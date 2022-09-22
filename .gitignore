@@ -1,3 +1,16 @@
+# материалы для разработки
+.restart-app
+Материалы/
+db.sqlite3
+ttt.py
+
+# картинки и видео - содержание
+static/media/
+
+# пароли
+project/settings.py
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
