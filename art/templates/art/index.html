@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="row tm-row">
+
+{% if all_products %}
+    {% for product in all_products %}
+        <div class="col-12 col-md-6 tm-post">
+            <a href="{% url 'art:detail' product.id %}" class="effect-lily tm-post-link">
+                <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ product.title|truncatechars:20 }}</h2>
+                <div class="tm-post-link-inner">
+                    {% if product.thumbnail %}
+                        <img src="{% static product.thumbnail.url %}" alt="{{ product.title }}" height="220">
+                    {% else %}
+                        <img src="{% static product.images.first.picture.url %}" alt="{{ product.title }}" height="220">
+                    {% endif %}
+                </div>
+            </a>                    
+            <p class="tm-pt-5">
+                {{ product.description|truncatechars:120 }}
+            </p>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>
+
+{% if is_paginated %}
+<div class="row tm-row tm-mt-100 tm-mb-75">
+        <nav class="tm-paging-nav d-inline-block">
+            <ul>
+                <li>
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next"><</a>
+            {% else %}
+                <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled"><</a>
+            {% endif %}
+                </li>
+                {% for p in page_obj.paginator.page_range %}
+                <li class="tm-paging-item {% if p == page_obj.number %} active{% endif %}">
+                    <a href="?page={{ p }}" class="mb-2 tm-btn tm-paging-link">{{ p }}</a>
+                </li>
+                {% endfor %}
+            <li>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">></a>
+            {% else %}
+                <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled">></a>
+            {% endif %}
+        </li>
+    </ul>
+        </nav>
+</div>            
+{% endif %}
+
+{% endblock %}
