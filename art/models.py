@@ -1,4 +1,3 @@
-#from pyexpat import model
 import cv2
 import moviepy.editor as mp
 

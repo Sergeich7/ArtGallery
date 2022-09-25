@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    path('api/', include('restapi.urls')),
     path('users/', include('users.urls')),
     path('captcha/', include('captcha.urls')),
     path('', include('art.urls')),

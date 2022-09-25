@@ -5,6 +5,8 @@
 {% load crispy_forms_tags %}
 
 
+{% block title %}{{ product.title }} ({{ product.category|lower }}, {{ product.technique|lower }}){% endblock %}
+
 {% block content %}
 <div class="row tm-row">
     <div class="mb-4 tm-pt-20">
