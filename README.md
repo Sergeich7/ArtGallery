@@ -16,5 +16,5 @@ https://artgallery-tatyana.ru/api/techs/2/
 https://artgallery-tatyana.ru/api/auths/1/
 
 Возвращает список продуктов в зависимости о фильтра.
-Фильтры можно задавать в люьом порядке. Или вообще не задавать
-https://artgallery-tatyana.ru/api/filter/author/1/category/2/technique/4/
+Фильтры можно задавать в любом порядке. Или вообще не задавать
+https://artgallery-tatyana.ru/api/filter/author/1/category/2/technique/1/
