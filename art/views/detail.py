@@ -11,7 +11,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = ArtComment
         fields = ('text',)      # отображать только поле для ввода текста
-        labels = {              # не отображать для него заголовок
+        labels = {                  # не отображать для него заголовок
             'text': '',
         }
 

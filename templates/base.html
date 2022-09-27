@@ -1,4 +1,6 @@
+{% load bootstrap4 %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -6,8 +8,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{% block title %}Aрт-галерея "ТАТЬЯНА"{% endblock %}</title>
+    {% bootstrap_javascript jquery='min' %}
+    <script src="{% static 'js/templatemo-script.js' %}"></script>
 	<link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
-	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/templatemo-xtra-blog.css' %}" rel="stylesheet">
 <body>
@@ -17,25 +21,40 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div class="tm-site-header">
-<!--
-                <h1 class="text-center"><a href="/" class="tm-external-link">Aрт-галерея<br><b>"ТАТЬЯНА"</b></a></h1>
--->
                 <h1 class="text-center">Aрт-галерея<br><b>"ТАТЬЯНА"</b></h1>
             </div>
             <nav class="tm-nav" id="tm-nav">            
                 <ul>
-                    {% block categories %}
 
-                    <li class="tm-nav-item{% if active_cat == 0 %} active{% endif %}"><a href="{% url 'art:category' 0 %}" class="tm-nav-link">
-                        <i class="fas fa-home"></i>
-                        Все работы ({{ count_obj }})
-                    </a></li>
+                    <li class="tm-nav-item{% if active_cat == '0cat' %} active{% endif %}"><b><a href="{% url 'art:filter' 'cat' 0 %}" class="tm-nav-link">
+<!--                        <i class="fas fa-home"></i>-->
+                        ВСЕ РАБОТЫ ({{ count_obj }})
+                    </a></b></li>
                     {% if all_categories %}
                         {% for category in all_categories %}
                             {% if category.num_arts > 0 %}
-                            <li class="tm-nav-item{% if active_cat == category.id %} active{% endif %}"><a href="{% url 'art:category' category.id %}" class="tm-nav-link">
+                            <li class="tm-nav-item{% if active_cat == category.id|slugify|add:'cat' %} active{% endif %}"><a href="{% url 'art:filter' 'cat' category.id %}" class="tm-nav-link">
                                     <i class="fas fa-arrow-right"></i>
-                                    {{ category.title }} ({{ category.num_arts }})
+                                    {{ category.title|truncatechars:12 }} ({{ category.num_arts }})
+                                </a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p>No categories are available.</p>
+                    {% endif %}
+                </ul>
+
+                <ul>
+                    <li class="tm-nav-item{% if active_cat == '0tec' %} active{% endif %}"><b><a href="{% url 'art:filter' 'tec' 0 %}" class="tm-nav-link">
+                        <!--<i class="fas fa-home"></i>-->
+                        ВСЕ ТЕХНИКИ ({{ count_obj }})
+                    </a></b></li>
+                    {% if all_techniques %}
+                        {% for technique in all_techniques %}
+                            {% if technique.num_arts > 0 %}
+                            <li class="tm-nav-item{% if active_cat == technique.id|slugify|add:'tec' %} active{% endif %}"><a href="{% url 'art:filter' 'tec' technique.id %}" class="tm-nav-link">
+                                    <i class="fas fa-arrow-right"></i>
+                                    {{ technique.title|truncatechars:12 }} ({{ technique.num_arts }})
                                 </a></li>
                             {% endif %}
                         {% endfor %}
@@ -43,46 +62,51 @@
                         <p>No categories are available.</p>
                     {% endif %}
 
-                    <li class="tm-nav-item{% if active_cat == 'contacts' %} active{% endif %}"><a href="{% url 'art:contacts' %}" class="tm-nav-link">
-                        <i class="fas fa-envelope"></i>
-                        Контакты
-                    </a></li>
-                    
-                    {% if user.is_authenticated %}
-                    <div class="tm-site-header">
-                        <h1 class="text-center">{{user.username}}</h1>
-                    </div>
-                        <li class="tm-nav-item{% if active_cat == 'password-change' %} active{% endif %}"><a href="{% url 'users:password-change' %}" class="tm-nav-link">
-                            <i class="fas fa-minus"></i>
-                            Изменить пароль
-                        </a></li>
-                        <li class="tm-nav-item{% if active_cat == 'logout' %} active{% endif %}"><a href="{% url 'logout' %}" class="tm-nav-link">
-                            <i class="fas fa-minus"></i>
-                            Выйти
-                        </a></li>
-                    {% else %}
-                        <li class="tm-nav-item{% if active_cat == 'login' %} active{% endif %}"><a href="{% url 'users:login' %}" class="tm-nav-link">
-                            <i class="fas fa-plus"></i>
-                            Войти
-                        </a></li>
-                        <li class="tm-nav-item{% if active_cat == 'signup' %} active{% endif %}"><a href="{% url 'users:signup' %}" class="tm-nav-link">
-                            <i class="fas fa-users"></i>
-                            Регистрация
-                        </a></li>
-                    {% endif %}
-
-                    {% endblock %}
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container-fluid">
         <main class="tm-main">
+            <div class="row tm-row">
+                <ul class="col-12 nav justify-content-end tm-mb-5">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'art:contacts' %}">Контакты</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toogle" data-toggle="dropdown" role="button" 
+                            aria-haspopup="true" aria-expanded="false" href="#">Личный кабинет</a>
+                        <div class="dropdown-menu">
+                            <!--
+                            <span><a class="nav-link" href="#">Редактировать</a></span>
+                            -->
+                            <span><a class="nav-link" href="{% url 'users:password-change' %}">Изменить пароль</a></span>
+                            <!--
+                            <span><a class="nav-link" href="#">Удалить</a></span>
+                            -->
+                            <span><a class="nav-link" href="{% url 'logout' %}">Выйти</a></span>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}">Войти</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="row tm-row">
+                <div class="col-12 tm-mb-20">
+                    <form method="GET" action="/" class="form-inline tm-search-form">                
+                        {{ s_form }}
+                        <button class="tm-search-button" type="submit">
+                            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                        </button>                                
+                    </form>
+                </div>                
+            </div>            
+            <hr class="tm-hr-primary">
+            {% bootstrap_messages %}
             {% block content %}
             {% endblock %}
         </main>
     </div>
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/templatemo-script.js' %}"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@ class VideoInline(admin.TabularInline):
 @admin.register(a_models.Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [GalleryInline, VideoInline]
-    list_display = ('title', 'category', 'technique')
+    list_display = ('title', 'category', 'technique',)
     list_display_links = ('title',)
     search_fields = ('title', 'description',)
     ordering = ('title',)

@@ -5,7 +5,10 @@ from art.views import ClearTextView, IndexView, DetailView, ContactFormView
 app_name = 'art'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    path('cat/<int:pk>/', IndexView.as_view(), name='category'),
+    re_path('(?P<filter>[-a-zA-Z0-9_]+)/(?P<pk>[0-9]+)/\\Z', IndexView.as_view(), name='filter'),
+#    path('<slug:sort>/<int:pk>/', IndexView.as_view(), name='filter'),
+#    path('cat/<int:pk>/', IndexView.as_view(), name='category'),
+#    path('tec/<int:pk>/', IndexView.as_view(), name='technique'),
     re_path('(?P<pk>[0-9]+)/\\Z', DetailView.as_view(), name='detail'),
     re_path(
         '(?P<pk>[0-9]+)/del/(?P<dc>[0-9]+)\\Z', DetailView.as_view(),
