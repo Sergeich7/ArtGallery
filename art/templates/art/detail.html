@@ -4,113 +4,190 @@
 
 {% load crispy_forms_tags %}
 
+{% load thumbnail %}
 
 {% block title %}{{ product.title }} ({{ product.category|lower }}, {{ product.technique|lower }}){% endblock %}
 
+{% block page_title %}{{ product.category }} * {{ product.technique }}{% endblock %}
+
 {% block content %}
-<div class="row tm-row">
-    <div class="mb-4 tm-pt-20">
+    <!-- Blog Section Start -->
+    <div class="section n-section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- Blog Main Area Start -->
+                <div class="col-lg-9 m-auto">
+                    <!-- Single Post Details Start -->
+                    <div class="blog-details mb-10">
 
-        <h2 class="tm-mb-20 tm-color-primary tm-post-title">{{ product.title }}</h2>
+                        <!-- Blog Details Image Start -->
+                        <div class="image mb-6" data-aos="fade-up" data-aos-delay="300">
+                        {% thumbnail thumb1st "1172" as im %}
+                            <a href="{% static thumb1st.url %}">
+                            <img class="fit-image" src="{% static im.url %}" alt="{ product.title }}">
+                            </a>
+                        {% endthumbnail %}
+                        </div>
+                        <!-- Blog Details Image End -->
 
-        <div class="tm-comment tm-mb-20">
-            <span class="tm-csize-text">{{ product.description }}</span>
+
+                        <!-- Single Post Details Content Start -->
+                        <div class="content" data-aos="fade-up" data-aos-delay="300">
+
+                            <!-- Title Start -->
+                            <h2 class="title mb-0">{{ product.title }}</h2>
+                            <!-- Title End -->
+
+                            <!-- Description Start -->
+                            <div class="desc">
+                                <p>{{ product.description }}</p>
+                            </div>
+                            <!-- Description End -->
+
+                            {% if product.author %}                                
+                            <div class="meta-list mt-1 mb-0">
+                                <span class="meta-item author mr-1 text-uppercase"><strong>Автор</strong></span>
+                                <span class="meta-item data">{{ product.author }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if product.created %}                                
+                            <div class="meta-list mt-1 mb-0">
+                                <span class="meta-item author mr-1 text-uppercase"><strong>Год создания</strong></span>
+                                <span class="meta-item data">{{ product.created|date:"Y" }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if product.technique %}                                
+                            <div class="meta-list mt-1 mb-0">
+                                <span class="meta-item author mr-1 text-uppercase"><strong>Техника исполнения</strong></span>
+                                <span class="meta-item data">{{ product.technique }}</span>
+                            </div>
+                            {% endif %}
+                   
+                            {% if product.size %}                                
+                            <div class="meta-list mt-1 mb-0">
+                                <span class="meta-item author mr-1 text-uppercase"><strong>Размер</strong></span>
+                                <span class="meta-item data">{{ product.size }}</span>
+                            </div>
+                            {% endif %}
+                    
+                            {% if product.materials %}                                
+                            <div class="meta-list mt-1 mb-0">
+                                <span class="meta-item author mr-1 text-uppercase"><strong>Используемые материалы</strong></span>
+                                <span class="meta-item data">{{ product.materials }}</span>
+                            </div>
+                            {% endif %}
+                   
+                            {% if product.videos.all or thumbs_wo_1st.all %}
+                            <div class="row mt-6">
+                            {% if product.videos.all %}
+                                {% for video in product.videos.all %}
+                                <div class="col-sm-6 col-12 mb-6" data-aos-delay="300" data-aos="fade-up">
+                                    <video controls class="fit-image" width="570">
+                                        <source src="{% static video.clip.url %}" type="video/mp4">							  
+                                            Your browser does not support the video tag.
+                                     </video>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if thumbs_wo_1st.all %}
+                                {% for image in thumbs_wo_1st.all %}
+                                <div class="col-sm-6 col-12 mb-6" data-aos-delay="300" data-aos="fade-up">
+                                    {% thumbnail image.picture "570" as im %}
+                                    <a href="{% static image.picture.url %}">
+                                        <img class="fit-image" src="{% static im.url %}">
+                                    </a>
+                                    {% endthumbnail %}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            </div>    
+                            {% endif %}
+                            
+                        </div>
+                        <!-- Single Post Details Content End -->
+                    </div>
+                    <!-- Single Post Details End -->
+
+                    <a name="comments"></a>
+                    {% if all_comments %}
+
+                    <!-- Comments Area Wrapper Start -->
+                    <div class="comment-area-wrapper mt-5" data-aos="fade-up" data-aos-delay="400">
+
+                        <!-- Title Start -->
+                        <h3 class="title mb-6">Комментарии</h3>
+                        <!-- Title End -->
+
+                        {% for comment in all_comments %}
+                        <!-- Single Comment Wrapper Start -->
+                        <div class="single-comment-wrap mb-10">
+                            <div class="comments-info">
+                                <p class="mb-1">{{ comment.text }}</p>
+                                <div class="comment-footer d-flex justify-content-between">
+                                    <span class="author"><strong>{{comment.user}}</strong>
+                                        {% if request.user == comment.user %}
+                                    <a class="link" href="{% url 'art:delete-comment' product.pk comment.pk %}" class="btn-reply"><i class="fa fa-reply"></i> <strong>Удалить комментарий</strong></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Single Comment Wrapper End -->
+                        {% endfor %}
+
+                    </div>
+                    <!-- Comments Area Wrapper End -->
+                    {% endif %}
+
+                    <!-- Blog Comments Form Start -->
+                    <div class="blog-comment-form-wrapper mt-10" data-aos="fade-up" data-aos-delay="400">
+
+                        <!-- Blog Comment Form Title Start -->
+                        <div class="blog-comment-form-title">
+                            <h2 class="title">Добавить комментарий</h2>
+                        </div>
+                        <!-- Blog Comment Form Title End -->
+
+                        <!-- Comment Box Start -->
+                        <div class="comment-box">
+                            {% if user.is_authenticated %}
+
+                            <form method="POST">
+                                <div class="row">
+                                    <!-- Message Input Start -->
+                                    <!--
+                                    <div class="col-12 col-custom">
+                                        <div class="input-item mt-4 mb-4">                                            
+                                            <textarea cols="30" rows="5" name="comment" class="rounded-0 w-100 custom-textarea input-area" placeholder="Message"></textarea>
+                                        </div>
+                                    </div>
+                                    -->
+                                    <!-- Message Input End -->
+
+                                    {% csrf_token %}
+                                    {{ form }} 
+                    
+                                    <!-- Submit Button Start -->
+                                    <div class="col-12 col-custom mt-4">
+                                        <button class="btn btn-primary btn-hover-secondary">Отправить</button>
+                                    </div>
+                                    <!-- Submit Button End -->
+
+                                </div>
+                                {% else %}
+                                <span class="author">Для отправки комментария необходимо <a href="{% url 'users:login' %}"><strong>ВОЙТИ</strong></strong></a> или <a href="{% url 'users:signup' %}"><strong>ЗАРЕГИСТРИРОВАТЬСЯ</strong></a></span>
+                                {% endif %}
+                            </form>
+
+                        </div>
+                        <!-- Comment Box End -->
+                    </div>
+                    <!-- Blog Comments Form End -->
+                </div>
+                <!-- Blog Main Area End -->
+            </div>
         </div>
-        
-        <div class="tm-comment tm-mb-5">
-            <span class="tm-csize-title tm-color-primary">Автор:</span><span class="tm-csize-text">{{ product.author }}</span>
-        </div>                                
-
-        <div class="tm-comment tm-mb-5">
-            <span class="tm-csize-title tm-color-primary">Техника исполнение:</span><span class="tm-csize-text">{{ product.technique }}</span>
-        </div>                                
-
-        {% if product.size %}                                
-        <div class="tm-comment tm-mb-5">
-            <span class="tm-csize-title tm-color-primary">Размер:</span><span class="tm-csize-text">{{ product.size }}</span>
-        </div>                                
-        {% endif %}
-
-        <div class="tm-comment tm-mb-5">
-            <span class="tm-csize-title tm-color-primary">Используемые материалы:</span><span class="tm-csize-text">{{ product.materials }}</span>
-        </div>                                
-
     </div>
-</div>
-<div class="row tm-art">
-    {% if product.images.all %}
-    {% for image in product.images.all %}
-        <div class="tm-detail-art">
-
-            {% load thumbnail %}
-            {% if image.vertical %}
-                {% thumbnail image.picture "x300" as im %}
-                <a href="{% static image.picture.url %}">
-                    <img src="{% static im.url %}">
-                </a>
-                {% endthumbnail %}
-            {% else %}
-                {% thumbnail image.picture "300" as im %}
-                <a href="{% static image.picture.url %}">
-                    <img src="{% static im.url %}">
-                </a>
-                {% endthumbnail %}
-            {% endif %}
-        </div>
-    {% endfor %}
-    {% endif %}
-</div>    
-<div class="row tm-art">
-    {% if product.videos.all %}
-    {% for video in product.videos.all %}
-    <div class="tm-detail-art">
-        <video controls class="tm-mb-40"{% if video.vertical %} height="400"{% else %} width="400"{% endif %}>
-        <source src="{% static video.clip.url %}" type="video/mp4">							  
-            Your browser does not support the video tag.
-        </video>
-    </div>
-    {% endfor %}
-    {% endif %}
-</div>    
-<a name="comments"></a>
-{% if all_comments %}
-<div>
-    <hr class="tm-hr-primary tm-mb-45">
-    <h2 class="tm-color-primary tm-post-title">Комментарии</h2>
-    {% for comment in all_comments %}
-    <div class="tm-comment tm-mb-25">
-        <figure class="tm-comment-figure">
-            <p class="tm-color-primary"><b>{{comment.user}}</b>
-            {% if request.user == comment.user %}
-                <br><a href="{% url 'art:delete-comment' product.pk comment.pk %}">Удалить</a>
-            {% endif %}
-            </p>
-        </figure>
-        <div class="tm-comment-figure">
-            <p>{{ comment.text }}</p>
-        </div>                                
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-
-
-<div>
-    <hr class="tm-hr-primary tm-mb-45">
-    <h2 class="pt-2 tm-color-primary tm-post-title">Добавить комментарий</h2>
-    {% if user.is_authenticated %}
-    <div class="row tm-row tm-pt-20">
-        <div class="col-lg-7 tm-contact-left">
-            <form method="POST" class="mb-5 ml-auto mr-0 tm-signup-form">                        
-                {% csrf_token %}
-                {{ form|crispy }} 
-                <button class="tm-btn tm-btn-primary tm-btn-small">Отправить</button>                        
-            </form>
-        </div>
-    </div>      
-    {% else %}
-        <p>Для отправки комментария необходимо <a href="{% url 'users:login' %}">войти</a> или <a href="{% url 'users:signup' %}">зарегистрироваться</a></p>
-    {% endif %}
-</div>      
-
+    <!-- Blog Section End -->
 {% endblock %}

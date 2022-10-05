@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row tm-row">
+    <div class="mb-4 tm-pt-20">
+        <h2 class="pt-2 tm-color-primary tm-post-title">Контакты</h2>
+        <p>Татьяна Сергеевна Белашова</p>
+    </div>
+</div>
+<div class="row tm-row">
+        <h2 class="pt-2 tm-color-primary tm-post-title">Обратная связь</h2>
+</div>
+<div class="row tm-row tm-pt-20">
+        <div class="col-lg-7 tm-contact-left">
+            <form method="POST" class="mb-5 ml-auto mr-0 tm-signup-form">                        
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="tm-btn tm-btn-primary tm-btn-small">Отправить</button>                        
+            </form>
+            <p>* - поля обязательные для заполнения</p>
+        </div>
+</div>      
+
+{% endblock %}

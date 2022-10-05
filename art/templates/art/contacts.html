@@ -1,26 +1,61 @@
+
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="row tm-row">
-    <div class="mb-4 tm-pt-20">
-        <h2 class="pt-2 tm-color-primary tm-post-title">Контакты</h2>
-        <p>Татьяна Сергеевна Белашова</p>
-    </div>
-</div>
-<div class="row tm-row">
-        <h2 class="pt-2 tm-color-primary tm-post-title">Обратная связь</h2>
-</div>
-<div class="row tm-row tm-pt-20">
-        <div class="col-lg-7 tm-contact-left">
-            <form method="POST" class="mb-5 ml-auto mr-0 tm-signup-form">                        
-                {% csrf_token %}
-                {{ form|crispy }}
-                <button class="tm-btn tm-btn-primary tm-btn-small">Отправить</button>                        
-            </form>
-            <p>* - поля обязательные для заполнения</p>
+
+
+
+    <!-- Blog Section Start -->
+    <div class="section n-section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- Blog Main Area Start -->
+                <div class="col-lg-6 m-auto">
+
+                    <div class="blog-comment-form-wrapper" data-aos="fade-up" data-aos-delay="400">
+
+                        <div class="blog-comment-form-title">
+                            <h1 class="title">Контакты</h1>
+                        </div>
+
+                        <div class="col-12 col-custom mt-4">
+                            <span class="author">Татьяна Сергеевна Белашова<span>
+                        </div>
+
+                        <div class="blog-comment-form-title mt-4">
+                            <h1 class="title">Обратная связь</h1>
+                        </div>
+
+                        <div class="comment-box">
+                            <form method="POST">
+
+                                <div class="row">
+                                    <div class="col-12 col-custom mt-4">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                    </div>
+                            
+                                    <!-- Submit Button Start -->
+                                    <div class="col-12 col-custom mt-4">
+                                        <button type="submit" class="btn btn-primary btn-hover-secondary">Отправить</button>
+                                    </div>
+                                    <!-- Submit Button End -->
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-12 col-custom mt-4">
+                            <span class="author">* поля обязательные для заполнения<span>
+                        </div>
+                    </div>
+                <!-- Blog Comments Form End -->
+                </div>
+                <!-- Blog Main Area End -->
+            </div>
         </div>
-</div>      
+    </div>
+    <!-- Blog Section End -->
 
 {% endblock %}

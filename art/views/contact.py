@@ -1,34 +1,33 @@
+from xml.dom.minidom import Attr
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django import forms
 
-from captcha.fields import CaptchaField
+from captcha.fields import CaptchaField, CaptchaTextInput
 
 from project.settings import ADMIN
-from art.views import AddContextMixin
 
 
 class ContactForm(forms.Form):
-    name = forms.CharField()
-    email = forms.EmailField()
-    message = forms.CharField(widget=forms.Textarea)
+    name = forms.CharField(
+        label='', 
+        widget=forms.TextInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Ваше имя',}))
+    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'e-mail',}))
+    message = forms.CharField(label='', widget=forms.Textarea(attrs={"rows": "4", "class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Текст сообщения',}))
     captcha = CaptchaField(
-        label='Введите текст с картинки',
-        error_messages={'invalid': 'Неправильный текст'}
+        label='',
+        error_messages={'invalid': 'Неправильный текст'},
+        widget=CaptchaTextInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Введите текст с картинки',})
         )
 
 
-class ContactFormView(AddContextMixin, FormView):
+class ContactFormView(FormView):
     """Контакты владельца и обратная связь."""
 
     template_name = 'art/contacts.html'
     form_class = ContactForm
     success_url = reverse_lazy('art:thanks')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return self.add_context(context)
 
     def form_valid(self, form):
         """Отправка письма владельцу сайта, если форма валидна."""

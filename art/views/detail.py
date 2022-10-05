@@ -3,7 +3,6 @@ from django.urls import reverse
 from django import forms
 
 from art.models import Product, ArtComment
-from art.views import AddContextMixin
 
 
 class CommentForm(forms.ModelForm):
@@ -14,20 +13,28 @@ class CommentForm(forms.ModelForm):
         labels = {                  # не отображать для него заголовок
             'text': '',
         }
+        widgets={
+            "text": forms.Textarea(attrs={'cols': '30', 'rows': '5', 'class': 'rounded-0 w-100 custom-textarea input-area',}),
+        }  
 
 
-class DetailView(AddContextMixin, CreateView):
+class DetailView(CreateView):
     model = ArtComment
     template_name = 'art/detail.html'
     form_class = CommentForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        active_cat = Product.objects.get(pk=self.kwargs.get('pk')).category.id
-        context['product'] = Product.objects.get(pk=self.kwargs.get('pk'))
+        prod = Product.objects.get(pk=self.kwargs.get('pk'))
+        th = prod.images.filter(thumb=True).order_by('?').first()
+        if not th:
+            th = prod.images.order_by('?').first()
+        context['product'] = prod
+        context['thumb1st'] = th.picture
+        context['thumbs_wo_1st'] = prod.images.exclude(id=th.pk)
         context['all_comments'] = ArtComment.objects.filter(
             product=self.kwargs.get('pk'))
-        return self.add_context(context, active_cat=active_cat)
+        return context
 
     def get_success_url(self):
         """Возврат на ту-же страницу после добавления комментария."""

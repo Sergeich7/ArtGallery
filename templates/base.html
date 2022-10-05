@@ -1,112 +1,362 @@
-{% load bootstrap4 %}
 {% load static %}
 {% load crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{% block title %}Aрт-галерея "ТАТЬЯНА"{% endblock %}</title>
-    {% bootstrap_javascript jquery='min' %}
-    <script src="{% static 'js/templatemo-script.js' %}"></script>
-	<link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/templatemo-xtra-blog.css' %}" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Aрт-галерея "ТАТЬЯНА"{% endblock %}</title>
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}">
+
+
+
+
+    <!-- Vendor CSS (Icon Font) -->
+
+    <!-- 
+    <link rel="stylesheet" href="{% static 'assets/css/vendor/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/vendor/pe-icon-7-stroke.min.css' %}"> 
+    -->
+
+    <!-- Plugins CSS (All Plugins Files) -->
+
+    <!--     
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/splitting.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/nice-select.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/aos.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/odometer-theme-default.min.css' %}"> 
+    -->
+
+    <!-- Main Style CSS -->
+
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" /> 
+    <link rel="stylesheet" href="{% static 'assets/css/nstyle.css' %}" /> 
+
+
+    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
+
+    <link rel="stylesheet" href="{% static 'assets/css/vendor.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}">
+    <!-- 
+    <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
+    -->
+
+
+</head>
+
 <body>
-	<header class="tm-header" id="tm-header">
-        <div class="tm-header-wrapper">
-            <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="tm-site-header">
-                <h1 class="text-center">Aрт-галерея<br><b>"ТАТЬЯНА"</b></h1>
+    <!-- Header Section Start -->
+    <div class="header section">
+
+        <!-- Header Top Start -->
+        <div class="header-top bg-secondary">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Header Top Link/Search Start -->
+                    <div class="col-lg-8 col-md-12">
+                        <ul class="n-header-top-links">
+                            <li><a href="{% url 'art:filter' 'cat' 0 %}"><b>Работ: {{ count_obj }}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 0 %}"><b>Категорий: {{ count_cat }}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'tec' 0 %}"><b>Техник: {{ count_tec }}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 0 %}"><b>Авторов: {{ count_aut }}</b></a></li>
+                        </ul>
+                    </div>
+                    <!-- Header Top Link/Search End -->
+                    <!-- Header Top Action Bar Start -->
+                    <div class="col-lg-4 col-md-12 text-md-right">
+                        <form method="GET" class="header-top-action" action="/">
+                            <!--
+                            <input class="action-search" type="text" placeholder="Поиск">
+                            -->
+                            {{ searchform }}
+                            <button class="action-btn" type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    <!-- Header Top Action Bar End -->
+                </div>
             </div>
-            <nav class="tm-nav" id="tm-nav">            
-                <ul>
-
-                    <li class="tm-nav-item{% if active_cat == '0cat' %} active{% endif %}"><b><a href="{% url 'art:filter' 'cat' 0 %}" class="tm-nav-link">
-<!--                        <i class="fas fa-home"></i>-->
-                        ВСЕ РАБОТЫ ({{ count_obj }})
-                    </a></b></li>
-                    {% if all_categories %}
-                        {% for category in all_categories %}
-                            {% if category.num_arts > 0 %}
-                            <li class="tm-nav-item{% if active_cat == category.id|slugify|add:'cat' %} active{% endif %}"><a href="{% url 'art:filter' 'cat' category.id %}" class="tm-nav-link">
-                                    <i class="fas fa-arrow-right"></i>
-                                    {{ category.title|truncatechars:12 }} ({{ category.num_arts }})
-                                </a></li>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <p>No categories are available.</p>
-                    {% endif %}
-                </ul>
-
-                <ul>
-                    <li class="tm-nav-item{% if active_cat == '0tec' %} active{% endif %}"><b><a href="{% url 'art:filter' 'tec' 0 %}" class="tm-nav-link">
-                        <!--<i class="fas fa-home"></i>-->
-                        ВСЕ ТЕХНИКИ ({{ count_obj }})
-                    </a></b></li>
-                    {% if all_techniques %}
-                        {% for technique in all_techniques %}
-                            {% if technique.num_arts > 0 %}
-                            <li class="tm-nav-item{% if active_cat == technique.id|slugify|add:'tec' %} active{% endif %}"><a href="{% url 'art:filter' 'tec' technique.id %}" class="tm-nav-link">
-                                    <i class="fas fa-arrow-right"></i>
-                                    {{ technique.title|truncatechars:12 }} ({{ technique.num_arts }})
-                                </a></li>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <p>No categories are available.</p>
-                    {% endif %}
-
-                </ul>
-            </nav>
         </div>
-    </header>
-    <div class="container-fluid">
-        <main class="tm-main">
-            <div class="row tm-row">
-                <ul class="col-12 nav justify-content-end tm-mb-5">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'art:contacts' %}">Контакты</a></li>
-                    {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toogle" data-toggle="dropdown" role="button" 
-                            aria-haspopup="true" aria-expanded="false" href="#">Личный кабинет</a>
-                        <div class="dropdown-menu">
-                            <!--
-                            <span><a class="nav-link" href="#">Редактировать</a></span>
-                            -->
-                            <span><a class="nav-link" href="{% url 'users:password-change' %}">Изменить пароль</a></span>
-                            <!--
-                            <span><a class="nav-link" href="#">Удалить</a></span>
-                            -->
-                            <span><a class="nav-link" href="{% url 'logout' %}">Выйти</a></span>
+        <!-- Header Top End -->
+
+        <!-- Header Bottom Start -->
+        <div class="header-bottom section header-sticky">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Header Logo Start -->
+                    <div class="col-lg-3 col-6">
+                        <div class="header-logo">
+                            <a href="/"><img src="{% static 'assets/images/logo/logo.gif' %}" alt="Site Logo" /></a>
                         </div>
-                    </li>
-                    {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}">Войти</a></li>
-                    {% endif %}
-                </ul>
+                    </div>
+                    <!-- Header Logo End -->
+
+                    <!-- Header Menu Start -->
+                    <div class="col-lg-9 col-6">
+                        <!-- Main Menu Start -->
+                        <div class="main-menu d-none d-lg-flex">
+                            <ul>
+                                <li>
+                                    <a href="/">Главная</a>
+                                </li>
+                                <li class="has-children">
+                                    <a href="#">Категории</a>
+                                    <ul class="sub-menu">
+                                        {% if all_categories %}
+                                        {% for category in all_categories %}
+                                            {% if category.num_arts > 0 %}
+                                                <li><a href="{% url 'art:filter' 'cat' category.id %}">{{ category.title|truncatechars:12 }} ({{ category.num_arts }})</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                            <p>No categories are available.</p>
+                                        {% endif %}
+                                        <li class="dropdown-divider"></li>
+                                        <li><a href="{% url 'art:filter' 'cat' 0 %}">Все ({{ count_obj }})</a></li>
+                                    </ul>
+                                </li>
+                                <li class="has-children">
+                                    <a href="#">Техники</a>
+                                    <ul class="sub-menu">
+                                        {% if all_techniques %}
+                                        {% for technique in all_techniques %}
+                                            {% if technique.num_arts > 0 %}
+                                                <li><a href="{% url 'art:filter' 'tec' technique.id %}">{{ technique.title|truncatechars:12 }} ({{ technique.num_arts }})</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                            <p>No categories are available.</p>
+                                        {% endif %}
+                                        <li class="dropdown-divider"></li>
+                                        <li><a href="{% url 'art:filter' 'tec' 0 %}">Все ({{ count_obj }})</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
+                                {% if user.is_authenticated %}
+                                <li class="has-children">
+                                    <a href="#">Личный кабинет</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
+                                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                                    </ul>
+                                </li>
+                                {% else %}
+                                <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
+                                <li><a href="{% url 'users:login' %}">Войти</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <!-- Main Menu End -->
+
+                        <!-- Main Menu Riht Side Start -->
+                        <div class="main-menu-right-side d-flex d-lg-none">
+
+                            <!-- Header Search Start -->
+                            <div class="header-search mr-4">
+                                <a class="header-search-icon" href="#"><i class="fa fa-search"></i></a>
+                            </div>
+                            <!-- Header Search End -->
+
+                            <!-- Mobile Menu Bar Start -->
+                            <div class="mobile-menu-bar-wrapper">
+                                <a href="#" class="mobile-menu-bar"><i class="fa fa-bars"></i></a>
+                            </div>
+                            <!-- Mobile Menu Bar End -->
+
+                        </div>
+                        <!-- Main Menu Riht Side End -->
+
+                    </div>
+                    <!-- Header Menu End -->
+                </div>
             </div>
-            <div class="row tm-row">
-                <div class="col-12 tm-mb-20">
-                    <form method="GET" action="/" class="form-inline tm-search-form">                
-                        {{ s_form }}
-                        <button class="tm-search-button" type="submit">
-                            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
-                        </button>                                
-                    </form>
-                </div>                
-            </div>            
-            <hr class="tm-hr-primary">
-            {% bootstrap_messages %}
-            {% block content %}
-            {% endblock %}
-        </main>
+        </div>
+        <!-- Header Bottom End -->
+
+        <!-- Mobile Menu Start -->
+        <div class="mobile-menu-wrapper">
+            <div class="body-overlay"></div>
+            <!-- Mobile Menu Inner Start -->
+            <div class="mobile-menu-inner">
+
+                <!-- Button Close Start -->
+                <div class="btn-close-bar">
+                    <i class="pe-7s-close"></i>
+                </div>
+                <!-- Button Close End -->
+
+                <!-- mobile menu start -->
+                <div class="mobile-navigation">
+                    <nav>
+                        <ul class="mobile-menu">
+                            <li>
+                                <a href="/">Главная</a>
+                            </li>
+                            <li class="has-children">
+                                <a href="#">Категории <i class="fa fa-angle-down aria-hidden="true""></i></a>
+                                <ul class="dropdown">
+                                    {% if all_categories %}
+                                    {% for category in all_categories %}
+                                        {% if category.num_arts > 0 %}
+                                            <li><a href="{% url 'art:filter' 'cat' category.id %}">{{ category.title|truncatechars:12 }} ({{ category.num_arts }})</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                        <p>No categories are available.</p>
+                                    {% endif %}
+                                    <li class="dropdown-divider"></li>
+                                    <li><a href="{% url 'art:filter' 'cat' 0 %}">Все ({{ count_obj }})</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="#">Техники <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul class="dropdown">
+                                    {% if all_techniques %}
+                                    {% for technique in all_techniques %}
+                                        {% if technique.num_arts > 0 %}
+                                            <li><a href="{% url 'art:filter' 'tec' technique.id %}">{{ technique.title|truncatechars:12 }} ({{ technique.num_arts }})</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                        <p>No categories are available.</p>
+                                    {% endif %}
+                                    <li class="dropdown-divider"></li>
+                                    <li><a href="{% url 'art:filter' 'tec' 0 %}">Все ({{ count_obj }})</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
+                            {% if user.is_authenticated %}
+                            <li class="has-children">
+                                <a href="#">Личный кабинет<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul class="dropdown">
+                                    <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
+                                    <li><a href="{% url 'logout' %}">Выход</a></li>
+                                </ul>
+                            </li>
+                            {% else %}
+                            <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
+                            <li><a href="{% url 'users:login' %}">Войти</a></li>
+                            {% endif %}
+                    </ul>
+                    </nav>
+                </div>
+                <!-- mobile menu end -->
+
+            </div>
+            <!-- Mobile Menu Inner End -->
+        </div>
+        <!-- Mobile Menu End -->
+
+        <!-- Offcanvas Search Start -->
+        <div class="offcanvas-search">
+            <!-- Offcanvas Search Inner Start -->
+            <div class="offcanvas-search-inner">
+                <!-- Button Close Start -->
+                <div class="btn-close-bar">
+                    <i class="pe-7s-close"></i>
+                </div>
+                <!-- Button Close End -->
+
+                <!-- Offcanvas Search Form Start -->
+                <form method="GET" class="offcanvas-search-form" action="/">
+                    {{ searchform }}
+<!--                    <input type="text" placeholder="Search Products...">
+    -->
+                </form>
+                <!-- Offcanvas Search Form End -->
+
+            </div>
+            <!-- Offcanvas Search Inner End -->
+
+        </div>
+        <!-- Offcanvas Search End -->
+
     </div>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Section Start -->
+    <div class="section n-breadcrumb-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="n-cr-breadcrumb-area">
+                        <h1 class="title">{% block page_title %}{{ page_title }}{% endblock %}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section End -->
+
+    {% block content %}
+    {% endblock %}
+
+    <div class="desc">
+        <p>&nbsp;</p>
+    </div>
+
+<!--
+    <footer class="section footer-section bg-secondary">
+        <div class="container">
+            <div class="row align-items-center footer-bottom">
+                <div class="col-12 text-center">
+                    <div class="copyright-content">
+                        <p class="mb-0"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+-->
+
+    <!-- Scroll Top Start -->
+    <a href="#" class="scroll-top" id="scroll-top">
+        <i class="arrow-top fa fa-long-arrow-up"></i>
+        <i class="arrow-bottom fa fa-long-arrow-up"></i>
+    </a>
+    <!-- Scroll Top End -->
+
+    <!-- Scripts -->
+    <!-- Global Vendor, plugins JS -->
+
+    <!-- Vendors JS -->
+
+    <!--     
+    <script src="{% static 'assets/js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/jquery-migrate-3.3.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/vendor/modernizr-3.11.2.min.js' %}"></script> 
+    -->
+
+    <!-- Plugins JS -->
+
+    <!--     
+    <script src="{% static 'assets/js/plugins/splitting.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/aos.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/nice-select.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/masonry.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/odometer.min.js' %}"></script> 
+    -->
+
+    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
+
+
+    <script src="{% static 'assets/js/vendor.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins.min.js' %}"></script>
+
+
+
+    <!--Main JS-->
+    <script src="{% static 'assets/js/main.js' %}"></script>
 </body>
+
 </html>

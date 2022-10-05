@@ -61,12 +61,11 @@ class Technique(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название')
+    created = models.DateField(null=True, verbose_name='Дата')
     description = models.TextField(verbose_name='Описание')
     materials = models.CharField(
         max_length=200, verbose_name='Материалы')
-    size = models.CharField( max_length=20, blank=True, verbose_name='Размер')
-    thumbnail = models.ImageField(
-        upload_to='thumbnails', blank=True, verbose_name='Миниатюра')
+    size = models.CharField(max_length=20, blank=True, verbose_name='Размер')
 
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE, verbose_name='Автор')
@@ -112,6 +111,7 @@ class Gallery(models.Model):
     picture = models.ImageField(
         upload_to='gallery', verbose_name='Фотографии')
     vertical = models.BooleanField(default=False, editable=False)
+    thumb = models.BooleanField(default=False)
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='images')
 

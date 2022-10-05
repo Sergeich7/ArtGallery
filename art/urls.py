@@ -1,6 +1,7 @@
 from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 
-from art.views import ClearTextView, IndexView, DetailView, ContactFormView
+from art.views import IndexView, DetailView, ContactFormView
 
 app_name = 'art'
 urlpatterns = [
@@ -14,6 +15,6 @@ urlpatterns = [
         '(?P<pk>[0-9]+)/del/(?P<dc>[0-9]+)\\Z', DetailView.as_view(),
         name='delete-comment'),
     path('contacts/', ContactFormView.as_view(), name='contacts'),
-    path('thanks/', ClearTextView.as_view(
+    path('thanks/', TemplateView.as_view(
                         template_name='art/thanks.html'), name='thanks'),
 ]

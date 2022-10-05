@@ -1,6 +1,11 @@
 
 html { overflow-x: hidden; }
 
+.iright {
+    float: right;
+    margin: 7px 7px 7px 7px;
+}
+
 body {
     margin: 0;
     padding: 0;

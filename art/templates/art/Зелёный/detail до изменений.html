@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+{% block title %}{{ product.title }} ({{ product.category|lower }}, {{ product.technique|lower }}){% endblock %}
+
+{% block content %}
+<div class="row tm-row">
+    <div class="mb-4 tm-pt-20">
+
+        <h2 class="tm-mb-20 tm-color-primary tm-post-title">{{ product.title }}</h2>
+
+        <div class="tm-comment tm-mb-20">
+            <span class="tm-csize-text">{{ product.description }}</span>
+        </div>
+        
+        <div class="tm-comment tm-mb-5">
+            <span class="tm-csize-title tm-color-primary">Автор:</span><span class="tm-csize-text">{{ product.author }}</span>
+        </div>                                
+
+        <div class="tm-comment tm-mb-5">
+            <span class="tm-csize-title tm-color-primary">Техника исполнение:</span><span class="tm-csize-text">{{ product.technique }}</span>
+        </div>                                
+
+        {% if product.size %}                                
+        <div class="tm-comment tm-mb-5">
+            <span class="tm-csize-title tm-color-primary">Размер:</span><span class="tm-csize-text">{{ product.size }}</span>
+        </div>                                
+        {% endif %}
+
+        <div class="tm-comment tm-mb-5">
+            <span class="tm-csize-title tm-color-primary">Используемые материалы:</span><span class="tm-csize-text">{{ product.materials }}</span>
+        </div>                                
+
+    </div>
+</div>
+<div class="row tm-art">
+    {% if product.images.all %}
+    {% for image in product.images.all %}
+        <div class="tm-detail-art">
+
+            {% load thumbnail %}
+            {% if image.vertical %}
+                {% thumbnail image.picture "x300" as im %}
+                <a href="{% static image.picture.url %}">
+                    <img src="{% static im.url %}">
+                </a>
+                {% endthumbnail %}
+            {% else %}
+                {% thumbnail image.picture "300" as im %}
+                <a href="{% static image.picture.url %}">
+                    <img src="{% static im.url %}">
+                </a>
+                {% endthumbnail %}
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% endif %}
+</div>    
+<div class="row tm-art">
+    {% if product.videos.all %}
+    {% for video in product.videos.all %}
+    <div class="tm-detail-art">
+        <video controls class="tm-mb-40"{% if video.vertical %} height="400"{% else %} width="400"{% endif %}>
+        <source src="{% static video.clip.url %}" type="video/mp4">							  
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>    
+<a name="comments"></a>
+{% if all_comments %}
+<div>
+    <hr class="tm-hr-primary tm-mb-45">
+    <h2 class="tm-color-primary tm-post-title">Комментарии</h2>
+    {% for comment in all_comments %}
+    <div class="tm-comment tm-mb-25">
+        <figure class="tm-comment-figure">
+            <p class="tm-color-primary"><b>{{comment.user}}</b>
+            {% if request.user == comment.user %}
+                <br><a href="{% url 'art:delete-comment' product.pk comment.pk %}">Удалить</a>
+            {% endif %}
+            </p>
+        </figure>
+        <div class="tm-comment-figure">
+            <p>{{ comment.text }}</p>
+        </div>                                
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div>
+    <hr class="tm-hr-primary tm-mb-45">
+    <h2 class="pt-2 tm-color-primary tm-post-title">Добавить комментарий</h2>
+    {% if user.is_authenticated %}
+    <div class="row tm-row tm-pt-20">
+        <div class="col-lg-7 tm-contact-left">
+            <form method="POST" class="mb-5 ml-auto mr-0 tm-signup-form">                        
+                {% csrf_token %}
+                {{ form|crispy }} 
+                <button class="tm-btn tm-btn-primary tm-btn-small">Отправить</button>                        
+            </form>
+        </div>
+    </div>      
+    {% else %}
+        <p>Для отправки комментария необходимо <a href="{% url 'users:login' %}">войти</a> или <a href="{% url 'users:signup' %}">зарегистрироваться</a></p>
+    {% endif %}
+</div>      
+
+{% endblock %}

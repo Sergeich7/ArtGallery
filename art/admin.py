@@ -23,6 +23,13 @@ class ProductAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
     search_fields = ('title', 'description',)
     ordering = ('title',)
+    fields = (
+        ('title', 'created'),
+        'description',
+        ('category', 'technique',),
+        'materials',
+        ('author', 'size',),
+    )
 
 
 @admin.register(a_models.Category)

@@ -2,62 +2,92 @@
 
 {% load static %}
 
+{% load thumbnail %}
+
+
+    <div class="resizer col"></div>
+
+    <!-- Single project Start -->
+
 {% block content %}
-
-<div class="row tm-row">
-
-{% if all_products %}
-    {% for product in all_products %}
-        <div class="col-12 col-md-6 tm-post">
-                <a href="{% url 'art:detail' product.id %}" class="effect-lily tm-post-link">
-                <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ product.title|truncatechars:20 }}</h2>
-                <div class="tm-post-link-inner">
-                    {% if product.thumbnail %}
-                        <img src="{% static product.thumbnail.url %}" alt="{{ product.title }}" height="220">
-                    {% else %}
-                        <img src="{% static product.images.first.picture.url %}" alt="{{ product.title }}" height="220">
-                    {% endif %}
+    <!-- Blog Section Start -->
+    <div class="section n-section-padding">
+        <div class="container">
+            <div class="row mb-n8 row-cols-sm-2 row-cols-lg-3 row-cols-1 mesonry-list">
+                <div class="resizer col"></div>
+                {% if all_products %}
+                {% for product in all_products %}
+                <div class="col mb-8">
+                    <!-- Single Blog Start -->
+                    <div class="blog-single-post-wrapper" data-aos="fade-up" data-aos-delay="100">
+                        <div class="blog-thumb">
+                            <a class="blog-overlay" href="{% url 'art:detail' product.id %}">
+                                {% thumbnail product.th "370" as im %}
+                                <img src="{% static im.url %}" class="main-image" alt="{ product.title }}">
+                                {% endthumbnail %}
+                            </a>
+                        </div>
+                        <div class="blog-content">
+                            <!--
+                            <div class="post-meta">
+                                <span>By : <a href="#">Admin</a></span>
+                                <span>05 Jan 2021</span>
+                            </div>
+                            -->
+                            <h3 class="title"><a href="{% url 'art:detail' product.id %}">{{ product.title|truncatechars:20 }}</a></h3>
+                            <p>{{ product.description|truncatechars:140 }}</p>
+                            <a class="link" href="{% url 'art:detail' product.id %}">Читать далее</a>
+                        </div>
+                    </div>
+                    <!-- Single Blog End -->
                 </div>
-            </a>                    
-            <p class="tm-pt-5">
-                {{ product.description|truncatechars:120 }}
-            </p>
-        </div>
-    {% endfor %}
-{% else %}
-    <p class="tm-pt-5">
-        Ничего не найдено
-    </p>
-{% endif %}
-</div>
-
-{% if is_paginated %}
-<div class="row tm-row tm-mt-100 tm-mb-75">
-        <nav class="tm-paging-nav d-inline-block">
-            <ul>
-                <li>
-                    
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&query={{ query }}{% endif %}" class="mb-2 tm-btn tm-btn-primary tm-prev-next"><</a>
-            {% else %}
-                <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled"><</a>
-            {% endif %}
-                </li>
-                {% for p in page_obj.paginator.page_range %}
-                <li class="tm-paging-item {% if p == page_obj.number %} active{% endif %}">
-                    <a href="?page={{ p }}{% if query %}&query={{ query }}{% endif %}" class="mb-2 tm-btn tm-paging-link">{{ p }}</a>
-                </li>
                 {% endfor %}
-            <li>
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}{% if query %}&query={{ query }}{% endif %}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">></a>
-            {% else %}
-                <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled">></a>
+                {% else %}
+                    <p>
+                        Ничего не найдено
+                    </p>
+                {% endif %}
+            </div>
+            {% if is_paginated %}
+            <div class="row mb-lg-0">
+                <!-- Pagination Start -->
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <ul class="pagination-cr mt-8 pt-8 border-top">
+                    <!--
+                        <li><a href="#"><i class="fa fa-angle-double-left"></i> Prev</a></li>
+                        <li class="active"><a href="#">01</a></li>
+                        <li><a href="#">02</a></li>
+                        <li><a href="#">03</a></li>
+                        <li><a href="#">Next <i class="fa fa-angle-double-right"></i></a></li>
+                    -->
+                        
+                        <li>
+                            <a href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% if query %}&query={{ query }}{% endif %}{% else %}#{% endif %}">
+                                <i class="fa fa-angle-double-left"></i> Prev
+                            </a>
+                        </li>
+                        
+                        
+                        {% for p in page_obj.paginator.page_range %}
+                        {% if p == page_obj.number %}
+                        <li class="active"><a href="#">{{ p }}</a></li>
+                        {% else %}
+                        <li><a href="?page={{ p }}{% if query %}&query={{ query }}{% endif %}">{{ p }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        <li>
+                            <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% if query %}&query={{ query }}{% endif %}{% else %}#{% endif %}">
+                                Next <i class="fa fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <!-- Pagination End -->
+            </div>
             {% endif %}
-        </li>
-    </ul>
-        </nav>
-</div>            
-{% endif %}
-
-{% endblock %}
+        </div>
+    </div>
+    <!-- Blog Section End -->
+    {% endblock %}

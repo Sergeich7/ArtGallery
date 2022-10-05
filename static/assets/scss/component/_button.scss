@@ -1,0 +1,102 @@
+/* ======== 4.1 Button CSS ========*/
+.btn {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 15px 28px;
+    border-width: 2px;
+    line-height: 1;
+    &:focus{
+        box-shadow: none !important;
+    }
+    &-sm {
+        padding: 12px 25px;
+    }
+    // Responsive
+    @media #{$large-mobile}{
+        padding: 12px 20px;
+        font-size: 12px;
+    }
+}
+/* Button Color & Style (Solid & Outline) */
+@each $name,
+$value in $theme-colors {
+    .btn-#{$name} {
+        border-color: $value;
+        background-color: $value;
+
+        @if $name==warning or $name==light {
+            color: $primary;
+        }
+
+        @else if $name==white-gray {
+            color: $primary;
+        }
+
+        @else {
+            color: $white;
+        }
+
+        &:hover,
+        &:focus {
+            border-color: transparent;
+            background-color: darken($value, 7.5%);
+
+            @if $name==warning or $name==light {
+                color: $headings-color;
+            }
+
+            @else {
+                color: $white;
+            }
+        }
+    }
+
+    .btn-outline-#{$name} {
+        color: $value;
+        border-color: $value;
+        background-color: transparent;
+
+        &:hover {
+            border-color: transparent;
+            background-color: $value;
+
+            @if $name==warning or $name==light {
+                color: $headings-color;
+            }
+
+            @else {
+                color: $white;
+            }
+        }
+    }
+}
+
+/* Button Hover Color & Style (Solid & Outline) */
+@each $name,
+$value in $theme-colors {
+    .btn-hover-#{$name} {
+        &:hover,
+        &:not(:disabled):not(.disabled).active {
+            border-color: transparent;
+            background-color: $value;
+
+            @if $name==warning or $name==light {
+                color: $headings-color;
+            }
+
+            @else {
+                color: $white;
+            }
+        }
+    }
+
+    .btn-outline-hover-#{$name} {
+        &:hover,
+        &:not(:disabled):not(.disabled).active {
+            color: $value;
+            border-color: transparent;
+            background-color: transparent;
+        }
+    }
+}

@@ -1,22 +1,50 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
-{% load bootstrap4 %}
 
 {% block content %}
-<div class="row tm-row">
-    <div class="mb-4 tm-pt-20">
-        <h2 class="pt-2 tm-color-primary tm-post-title">Войти</h2>
-        <div class="tm-pt-20">
-            <form method="POST" class="mb-5 ml-auto mr-0 tm-signup-form">                        
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button class="tm-btn tm-btn-primary tm-btn-small">Отправить</button>                        
-            </form>
-            <p>* - поля обязательные для заполнения</p>
-            <p>** - <a href="{% url 'users:password-reset' %}">сброс пароля</a> (если Вы забыли пароль)</p>
+
+    <!-- Blog Section Start -->
+    <div class="section n-section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- Blog Main Area Start -->
+                <div class="col-lg-6 m-auto">
+
+                    <div class="blog-comment-form-wrapper" data-aos="fade-up" data-aos-delay="400">
+
+                        <div class="blog-comment-form-title">
+                            <h1 class="title">Войти</h1>
+                        </div>
+
+                        <div class="comment-box">
+                            <form method="POST">
+
+                                <div class="row">
+                                    <div class="col-12 col-custom mt-4">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                    </div>
+                            
+                                    <!-- Submit Button Start -->
+                                    <div class="col-12 col-custom mt-6">
+                                        <button type="submit" class="btn btn-primary btn-hover-secondary">Войти</button>
+                                    </div>
+                                    <!-- Submit Button End -->
+
+                                    <div class="col-12 col-custom mt-4">
+                                        <span class="author"><a href="{% url 'users:password-reset' %}"><strong>СБРОСИТЬ ПАРОЛЬ</strong></a> (если Вы забыли пароль)<span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Blog Comments Form End -->
+                </div>
+                <!-- Blog Main Area End -->
+            </div>
         </div>
     </div>
-</div>
+    <!-- Blog Section End -->
 
 {% endblock %}
