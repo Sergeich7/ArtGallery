@@ -73,8 +73,18 @@
   font-size: 22px;
 }
 
-.n-breadcrumb-bg {
+.n-breadcrumb-bg-1 {
   background-image: url(../images/bg/n-breadcrumb-bg1.jpg);
+}
+
+.n-breadcrumb-bg-2 {
+  background-image: url(../images/bg/n-breadcrumb-bg2.jpg);
+}
+
+.n-breadcrumb-bg {
+/*
+  background-image: url(../images/bg/n-breadcrumb-bg1.jpg);
+  */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;

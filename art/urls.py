@@ -6,15 +6,25 @@ from art.views import IndexView, DetailView, ContactFormView
 app_name = 'art'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    re_path('(?P<filter>[-a-zA-Z0-9_]+)/(?P<pk>[0-9]+)/\\Z', IndexView.as_view(), name='filter'),
-#    path('<slug:sort>/<int:pk>/', IndexView.as_view(), name='filter'),
-#    path('cat/<int:pk>/', IndexView.as_view(), name='category'),
-#    path('tec/<int:pk>/', IndexView.as_view(), name='technique'),
+
+    path('contacts/', ContactFormView.as_view(), name='contacts'),
+    path('thanks/', TemplateView.as_view(
+                        template_name='art/thanks.html'), name='thanks'),
+
+    # фильтр по категориям и техникам (id или slug)
+    # /cat/1/ /cat/vazy/ /tec/2/ /tec/dekupazh/
+    re_path('(?P<filter>[a-z]+)/(?P<pk>[0-9]+)/\\Z', IndexView.as_view(), name='filter'),
+    re_path('(?P<filter>[a-z]+)/(?P<slug>[-a-z]+)/\\Z', IndexView.as_view(), name='filter'),
+
+    # детали работы по pk
     re_path('(?P<pk>[0-9]+)/\\Z', DetailView.as_view(), name='detail'),
     re_path(
         '(?P<pk>[0-9]+)/del/(?P<dc>[0-9]+)\\Z', DetailView.as_view(),
         name='delete-comment'),
-    path('contacts/', ContactFormView.as_view(), name='contacts'),
-    path('thanks/', TemplateView.as_view(
-                        template_name='art/thanks.html'), name='thanks'),
+
+    # детали работы по slug
+    re_path('(?P<slug>[-a-zA-Z0-9_]+)/\\Z', DetailView.as_view(), name='detail'),
+    re_path(
+        '(?P<slug>[-a-zA-Z0-9_]+)/del/(?P<dc>[0-9]+)\\Z', DetailView.as_view(),
+        name='delete-comment'),
 ]

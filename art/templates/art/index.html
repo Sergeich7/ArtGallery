@@ -21,9 +21,9 @@
                     <!-- Single Blog Start -->
                     <div class="blog-single-post-wrapper" data-aos="fade-up" data-aos-delay="100">
                         <div class="blog-thumb">
-                            <a class="blog-overlay" href="{% url 'art:detail' product.id %}">
+                            <a class="blog-overlay" href="{% url 'art:detail' product.slug %}">
                                 {% thumbnail product.th "370" as im %}
-                                <img src="{% static im.url %}" class="main-image" alt="{ product.title }}">
+                                <img src="{{ im.url }}" class="main-image" alt="{{ product.title }}">
                                 {% endthumbnail %}
                             </a>
                         </div>
@@ -34,9 +34,9 @@
                                 <span>05 Jan 2021</span>
                             </div>
                             -->
-                            <h3 class="title"><a href="{% url 'art:detail' product.id %}">{{ product.title|truncatechars:20 }}</a></h3>
+                            <h3 class="title"><a href="{% url 'art:detail' product.slug %}">{{ product.title|truncatechars:20 }}</a></h3>
                             <p>{{ product.description|truncatechars:140 }}</p>
-                            <a class="link" href="{% url 'art:detail' product.id %}">Читать далее</a>
+                            <a class="link" href="{% url 'art:detail' product.slug %}">Читать далее</a>
                         </div>
                     </div>
                     <!-- Single Blog End -->

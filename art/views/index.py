@@ -1,6 +1,4 @@
-from itertools import product
 import random
-from datetime import date
 
 from django.views.generic import ListView
 from django.db.models import Q, Count
@@ -25,19 +23,38 @@ class IndexView(ListView):
     def get_queryset(self):
         # отображаем все продукты
         q = Q()
-        if self.kwargs.get('pk'):
-            pk = self.kwargs.get('pk')
-            if pk not in '0':
-                if 'cat' in self.kwargs.get('filter'):
-                    # отображаем продукты только определенной категории
-                    q = Q(category=pk)
-                    self.page_title = Category.objects.get(pk=pk)
+        if self.kwargs.get('filter'):
+        # фильтр по категории или техники
+            if 'cat' in self.kwargs.get('filter'):
+                # отображаем продукты только определенной категории
+                if self.kwargs.get('pk'):
+                    # выводим категории по id
+                    pk = self.kwargs.get('pk')
+                    if pk not in '0':
+                        q = Q(category=pk)
+                        self.page_title = Category.objects.get(pk=pk)
                 else:
-                    # отображаем продукты только определенной техники
+                    # выводим категории по slug
+                    slug = self.kwargs.get('slug')
+                    if slug not in 'all':
+                        q = Q(category__slug=slug)
+                        self.page_title = Category.objects.get(slug=slug)
+            else:
+                # отображаем продукты только определенной техники
+                if self.kwargs.get('pk'):
+                    # выводим техники по id
+                    pk = self.kwargs.get('pk')
                     q = Q(technique=pk)
                     self.page_title = Technique.objects.get(pk=pk)
+                else:
+                    # выводим техники по slug
+                    slug = self.kwargs.get('slug')
+                    if slug not in 'all':
+                        q = Q(technique__slug=slug)
+                        self.page_title = Technique.objects.get(slug=slug)
         else:
             if 'query' in self.request.GET:
+                # Поиск
                 query = self.request.GET['query']
                 if len(query):
                     # ищем
@@ -55,6 +72,8 @@ class IndexView(ListView):
                         Q(category__title__lower__icontains=query) |\
                         Q(author__last_name__lower__icontains=query) |\
                         Q(technique__title__lower__icontains=query)
+
+
         not_sorted_qs = Product.objects.filter(q)
 
         # has_thumb=True если есть выбранные хорошие картинки
@@ -84,11 +103,5 @@ class IndexView(ListView):
 
         not_sorted_qs = p1.union(p2)
 
-        # сортирую вывод каждый день по разному,
-        # пусть хоть что-то иногда меняется на сайте
-        # annotation не получилось, почему-то всегда аннотируется
-        # одним и тем-же значением. random вызывается только 1 раз
-        sort_by = ('id', '-id', 'description', '-description',)
-        random.seed(int(str(date.today()).replace('-', '')))
-        return not_sorted_qs.order_by(
-            sort_by[random.randint(0, len(sort_by)-1)])
+        return not_sorted_qs.order_by('-created')
+        

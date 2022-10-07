@@ -23,28 +23,29 @@ class ProductAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
     search_fields = ('title', 'description',)
     ordering = ('title',)
+    prepopulated_fields = {'slug': ('title',)}
     fields = (
         ('title', 'created'),
         'description',
         ('category', 'technique',),
-        'materials',
-        ('author', 'size',),
+        ('materials', 'size',),
+        ('author', 'slug',),
     )
 
 
 @admin.register(a_models.Category)
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {'slug': ('title',)}
 
 
 @admin.register(a_models.Author)
 class AuthorAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {'slug': ('last_name', 'first_name', 'patronymic',)}
 
 
 @admin.register(a_models.Technique)
 class TechniqueAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {'slug': ('title',)}
 
 
 @admin.register(a_models.ArtComment)

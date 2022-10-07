@@ -23,8 +23,8 @@
                         <!-- Blog Details Image Start -->
                         <div class="image mb-6" data-aos="fade-up" data-aos-delay="300">
                         {% thumbnail thumb1st "1172" as im %}
-                            <a href="{% static thumb1st.url %}">
-                            <img class="fit-image" src="{% static im.url %}" alt="{ product.title }}">
+                            <a href="{{ thumb1st.url }}">
+                            <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
                             </a>
                         {% endthumbnail %}
                         </div>
@@ -85,7 +85,7 @@
                                 {% for video in product.videos.all %}
                                 <div class="col-sm-6 col-12 mb-6" data-aos-delay="300" data-aos="fade-up">
                                     <video controls class="fit-image" width="570">
-                                        <source src="{% static video.clip.url %}" type="video/mp4">							  
+                                        <source src="{{ video.clip.url }}" type="video/mp4">							  
                                             Your browser does not support the video tag.
                                      </video>
                                 </div>
@@ -95,8 +95,8 @@
                                 {% for image in thumbs_wo_1st.all %}
                                 <div class="col-sm-6 col-12 mb-6" data-aos-delay="300" data-aos="fade-up">
                                     {% thumbnail image.picture "570" as im %}
-                                    <a href="{% static image.picture.url %}">
-                                        <img class="fit-image" src="{% static im.url %}">
+                                    <a href="{{ image.picture.url }}">
+                                        <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
                                     </a>
                                     {% endthumbnail %}
                                 </div>
@@ -128,7 +128,7 @@
                                 <div class="comment-footer d-flex justify-content-between">
                                     <span class="author"><strong>{{comment.user}}</strong>
                                         {% if request.user == comment.user %}
-                                    <a class="link" href="{% url 'art:delete-comment' product.pk comment.pk %}" class="btn-reply"><i class="fa fa-reply"></i> <strong>Удалить комментарий</strong></a>
+                                    <a class="link" href="{% url 'art:delete-comment' product.slug comment.pk %}" class="btn-reply"><i class="fa fa-reply"></i> <strong>Удалить комментарий</strong></a>
                                     {% endif %}
                                 </div>
                             </div>
