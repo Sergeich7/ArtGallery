@@ -5,7 +5,7 @@ db.sqlite3
 ttt.py
 
 # картинки и видео - содержание
-static/media/
+media/
 
 # пароли
 project/settings.py
