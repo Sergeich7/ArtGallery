@@ -1,9 +1,6 @@
-import random
 
 from django.views.generic import ListView
-from django.db.models import Q, Count
-from django.db.models import CharField, TextField, Subquery, OuterRef, ImageField, ExpressionWrapper, Exists
-from django.db.models.functions import Lower
+from django.db.models import Q, Subquery, OuterRef, Exists
 
 from art.models import Gallery, Product, Category, Technique
 
@@ -57,22 +54,15 @@ class IndexView(ListView):
                 # Поиск
                 query = self.request.GET['query']
                 if len(query):
-                    # ищем
-#                    q = Q(title__iexact=query) |\
-#                        Q(description__iexact=query) |\
-#                        Q(materials__iexact=query) |\
-#                        Q(category__title__iexact=query) |\
-#                        Q(author__last_name__iexact=query) |\
-#                        Q(technique__title__iexact=query)
-                    CharField.register_lookup(Lower, "lower")
-                    TextField.register_lookup(Lower, "lower")
-                    q = Q(title__lower__icontains=query) |\
-                        Q(description__lower__icontains=query) |\
-                        Q(materials__lower__icontains=query) |\
-                        Q(category__title__lower__icontains=query) |\
-                        Q(author__last_name__lower__icontains=query) |\
-                        Q(technique__title__lower__icontains=query)
-
+                    # запрос в модель на поиск 
+                    # в SQLite не работает регистронезависимый поиск
+                    # в MySQL все работает норм
+                    q = Q(title__icontains=query) |\
+                        Q(description__icontains=query) |\
+                        Q(materials__icontains=query) |\
+                        Q(category__title__icontains=query) |\
+                        Q(author__last_name__icontains=query) |\
+                        Q(technique__title__icontains=query)
 
         not_sorted_qs = Product.objects.filter(q)
 
@@ -104,4 +94,5 @@ class IndexView(ListView):
         not_sorted_qs = p1.union(p2)
 
         return not_sorted_qs.order_by('-created')
+
         

@@ -1,3 +1,4 @@
+{% load tmpl_extras %}
 {% load static %}
 {% load crispy_forms_tags %}
 
@@ -37,7 +38,6 @@
     <!-- Main Style CSS -->
 
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" /> 
-    <link rel="stylesheet" href="{% static 'assets/css/nstyle.css' %}" /> 
 
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
@@ -47,21 +47,6 @@
     <!-- 
     <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
     -->
-
-<script>
-// функция для получения рандомного числа
-function randomInteger (min, max){
-  var rand = min - 0.5 + Math.random() * (max - min +1)
-  rand = Math.round(rand);
-  return rand;
-}
-// для персонажа у нас всего 8 картинок, поэтому ограничиваем случайное число от 1 до 8
-var randomPerson = randomInteger(1,2);
-// добавляем класс для body и для #person, список возможных классов пересичлен в файле style.css
-$(function(){
-  $('#breadcrumb').addClass("breadcrumb-" + randomPerson);
-});
-</script>
 
 </head>
 
@@ -75,11 +60,11 @@ $(function(){
                 <div class="row align-items-center">
                     <!-- Header Top Link/Search Start -->
                     <div class="col-lg-8 col-md-12">
-                        <ul class="n-header-top-links">
-                            <li><a href="{% url 'art:filter' 'cat' 0 %}"><b>Работ: {{ count_obj }}</b></a></li>
-                            <li><a href="{% url 'art:filter' 'cat' 0 %}"><b>Категорий: {{ count_cat }}</b></a></li>
-                            <li><a href="{% url 'art:filter' 'tec' 0 %}"><b>Техник: {{ count_tec }}</b></a></li>
-                            <li><a href="{% url 'art:filter' 'cat' 0 %}"><b>Авторов: {{ count_aut }}</b></a></li>
+                        <ul class="header-top-links">
+                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Работ: {% total_obj %}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Категорий: {% total_cat %}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'tec' 'all' %}"><b>Техник: {% total_tec %}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Авторов: {% total_aut %}</b></a></li>
                         </ul>
                     </div>
                     <!-- Header Top Link/Search End -->
@@ -122,33 +107,13 @@ $(function(){
                                 <li class="has-children">
                                     <a href="#">Категории</a>
                                     <ul class="sub-menu">
-                                        {% if all_categories %}
-                                        {% for category in all_categories %}
-                                            {% if category.num_arts > 0 %}
-                                                <li><a href="{% url 'art:filter' 'cat' category.slug %}">{{ category.title|truncatechars:12 }} ({{ category.num_arts }})</a></li>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% else %}
-                                            <p>No categories are available.</p>
-                                        {% endif %}
-                                        <li class="dropdown-divider"></li>
-                                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Все ({{ count_obj }})</a></li>
+                                        {% menu_items_cat_tec 'cat' %}
                                     </ul>
                                 </li>
                                 <li class="has-children">
                                     <a href="#">Техники</a>
                                     <ul class="sub-menu">
-                                        {% if all_techniques %}
-                                        {% for technique in all_techniques %}
-                                            {% if technique.num_arts > 0 %}
-                                                <li><a href="{% url 'art:filter' 'tec' technique.slug %}">{{ technique.title|truncatechars:12 }} ({{ technique.num_arts }})</a></li>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% else %}
-                                            <p>No categories are available.</p>
-                                        {% endif %}
-                                        <li class="dropdown-divider"></li>
-                                        <li><a href="{% url 'art:filter' 'tec' 'all' %}">Все ({{ count_obj }})</a></li>
+                                        {% menu_items_cat_tec 'tec' %}
                                     </ul>
                                 </li>
                                 <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
@@ -215,33 +180,13 @@ $(function(){
                             <li class="has-children">
                                 <a href="#">Категории <i class="fa fa-angle-down aria-hidden="true""></i></a>
                                 <ul class="dropdown">
-                                    {% if all_categories %}
-                                    {% for category in all_categories %}
-                                        {% if category.num_arts > 0 %}
-                                            <li><a href="{% url 'art:filter' 'cat' category.slug %}">{{ category.title|truncatechars:12 }} ({{ category.num_arts }})</a></li>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% else %}
-                                        <p>No categories are available.</p>
-                                    {% endif %}
-                                    <li class="dropdown-divider"></li>
-                                    <li><a href="{% url 'art:filter' 'cat' 'all' %}">Все ({{ count_obj }})</a></li>
+                                    {% menu_items_cat_tec 'cat' %}
                                 </ul>
                             </li>
                             <li class="has-children">
                                 <a href="#">Техники <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <ul class="dropdown">
-                                    {% if all_techniques %}
-                                    {% for technique in all_techniques %}
-                                        {% if technique.num_arts > 0 %}
-                                            <li><a href="{% url 'art:filter' 'tec' technique.slug %}">{{ technique.title|truncatechars:12 }} ({{ technique.num_arts }})</a></li>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% else %}
-                                        <p>No categories are available.</p>
-                                    {% endif %}
-                                    <li class="dropdown-divider"></li>
-                                    <li><a href="{% url 'art:filter' 'tec' 'all' %}">Все ({{ count_obj }})</a></li>
+                                    {% menu_items_cat_tec 'tec' %}
                                 </ul>
                             </li>
                             <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
@@ -261,6 +206,19 @@ $(function(){
                     </nav>
                 </div>
                 <!-- mobile menu end -->
+                <!-- Contact Links/Social Links Start -->
+                <div class="mt-auto">
+                    <!-- Contact Link Start -->
+                    <ul class="contact-links">
+                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Работ: <b>{% total_obj %}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Категорий: <b>{% total_cat %}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'tec' 'all' %}">Техник: <b>{% total_tec %}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Авторов: <b>{% total_aut %}</b></a></li>
+                    </ul>
+                    <!-- Contact Link End -->
+
+                </div>
+                <!-- Contact Links/Social Links End -->
 
             </div>
             <!-- Mobile Menu Inner End -->
@@ -295,11 +253,11 @@ $(function(){
     <!-- Header Section End -->
 
     <!-- Breadcrumb Section Start -->
-    <div class="section n-breadcrumb-bg n-breadcrumb-bg-1">
+    <div class="section breadcrumb-bg breadcrumb-bg-1">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="n-cr-breadcrumb-area">
+                    <div class="cr-breadcrumb-area">
                         <h1 class="title">{% block page_title %}{{ page_title }}{% endblock %}</h1>
                     </div>
                 </div>

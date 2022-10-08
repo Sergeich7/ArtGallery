@@ -14634,21 +14634,21 @@ ul li {
 
 /* Section Spacing */
 .section-padding {
-  padding-top: 120px;
-  padding-bottom: 120px;
+  padding-top: 80px;
+  padding-bottom: 80px;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .section-padding {
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .section-padding {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
 }
 
@@ -15022,8 +15022,8 @@ ul li {
 }
 
 .header-top-links li {
-  color: #ffffff;
-  padding: 0 30px;
+  color: lightgray;
+  padding: 0 12px;
   border-left: 1px solid #41414a;
   font-size: 13px;
   font-weight: 500;
@@ -15062,7 +15062,7 @@ ul li {
 }
 
 .header-top-links li a {
-  color: #ffffff;
+  color: lightgray;
 }
 
 .header-top-links li a:hover {
@@ -15091,9 +15091,9 @@ ul li {
   height: 40px;
   line-height: 40px;
   padding-left: 20px;
-  border: 1px solid #41414a;
+  border: 1px solid rgb(117, 117, 117);
   border-radius: 3px;
-  color: #ffffff;
+  color: lightgray;
   font-size: 14px;
   font-weight: 300;
   padding-right: 35px;
@@ -15119,27 +15119,27 @@ ul li {
 }
 
 .header-top-action .action-search::-webkit-input-placeholder {
-  color: #ffffff;
+  color: lightgray;
   opacity: 1;
 }
 
 .header-top-action .action-search::-moz-placeholder {
-  color: #ffffff;
+  color: lightgray;
   opacity: 1;
 }
 
 .header-top-action .action-search:-ms-input-placeholder {
-  color: #ffffff;
+  color: lightgray;
   opacity: 1;
 }
 
 .header-top-action .action-search::-ms-input-placeholder {
-  color: #ffffff;
+  color: lightgray;
   opacity: 1;
 }
 
 .header-top-action .action-search::placeholder {
-  color: #ffffff;
+  color: lightgray;
   opacity: 1;
 }
 
@@ -15527,7 +15527,6 @@ ul li {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-bottom: 10px;
 }
 
 .contact-links li a {
@@ -16395,8 +16394,18 @@ ul li {
 }
 
 /* ======== 4.6 Breadcrumb CSS ========*/
+.breadcrumb-bg-1 {
+  background-image: url(../images/bg/breadcrumb-bg1.jpg);
+}
+
+.breadcrumb-bg-2 {
+  background-image: url(../images/bg/breadcrumb-bg2.jpg);
+}
+
 .breadcrumb-bg {
-  background-image: url(../images/bg/breadcrumb-bg.jpg);
+/*
+  background-image: url(../images/bg/breadcrumb-bg1.jpg);
+*/
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -16411,7 +16420,7 @@ ul li {
   height: 100%;
   content: "";
   background: #ffb300;
-  opacity: .6;
+  opacity: .3;
 }
 
 .cr-breadcrumb-area {
@@ -16421,9 +16430,9 @@ ul li {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
+  -webkit-justify-content: center;
       -ms-flex-pack: justify;
-          justify-content: space-between;
+          justify-content: center;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
@@ -16445,16 +16454,18 @@ ul li {
 }
 
 .cr-breadcrumb-area .title {
-  color: #ffffff;
+  color: darkslategrey;
   font-size: 30px;
   font-weight: 700;
   text-transform: uppercase;
   z-index: 1;
   margin-bottom: 0px;
+  text-align: center;
 }
 
 @media only screen and (max-width: 575px) {
   .cr-breadcrumb-area .title {
+    text-align: center;
     font-size: 26px;
   }
 }
@@ -16471,7 +16482,7 @@ ul li {
 }
 
 .cr-breadcrumb-area .breadcrumb-list li {
-  color: #ffffff;
+  color: lightgray;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -16488,7 +16499,7 @@ ul li {
 }
 
 .cr-breadcrumb-area .breadcrumb-list li a {
-  color: #ffffff;
+  color: lightgray;
   -webkit-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;

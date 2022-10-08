@@ -13,14 +13,11 @@ urlpatterns = [
     path('api/', include('restapi.urls')),
     path('users/', include('users.urls')),
     path('captcha/', include('captcha.urls')),
-    path('', include('art.urls')),
     path('admin/', admin.site.urls),
     path('users/', include('django.contrib.auth.urls')),
+    path('', include('art.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns.append(path('static/<path:path>', never_cache(serve))) 
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-#    pass
-
-
