@@ -1,13 +1,15 @@
-from django.urls import include, path, re_path
+from django.urls import path, re_path
 from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
 
 from art.views import IndexView, DetailView, ContactFormView
+from .sitemaps import ArtSiteMaps
 
 app_name = 'art'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-
     path('contacts/', ContactFormView.as_view(), name='contacts'),
+
     path('thanks/', TemplateView.as_view(
                         template_name='art/thanks.html'), name='thanks'),
 
@@ -19,12 +21,21 @@ urlpatterns = [
     # детали работы по pk
     re_path('(?P<pk>[0-9]+)/\\Z', DetailView.as_view(), name='detail'),
     re_path(
-        '(?P<pk>[0-9]+)/del/(?P<dc>[0-9]+)\\Z', DetailView.as_view(),
+        '(?P<pk>[0-9]+)/del/(?P<dc>[0-9]+)\\Z',
+        DetailView.as_view(),
         name='delete-comment'),
 
-    # детали работы по slug
-    re_path('(?P<slug>[-a-zA-Z0-9_]+)/\\Z', DetailView.as_view(), name='detail'),
     re_path(
-        '(?P<slug>[-a-zA-Z0-9_]+)/del/(?P<dc>[0-9]+)\\Z', DetailView.as_view(),
+        'sitemap.xml/{0,1}', sitemap, {'sitemaps': ArtSiteMaps}, name='sitemaps'),
+
+    # детали работы по slug
+    re_path(
+        '(?P<slug>[-a-zA-Z0-9_!sitemap.xml]+)/\\Z',
+        DetailView.as_view(),
+        name='detail'),
+    re_path(
+        '(?P<slug>[-a-zA-Z0-9_!sitemap.xml]+)/del/(?P<dc>[0-9]+)\\Z',
+        DetailView.as_view(),
         name='delete-comment'),
+
 ]

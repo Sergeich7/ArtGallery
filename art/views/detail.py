@@ -1,4 +1,5 @@
 from django.views.generic import CreateView
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django import forms
 
@@ -26,9 +27,11 @@ class DetailView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.kwargs.get('pk'):
-            prod = Product.objects.get(pk=self.kwargs.get('pk'))
+#            prod = Product.objects.get(pk=self.kwargs.get('pk'))
+            prod = get_object_or_404(Product, pk=self.kwargs.get('pk'))
         else:
-            prod = Product.objects.get(slug=self.kwargs.get('slug'))
+#            prod = Product.objects.get(slug=self.kwargs.get('slug'))
+            prod = get_object_or_404(Product, slug=self.kwargs.get('slug'))
         th = prod.images.filter(thumb=True).order_by('?').first()
         if not th:
             th = prod.images.order_by('?').first()

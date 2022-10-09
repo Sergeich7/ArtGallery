@@ -1,0 +1,8 @@
+User-agent: *
+
+Sitemap: /sitemap.xml
+
+Disallow: /restapi/
+Disallow: /users/
+Disallow: /admin/
+

@@ -1,5 +1,4 @@
-#from pyexpat import model
-from enum import unique
+
 import cv2
 import moviepy.editor as mp
 
@@ -21,6 +20,9 @@ class Author(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True,
         verbose_name='Django user',)
 
+    def get_absolute_url(self):
+        return f'/aut/{self.slug}/'
+
     def __str__(self):
         return f'{self.last_name} {self.first_name} {self.patronymic}'.strip()
 
@@ -38,6 +40,9 @@ class Category(models.Model):
 #    slug = models.SlugField(max_length=30, null=True, blank=True)
     slug = models.SlugField(max_length=30, unique=True)
 
+    def get_absolute_url(self):
+        return f'/cat/{self.slug}/'
+
     def __str__(self):
         return self.title
 
@@ -54,6 +59,9 @@ class Technique(models.Model):
         max_length=30, verbose_name='Техника')
 #    slug = models.SlugField(max_length=30, null=True, blank=True)
     slug = models.SlugField(max_length=30, unique=True)
+
+    def get_absolute_url(self):
+        return f'/tec/{self.slug}/'
 
     def __str__(self):
         return self.title
@@ -83,6 +91,8 @@ class Product(models.Model):
     technique = models.ForeignKey(
         Technique, on_delete=models.CASCADE, verbose_name='Техника')
 
+    def get_absolute_url(self):
+        return f'/{self.slug}/'
 
     def __str__(self):
         return self.title
