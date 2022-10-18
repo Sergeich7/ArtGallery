@@ -16394,12 +16394,32 @@ ul li {
 }
 
 /* ======== 4.6 Breadcrumb CSS ========*/
-.breadcrumb-bg-1 {
+.breadcrumb-1-bg {
   background-image: url(../images/bg/breadcrumb-bg1.jpg);
 }
 
-.breadcrumb-bg-2 {
+.breadcrumb-2-bg {
   background-image: url(../images/bg/breadcrumb-bg2.jpg);
+}
+
+.breadcrumb-3-bg {
+  background-image: url(../images/bg/breadcrumb-bg3.jpg);
+}
+
+.breadcrumb-4-bg {
+  background-image: url(../images/bg/breadcrumb-bg4.jpg);
+}
+
+.breadcrumb-5-bg {
+  background-image: url(../images/bg/breadcrumb-bg5.jpg);
+}
+
+.breadcrumb-6-bg {
+  background-image: url(../images/bg/breadcrumb-bg6.jpg);
+}
+
+.breadcrumb-7-bg {
+  background-image: url(../images/bg/breadcrumb-bg7.jpg);
 }
 
 .breadcrumb-bg {

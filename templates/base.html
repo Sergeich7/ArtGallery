@@ -44,13 +44,12 @@
 
     <link rel="stylesheet" href="{% static 'assets/css/vendor.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}">
-    <!-- 
-    <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
-    -->
 
 </head>
 
+
 <body>
+
     <!-- Header Section Start -->
     <div class="header section">
 
@@ -101,9 +100,6 @@
                         <!-- Main Menu Start -->
                         <div class="main-menu d-none d-lg-flex">
                             <ul>
-                                <li>
-                                    <a href="/">Главная</a>
-                                </li>
                                 <li class="has-children">
                                     <a href="#">Категории</a>
                                     <ul class="sub-menu">
@@ -116,10 +112,16 @@
                                         {% menu_items_cat_tec 'tec' %}
                                     </ul>
                                 </li>
+                                <li class="has-children">
+                                    <a href="#">Авторы</a>
+                                    <ul class="sub-menu">
+                                        {% menu_items_cat_tec 'aut' %}
+                                    </ul>
+                                </li>
                                 <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
                                 {% if user.is_authenticated %}
                                 <li class="has-children">
-                                    <a href="#">Личный кабинет</a>
+                                    <a href="#">{{user.username|truncatechars:7}}</a>
                                     <ul class="sub-menu">
                                         <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
                                         <li><a href="{% url 'logout' %}">Выход</a></li>
@@ -189,10 +191,16 @@
                                     {% menu_items_cat_tec 'tec' %}
                                 </ul>
                             </li>
+                            <li class="has-children">
+                                <a href="#">Авторы <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul class="dropdown">
+                                    {% menu_items_cat_tec 'aut' %}
+                                </ul>
+                            </li>
                             <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
                             {% if user.is_authenticated %}
                             <li class="has-children">
-                                <a href="#">Личный кабинет<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <a href="#">{{user.username}}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <ul class="dropdown">
                                     <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
                                     <li><a href="{% url 'logout' %}">Выход</a></li>
@@ -253,12 +261,17 @@
     <!-- Header Section End -->
 
     <!-- Breadcrumb Section Start -->
-    <div class="section breadcrumb-bg breadcrumb-bg-1">
+<!--    
+<div class="section breadcrumb-bg breadcrumb-1-bg">
+-->
+    <div class="section breadcrumb-bg breadcrumb-{% random_int 1 5 %}-bg">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="cr-breadcrumb-area">
+                        <!--
                         <h1 class="title">{% block page_title %}{{ page_title }}{% endblock %}</h1>
+                        -->
                     </div>
                 </div>
             </div>
@@ -269,24 +282,89 @@
     {% block content %}
     {% endblock %}
 
-    <div class="desc">
-        <p>&nbsp;</p>
-    </div>
-
-<!--
     <footer class="section footer-section bg-secondary">
-        <div class="container">
-            <div class="row align-items-center footer-bottom">
-                <div class="col-12 text-center">
-                    <div class="copyright-content">
-                        <p class="mb-0"></p>
+        <!-- Footer Top Start -->
+        <div class="footer-top">
+            <div class="container">
+                <div class="row mb-n10">
+                    <!--
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10">
+                    -->
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
+                            <div class="single-footer-widget">
+                            <h2 class="widget-title">Категории</h2>
+                            <ul class="widget-list pt-6">
+                                {% menu_items_cat_tec 'cat' 'noall' %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
+                        <div class="single-footer-widget">
+                            <h2 class="widget-title">Техники</h2>
+                            <ul class="widget-list pt-6">
+                                {% menu_items_cat_tec 'tec' 'noall' %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
+                        <div class="single-footer-widget">
+                            <h2 class="widget-title">Авторы</h2>
+                            <ul class="widget-list pt-6">
+                                {% menu_items_cat_tec 'aut' 'noall' %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
+                        <div class="single-footer-widget">
+                            <h2 class="widget-title">Страницы</h2>
+                            <ul class="widget-list pt-6">
+                                <li><a href="/">Главная</a></li>
+                                <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-3 mb-10"">
+                        <div class="single-footer-widget">
+                            <h2 class="widget-title">Личный кабинет</h2>
+                            <p class="desc-content mb-0"><strong>{{user.username}}</strong></p>
+                            {% if user.is_authenticated %}
+                                <ul class="widget-list pt-1">
+                                <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
+                                <li><a href="{% url 'logout' %}">Выход</a></li>
+                                {% else %}
+                                <ul class="widget-list pt-6">
+                                    <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
+                                <li><a href="{% url 'users:login' %}">Войти</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
--->
+        <!-- Footer Top End -->
 
+        <!-- Footer Bottom Start -->
+        <div class="container">
+            <div class="row align-items-center footer-bottom">
+                <div class="col-12 text-center">
+                    <div class="copyright-content">
+                        <p class="mb-0">© 
+<script language="JavaScript">
+TekDat4Year = new Date();
+tekear = TekDat4Year.getYear();
+if (tekear < 1800) tekear = tekear + 1900;
+styear = 2022
+document.write(styear);
+if (styear < tekear) document.write(' - ' + tekear);
+</script>
+                        <a href="https://artgallery-tatyana.ru/">Aрт-галерея "ТАТЬЯНА".</a> Все права защищены.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Bottom End -->
+    </footer>
     <!-- Scroll Top Start -->
     <a href="#" class="scroll-top" id="scroll-top">
         <i class="arrow-top fa fa-long-arrow-up"></i>

@@ -2,6 +2,8 @@ User-agent: *
 
 Sitemap: /sitemap.xml
 
+Disallow: /instruction/
+
 Disallow: /restapi/
 Disallow: /users/
 Disallow: /admin/

@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+
+    <!-- Blog Section Start -->
+    <div class="section section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- Blog Main Area Start -->
+                <div class="col-lg-6 m-auto">
+
+                    <div class="blog-comment-form-wrapper" data-aos="fade-up" data-aos-delay="400">
+
+                        <div class="blog-comment-form-title">
+                            <h1 class="title">Инструкция</h1>
+                        </div>
+
+                        <div class="col-12 col-custom mt-4">
+                            <p class="author">Для размещения работы на сайте необходимо прислать письмо на адрес <a href="mailto:webmaster@artgallery-tatyana.ru">webmaster@artgallery-tatyana.ru</a> с информацией:</p>
+                            <ul>
+                                <li><i class="fa fa-check"></i> Название</li>
+                                <li><i class="fa fa-check"></i> Автор</li>
+                                <li><i class="fa fa-check"></i> Год создания (можно дату)</li>
+                                <li><i class="fa fa-check"></i> Категория (выбрать из уже имеющихся или добавить новую)</li>
+                                <li><i class="fa fa-check"></i> Техника исполнения (выбрать из уже имеющихся или добавить новую)</li>
+                                <li><i class="fa fa-check"></i> Описание</li>
+                                <li><i class="fa fa-check"></i> Используемые материалы</li>
+                                <li><i class="fa fa-check"></i> Размер (не обязательно)</li>
+                                <li><i class="fa fa-check"></i> Фотографии (обязательна хоть одна фотография)</li>
+                                <li><i class="fa fa-check"></i> Видео (можно несколько, но не обязательно)</li>
+                            </ul>
+                        </div>
+
+                        <div class="blog-comment-form-title mt-4">
+                            <h1 class="title">Рекомендации</h1>
+                        </div>
+
+                        <div class="col-12 col-custom mt-4">
+                            <p class="author"><i class="fa fa-check"></i> <strong>НАЗВАНИЕ</strong><br> Название должно быть коротким и ёмким. <strong>"Грачи прилетели"</strong> - хорошее название. <strong>"Масленный пейзаж стаи черных птиц на деревьях"</strong> - плохое название.</p>
+                            <p class="author"><i class="fa fa-check"></i> <strong>ОПИСАНИЕ</strong><br> Описание чем больше, тем лучше. Можно описать мотивы побудившие к созданию работы. Этапы создания. Может трудности какие-то были. Может советы для последователей. В общем все относящееся к этой работе.</p>
+                            <p class="author"><i class="fa fa-check"></i> <strong>ФОТОГРАФИИ</strong><br> Фотографий можно несколько. Желательно с разного ракурса. Можно так-же добавить фотографии сделанные в ходе выполнения работ.</p>
+                        </div>
+
+                    </div>
+                <!-- Blog Comments Form End -->
+                </div>
+                <!-- Blog Main Area End -->
+            </div>
+        </div>
+    </div>
+    <!-- Blog Section End -->
+
+{% endblock %}

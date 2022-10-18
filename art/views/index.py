@@ -2,7 +2,7 @@
 from django.views.generic import ListView
 from django.db.models import Q, Subquery, OuterRef, Exists
 
-from art.models import Gallery, Product, Category, Technique
+from art.models import Author, Gallery, Product, Category, Technique
 
 
 class IndexView(ListView):
@@ -10,7 +10,6 @@ class IndexView(ListView):
     context_object_name = 'all_products'
     page_title = ''
     paginate_by = 9
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,7 +35,7 @@ class IndexView(ListView):
                     if slug not in 'all':
                         q = Q(category__slug=slug)
                         self.page_title = Category.objects.get(slug=slug)
-            else:
+            elif 'tec' in self.kwargs.get('filter'):
                 # отображаем продукты только определенной техники
                 if self.kwargs.get('pk'):
                     # выводим техники по id
@@ -49,6 +48,19 @@ class IndexView(ListView):
                     if slug not in 'all':
                         q = Q(technique__slug=slug)
                         self.page_title = Technique.objects.get(slug=slug)
+            else:
+                # отображаем продукты только определенного автора
+                if self.kwargs.get('pk'):
+                    # выводим техники по id
+                    pk = self.kwargs.get('pk')
+                    q = Q(author=pk)
+                    self.page_title = Author.objects.get(pk=pk)
+                else:
+                    # выводим техники по slug
+                    slug = self.kwargs.get('slug')
+                    if slug not in 'all':
+                        q = Q(author__slug=slug)
+                        self.page_title = Author.objects.get(slug=slug)
         else:
             if 'query' in self.request.GET:
                 # Поиск

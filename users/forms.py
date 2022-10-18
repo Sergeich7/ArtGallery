@@ -81,7 +81,7 @@ class MyAuthenticationForm(AuthenticationForm):
     username = UsernameField(label='', widget=forms.TextInput(
         attrs={
             'class': 'rounded-0 w-100 input-area name, mb-4', 
-            'placeholder': 'Имя',}))
+            'placeholder': 'Имя или e-mail', }))
 
     password = forms.CharField(label='', widget=forms.PasswordInput(
         attrs={

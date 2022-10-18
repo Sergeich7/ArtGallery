@@ -11,11 +11,10 @@ class Author(models.Model):
 
     last_name = models.CharField(
         max_length=30, blank=False, verbose_name='Фамилия',)
-    first_name = models.CharField(max_length=30, verbose_name='Имя',)
-    patronymic = models.CharField(max_length=30, verbose_name='Отчество',)
-#    slug = models.SlugField(max_length=100, null=True, blank=True)
-    slug = models.SlugField(max_length=100, unique=True)
-    email = models.EmailField(max_length=50)
+    first_name = models.CharField(max_length=30, verbose_name='Имя')
+    patronymic = models.CharField(max_length=30, verbose_name='Отчество')
+    slug = models.SlugField(max_length=100, unique=True, db_index=True,)
+    email = models.EmailField(max_length=50,)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, null=True, blank=True,
         verbose_name='Django user',)
@@ -37,8 +36,7 @@ class Author(models.Model):
 class Category(models.Model):
     title = models.CharField(
         max_length=30, verbose_name='Категория')
-#    slug = models.SlugField(max_length=30, null=True, blank=True)
-    slug = models.SlugField(max_length=30, unique=True)
+    slug = models.SlugField(max_length=30, db_index=True, unique=True)
 
     def get_absolute_url(self):
         return f'/cat/{self.slug}/'
@@ -57,7 +55,6 @@ class Category(models.Model):
 class Technique(models.Model):
     title = models.CharField(
         max_length=30, verbose_name='Техника')
-#    slug = models.SlugField(max_length=30, null=True, blank=True)
     slug = models.SlugField(max_length=30, unique=True)
 
     def get_absolute_url(self):
@@ -76,8 +73,7 @@ class Technique(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название')
-#    slug = models.SlugField(max_length=100, null=True)
-    slug = models.SlugField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, db_index=True, unique=True)
     created = models.DateField(null=True, verbose_name='Дата создания')
     description = models.TextField(verbose_name='Описание')
     materials = models.CharField(

@@ -11,7 +11,7 @@ from project.settings import ADMIN
 
 class ContactForm(forms.Form):
     name = forms.CharField(
-        label='', 
+        label='',
         widget=forms.TextInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Ваше имя',}))
     email = forms.EmailField(label='', widget=forms.EmailInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'e-mail',}))
     message = forms.CharField(label='', widget=forms.Textarea(attrs={"rows": "4", "class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Текст сообщения',}))

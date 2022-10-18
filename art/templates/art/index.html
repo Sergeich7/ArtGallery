@@ -53,35 +53,25 @@
                 <!-- Pagination Start -->
                 <div class="col" data-aos="fade-up" data-aos-delay="300">
                     <ul class="pagination-cr mt-8 pt-8 border-top">
-                    <!--
-                        <li><a href="#"><i class="fa fa-angle-double-left"></i> Prev</a></li>
-                        <li class="active"><a href="#">01</a></li>
-                        <li><a href="#">02</a></li>
-                        <li><a href="#">03</a></li>
-                        <li><a href="#">Next <i class="fa fa-angle-double-right"></i></a></li>
-                    -->
+                        <li></li>
                         
-                        <li>
-                            <a href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% if query %}&query={{ query }}{% endif %}{% else %}#{% endif %}">
-                                <i class="fa fa-angle-double-left"></i> Prev
-                            </a>
-                        </li>
+{% for p in page_obj.paginator.page_range %}
+    {% if p != page_obj.number %}
+        {% if p == page_obj.paginator.num_pages and page_obj.number < page_obj.paginator.num_pages|add:-2 %}
+            <li><strong>. . .</strong></li>
+        {% endif %}
+        {% if p == 1 or p == page_obj.previous_page_number or p == page_obj.next_page_number or p == page_obj.paginator.num_pages %}
+            <li><a href="?page={{ p }}{% if query %}&query={{ query }}{% endif %}">{{ p }}</a></li>
+        {% endif %}
+        {% if p == 1 and page_obj.number >= 4 %}
+            <li><strong>. . .</strong></li>
+        {% endif %}
+    {% else %}
+        <li class="active"><a href="#">{{ p }}</a></li>
+    {% endif %}
+{% endfor %}
                         
-                        
-                        {% for p in page_obj.paginator.page_range %}
-                        {% if p == page_obj.number %}
-                        <li class="active"><a href="#">{{ p }}</a></li>
-                        {% else %}
-                        <li><a href="?page={{ p }}{% if query %}&query={{ query }}{% endif %}">{{ p }}</a></li>
-                        {% endif %}
-                        {% endfor %}
-                        
-                        <li>
-                            <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% if query %}&query={{ query }}{% endif %}{% else %}#{% endif %}">
-                                Next <i class="fa fa-angle-double-right"></i>
-                            </a>
-                        </li>
-                        
+                        <li></li>
                     </ul>
                 </div>
                 <!-- Pagination End -->

@@ -13,6 +13,9 @@ urlpatterns = [
     path('thanks/', TemplateView.as_view(
                         template_name='art/thanks.html'), name='thanks'),
 
+    path('instruction/', TemplateView.as_view(
+                        template_name='art/instruction.html'), name='instruction'),
+
     # фильтр по категориям и техникам (id или slug)
     # /cat/1/ /cat/vazy/ /tec/2/ /tec/dekupazh/
     re_path('(?P<filter>[a-z]+)/(?P<pk>[0-9]+)/\\Z', IndexView.as_view(), name='filter'),
