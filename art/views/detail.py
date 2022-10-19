@@ -14,7 +14,7 @@ class CommentForm(forms.ModelForm):
         labels = {                  # не отображать для него заголовок
             'text': '',
         }
-        widgets={
+        widgets = {
             "text": forms.Textarea(attrs={'cols': '30', 'rows': '5', 'class': 'rounded-0 w-100 custom-textarea input-area',}),
         }  
 

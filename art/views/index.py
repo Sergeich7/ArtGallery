@@ -51,30 +51,29 @@ class IndexView(ListView):
             else:
                 # отображаем продукты только определенного автора
                 if self.kwargs.get('pk'):
-                    # выводим техники по id
+                    # выводим автора по id
                     pk = self.kwargs.get('pk')
                     q = Q(author=pk)
                     self.page_title = Author.objects.get(pk=pk)
                 else:
-                    # выводим техники по slug
+                    # выводим автора по slug
                     slug = self.kwargs.get('slug')
                     if slug not in 'all':
                         q = Q(author__slug=slug)
                         self.page_title = Author.objects.get(slug=slug)
-        else:
-            if 'query' in self.request.GET:
-                # Поиск
-                query = self.request.GET['query']
-                if len(query):
-                    # запрос в модель на поиск 
-                    # в SQLite не работает регистронезависимый поиск
-                    # в MySQL все работает норм
-                    q = Q(title__icontains=query) |\
-                        Q(description__icontains=query) |\
-                        Q(materials__icontains=query) |\
-                        Q(category__title__icontains=query) |\
-                        Q(author__last_name__icontains=query) |\
-                        Q(technique__title__icontains=query)
+        elif 'query' in self.request.GET:
+            # Поиск
+            query = self.request.GET['query']
+            if len(query):
+                # запрос в модель на поиск
+                # в SQLite не работает регистронезависимый поиск
+                # в MySQL все работает норм
+                q = Q(title__icontains=query) |\
+                    Q(description__icontains=query) |\
+                    Q(materials__icontains=query) |\
+                    Q(category__title__icontains=query) |\
+                    Q(author__last_name__icontains=query) |\
+                    Q(technique__title__icontains=query)
 
         not_sorted_qs = Product.objects.filter(q)
 
@@ -107,4 +106,3 @@ class IndexView(ListView):
 
         return not_sorted_qs.order_by('-created')
 
-        

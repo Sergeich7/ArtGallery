@@ -60,10 +60,10 @@
                     <!-- Header Top Link/Search Start -->
                     <div class="col-lg-8 col-md-12">
                         <ul class="header-top-links">
-                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Работ: {% total_obj %}</b></a></li>
-                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Категорий: {% total_cat %}</b></a></li>
-                            <li><a href="{% url 'art:filter' 'tec' 'all' %}"><b>Техник: {% total_tec %}</b></a></li>
-                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Авторов: {% total_aut %}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Работ: {{ total_obj }}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Категорий: {{ total_cat }}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'tec' 'all' %}"><b>Техник: {{ total_tec }}</b></a></li>
+                            <li><a href="{% url 'art:filter' 'cat' 'all' %}"><b>Авторов: {{ total_aut }}</b></a></li>
                         </ul>
                     </div>
                     <!-- Header Top Link/Search End -->
@@ -218,10 +218,10 @@
                 <div class="mt-auto">
                     <!-- Contact Link Start -->
                     <ul class="contact-links">
-                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Работ: <b>{% total_obj %}</b></a></li>
-                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Категорий: <b>{% total_cat %}</b></a></li>
-                        <li><a href="{% url 'art:filter' 'tec' 'all' %}">Техник: <b>{% total_tec %}</b></a></li>
-                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Авторов: <b>{% total_aut %}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Работ: <b>{{ total_obj }}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Категорий: <b>{{ total_cat }}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'tec' 'all' %}">Техник: <b>{{ total_tec }}</b></a></li>
+                        <li><a href="{% url 'art:filter' 'cat' 'all' %}">Авторов: <b>{{ total_aut }}</b></a></li>
                     </ul>
                     <!-- Contact Link End -->
 

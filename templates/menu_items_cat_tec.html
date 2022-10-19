@@ -11,6 +11,6 @@
 {% endif %}
 {% if items_no_all == 'all' %}
     <li class="dropdown-divider"></li>
-    <li><a href="{% url 'art:filter' items_type 'all' %}">Все ({% total_obj %})</a></li>
+    <li><a href="{% url 'art:filter' items_type 'all' %}">Все ({{ total_obj }})</a></li>
 {% endif %}
 
