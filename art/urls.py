@@ -19,7 +19,7 @@ urlpatterns = [
     # фильтр по категориям и техникам (id или slug)
     # /cat/1/ /cat/vazy/ /tec/2/ /tec/dekupazh/
     re_path('(?P<filter>[a-z]+)/(?P<pk>[0-9]+)/\\Z', IndexView.as_view(), name='filter'),
-    re_path('(?P<filter>[a-z]+)/(?P<slug>[-a-z]+)/\\Z', IndexView.as_view(), name='filter'),
+    re_path('(?P<filter>[a-z]+)/(?P<slug>[-a-z0-9_]+)/\\Z', IndexView.as_view(), name='filter'),
 
     # детали работы по pk
     re_path('(?P<pk>[0-9]+)/\\Z', DetailView.as_view(), name='detail'),

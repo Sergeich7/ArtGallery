@@ -22,7 +22,7 @@
                     <div class="blog-single-post-wrapper" data-aos="fade-up" data-aos-delay="100">
                         <div class="blog-thumb">
                             <a class="blog-overlay" href="{% url 'art:detail' product.slug %}">
-                                {% thumbnail product.th "370" as im %}
+                                {% thumbnail product.thumbnail.picture "370" as im %}
                                 <img src="{{ im.url }}" class="main-image" alt="{{ product.title }}">
                                 {% endthumbnail %}
                             </a>

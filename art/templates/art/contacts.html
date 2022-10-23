@@ -16,14 +16,6 @@
 
                     <div class="blog-comment-form-wrapper" data-aos="fade-up" data-aos-delay="400">
 
-                        <div class="blog-comment-form-title">
-                            <h1 class="title">Контакты</h1>
-                        </div>
-
-                        <div class="col-12 col-custom mt-4">
-                            <span class="author">Татьяна Сергеевна Белашова<span>
-                        </div>
-
                         <div class="blog-comment-form-title mt-4">
                             <h1 class="title">Обратная связь</h1>
                         </div>
@@ -36,15 +28,15 @@
                                         {% csrf_token %}
                                         {{ form|crispy }}
                                     </div>
-                            
-                                    <!-- Submit Button Start -->
                                     <div class="col-12 col-custom mt-4">
                                         <button type="submit" class="btn btn-primary btn-hover-secondary">Отправить</button>
                                     </div>
-                                    <!-- Submit Button End -->
 
                                 </div>
                             </form>
+                            <div class="col-12 col-custom mt-4">
+                                <p>Я <strong>СОГЛАСЕН</strong> на обработку и хранение моих персональных данных, указанных мною в Форме обратной связи.</p>
+                        </div>
                         </div>
                         <!--
                         <div class="col-12 col-custom mt-4">

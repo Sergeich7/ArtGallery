@@ -1,7 +1,4 @@
 
-import cv2
-import moviepy.editor as mp
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -30,7 +27,7 @@ class Author(models.Model):
 
         verbose_name = 'Автор'
         verbose_name_plural = 'Авторы'
-        ordering = ['last_name']
+        ordering = ['last_name', 'first_name']
 
 
 class Category(models.Model):
@@ -87,6 +84,14 @@ class Product(models.Model):
     technique = models.ForeignKey(
         Technique, on_delete=models.CASCADE, verbose_name='Техника')
 
+    @property
+    def thumbnail(self):
+        """Возвращает рандомную хорошую тумбу как основную."""
+        th = self.images.filter(thumb=True).order_by('?').first()
+        if not th:
+            th = self.images.order_by('?').first()
+        return th
+
     def get_absolute_url(self):
         return f'/{self.slug}/'
 
@@ -125,7 +130,6 @@ class ArtComment(models.Model):
 class Gallery(models.Model):
     picture = models.ImageField(
         upload_to='gallery', verbose_name='Фотографии')
-    vertical = models.BooleanField(default=False, editable=False)
     thumb = models.BooleanField(default=False)
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='images')
@@ -136,37 +140,12 @@ class Gallery(models.Model):
         verbose_name = 'Фотография'
         verbose_name_plural = 'Фотографии'
 
-    def save(self, *args, **kwargs):
-        """Проверка картинки на вертикальность."""
-        """Чтобы не проверять каждый раз при отображении"""
-        super().save(*args, **kwargs)
-        # if self.picture.height > self.picture.width:
-        #   self.vertical = True
-        # иногда у картинки перепутаны размер. скорее всего в файле что-то.
-        # битый может битый, а может в PIL какой косяк
-        # получаю размеры при помощи OpenCV
-        height, width, _ = cv2.imread(self.picture.path).shape
-        if height > width:
-            self.vertical = True
-            super().save(*args, **kwargs)
-
 
 class Video(models.Model):
     clip = models.FileField(
         upload_to='videos', blank=True, verbose_name='Видео')
-    vertical = models.BooleanField(default=False, editable=False)
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='videos')
-
-    def save(self, *args, **kwargs):
-        """Проверка видео на вертикальность."""
-        """Чтобы не проверять каждый раз при отображении"""
-        super().save(*args, **kwargs)
-        if self.clip:
-            clip1 = mp.VideoFileClip(self.clip.path)
-            if clip1.h < clip1.w:
-                self.vertical = True
-        super().save(*args, **kwargs)
 
     class Meta:
         """Что-бы в админке красиво было."""

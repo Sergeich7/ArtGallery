@@ -15,10 +15,10 @@ def menu_items_cat_tec(context, items_type='cat', fl_no_all='all'):
     # не желательно.
     # если fl_no_all='all', то добавляет строку с общим количеством работ.
     return {
-        'all_items': context[f'all_items_{items_type}'],
         'items_type': items_type,
         'items_no_all': fl_no_all,
-        'total_obj': context['total_obj']
+        'total_obj': context['total_obj'],
+        'all_items': context[f'all_items_{items_type}'],
     }
 
 

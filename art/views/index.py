@@ -75,34 +75,36 @@ class IndexView(ListView):
                     Q(author__last_name__icontains=query) |\
                     Q(technique__title__icontains=query)
 
-        not_sorted_qs = Product.objects.filter(q)
+        return Product.objects.filter(q).order_by('-created')
 
-        # has_thumb=True если есть выбранные хорошие картинки
-        sq_has_thumb = Exists(
-            # True - Есть картинки выбранные под тумбы
-            Gallery.objects.filter(product=OuterRef('pk')).filter(thumb=True)
-        )
-        not_sorted_qs = not_sorted_qs.annotate(has_thumb=sq_has_thumb)
-
-        # выбираем картинку под тумбу для тех,
-        # где нет выбранных под тумбы рандомно из всех
-        sq = Subquery(
-            # Рандомная тумба из всех тумб
-            Gallery.objects.filter(product=OuterRef('pk')).\
-                order_by('?')[:1].values('picture')
-        )
-        p1 = not_sorted_qs.annotate(th=sq).filter(has_thumb=False)
-
-        # выбираем картинку под тумбу для тех,
-        # где есть выбранные под тумбы рандомно из всех выбранных
-        sq = Subquery(
-            # Рандомная тумба из выбранных тумб
-            Gallery.objects.filter(product=OuterRef('pk')).filter(thumb=True).\
-                order_by('?')[:1].values('picture')
-        )
-        p2 = not_sorted_qs.annotate(th=sq).filter(has_thumb=True)
-
-        not_sorted_qs = p1.union(p2)
-
-        return not_sorted_qs.order_by('-created')
-
+# Может так будет работать быстрее чем через вычисляемое поле?
+#        not_sorted_qs = Product.objects.filter(q)
+#
+#        # has_thumb=True если есть выбранные хорошие картинки
+#        sq_has_thumb = Exists(
+#            # True - Есть картинки выбранные под тумбы
+#            Gallery.objects.filter(product=OuterRef('pk')).filter(thumb=True)
+#        )
+#        not_sorted_qs = not_sorted_qs.annotate(has_thumb=sq_has_thumb)
+#
+#        # выбираем картинку под тумбу для тех,
+#        # где нет выбранных под тумбы рандомно из всех
+#        sq = Subquery(
+#            # Рандомная тумба из всех тумб
+#            Gallery.objects.filter(product=OuterRef('pk')).\
+#                order_by('?')[:1].values('picture')
+#        )
+#        p1 = not_sorted_qs.annotate(th=sq).filter(has_thumb=False)
+#
+#        # выбираем картинку под тумбу для тех,
+#        # где есть выбранные под тумбы рандомно из всех выбранных
+#        sq = Subquery(
+#            # Рандомная тумба из выбранных тумб
+#            Gallery.objects.filter(product=OuterRef('pk')).filter(thumb=True).\
+#                order_by('?')[:1].values('picture')
+#        )
+#        p2 = not_sorted_qs.annotate(th=sq).filter(has_thumb=True)
+#
+#        not_sorted_qs = p1.union(p2)
+#
+#        return not_sorted_qs.order_by('-created')

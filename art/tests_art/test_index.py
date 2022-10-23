@@ -4,23 +4,14 @@ from django.urls import reverse
 
 class IndexViewTest(TestCase):
 
-    def test_view_url_exist_at_proper_location(self):
-        resp = self.client.get('/')
-        self.assertEqual(resp.status_code, 200)
-
-    def test_view_uses_correct_template(self):
-        resp = self.client.get(reverse('art:index'))
+    def test_index_abs_tmp(self):
+        resp = self.client.get('/', follow=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'art/index.html')
 
-    def test_view_cat_exist_at_proper_location(self):
-        resp = self.client.get('/cat/1/')
+    def test_index_rev(self):
+        resp = self.client.get(reverse('art:index'), follow=True)
         self.assertEqual(resp.status_code, 200)
-
-    def test_view_cat_uses_correct_template(self):
-        resp = self.client.get(reverse('art:category', args=[1]))
-        self.assertEqual(resp.status_code, 200)
-        self.assertTemplateUsed(resp, 'art/index.html')
 
 
 #from django.contrib.auth import get_user_model

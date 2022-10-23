@@ -1,3 +1,7 @@
+
+.coverage
+htmlcov/
+
 # материалы для разработки
 .restart-app
 Материалы/
