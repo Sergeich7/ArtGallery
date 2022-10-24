@@ -1,4 +1,5 @@
 
+# покрытие тестами
 .coverage
 htmlcov/
 
@@ -12,7 +13,7 @@ ttt.py
 media/
 
 # пароли
-project/settings.py
+config.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

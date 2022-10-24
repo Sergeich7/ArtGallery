@@ -28,7 +28,7 @@ class ProductViewSet(ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
 
 
-class IdListProductsViewSet(ListAPIView):
+class IdListProductsView(ListAPIView):
 #    queryset = Product.objects.all()
     serializer_class = IdListSerializer
 

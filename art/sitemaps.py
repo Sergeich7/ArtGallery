@@ -6,6 +6,8 @@ from .models import Product, Category, Technique, Author
 
 
 class StaticSitemap(Sitemap):
+    changefreq = 'weekly'
+    priority = 0.9
 
     def items(self):
         return ['art:index', 'art:contacts']
@@ -50,6 +52,6 @@ ArtSiteMaps = {
     'product': ProductSitemap,
     'category': CategorySitemap,
     'technique': TechniqueSitemap,
-#    'author': AuthorSitemap,
+    'author': AuthorSitemap,
     'static': StaticSitemap
     }
