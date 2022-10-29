@@ -16,7 +16,7 @@ media/
 config.json
 
 # миграции
-migrations/
+art/migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
