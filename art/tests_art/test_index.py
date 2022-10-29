@@ -1,18 +1,20 @@
+from http import HTTPStatus
+
 from django.test import TestCase
 from django.urls import reverse
 
 
-class IndexViewTest(TestCase):
-
-    def test_index_abs_tmp(self):
-        resp = self.client.get('/', follow=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertTemplateUsed(resp, 'art/index.html')
-
-    def test_index_rev(self):
-        resp = self.client.get(reverse('art:index'), follow=True)
-        self.assertEqual(resp.status_code, 200)
-
+#class IndexViewTest(TestCase):
+#
+#    def test_index_abs_tmp(self):
+#        resp = self.client.get('/', follow=True)
+#        self.assertEqual(resp.status_code, HTTPStatus.OK)
+#        self.assertTemplateUsed(resp, 'art/index.html')
+#
+#    def test_index_rev(self):
+#        resp = self.client.get(reverse('art:index'), follow=True)
+#        self.assertEqual(resp.status_code, HTTPStatus.OK)
+#
 
 #from django.contrib.auth import get_user_model
 #from django.test import Client, TestCase

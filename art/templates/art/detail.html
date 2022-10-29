@@ -22,7 +22,7 @@
 
                         <!-- Blog Details Image Start -->
                         <div class="image mb-6" data-aos="fade-up" data-aos-delay="300">
-                        {% thumbnail thumb1st "1172" as im %}
+                        {% thumbnail product.th_of_day.picture "1172" as im %}
                             <a href="{{ thumb1st.url }}">
                             <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
                             </a>
@@ -78,11 +78,11 @@
                                 <span class="meta-item data">{{ product.materials }}</span>
                             </div>
                             {% endif %}
-                   
-                            {% if product.videos.all or thumbs_wo_1st.all %}
+                            
+                            {% if vids or thumbs_wo_1st %}
                             <div class="row mt-6">
-                            {% if product.videos.all %}
-                                {% for video in product.videos.all %}
+                            {% if vids %}
+                                {% for video in vids %}
                                 <div class="col-sm-6 col-12 mb-6" data-aos-delay="300" data-aos="fade-up">
                                     <video controls class="fit-image" width="570">
                                         <source src="{{ video.clip.url }}" type="video/mp4">							  
@@ -91,8 +91,8 @@
                                 </div>
                                 {% endfor %}
                             {% endif %}
-                            {% if thumbs_wo_1st.all %}
-                                {% for image in thumbs_wo_1st.all %}
+                            {% if thumbs_wo_1st %}
+                                {% for image in thumbs_wo_1st %}
                                 <div class="col-sm-6 col-12 mb-6" data-aos-delay="300" data-aos="fade-up">
                                     {% thumbnail image.picture "570" as im %}
                                     <a href="{{ image.picture.url }}">

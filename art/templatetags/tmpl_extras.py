@@ -23,7 +23,7 @@ def menu_items_cat_tec(context, items_type='cat', fl_no_all='all'):
 
 
 @register.simple_tag
-def random_int(a, b=None):
+def random_int(a: int, b=None) -> int:
     """Тэг с номером текущего желтого фона. Выбирается ранодомно."""
     if b is None:
         b = a

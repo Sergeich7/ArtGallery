@@ -29,7 +29,6 @@ class ProductViewSet(ReadOnlyModelViewSet):
 
 
 class IdListProductsView(ListAPIView):
-#    queryset = Product.objects.all()
     serializer_class = IdListSerializer
 
     def get_queryset(self):

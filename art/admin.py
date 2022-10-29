@@ -6,6 +6,7 @@ import art.models as a_models
 admin.site.site_header = 'Арт-галерея'
 admin.site.site_title = 'Арт-галерея'
 
+
 class GalleryInline(admin.TabularInline):
     fk_name = 'product'
     model = a_models.Gallery

@@ -5,11 +5,19 @@ import sys
 import json
 from pathlib import Path
 
+
+def on_production() -> bool:
+    """Функция определяет где запущен экземпляр. РАЗРАБОТКА или ПРОДАКШЕН."""
+    return 'www' in str(Path(__file__).resolve())
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Читаем пароли, личные данные и тд из файла конфигурации
-with open(BASE_DIR / 'project' / 'config.json', 'r', encoding="utf8") as cf:
+# На продакшен прячем конфиг выше корневого каталога сайта
+CONFIG_DIR = BASE_DIR.parent if on_production() else BASE_DIR
+with open(CONFIG_DIR / 'config.json', 'r', encoding="utf8") as cf:
     config = json.load(cf)
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -92,7 +100,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-if 'www' in str(BASE_DIR):
+if on_production():
     ############################################
     # PRODUCTION
     DEBUG = False
@@ -121,7 +129,13 @@ else:
     # РАЗРАБОТКА
     DEBUG = True
 
-    STATICFILES_DIRS = [BASE_DIR / "static",]
+    # для 'debug_toolbar'
+    # pip install django-debug-toolbar
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    INTERNAL_IPS = ['127.0.0.1']
+
+    STATICFILES_DIRS = [BASE_DIR / "static"]
     MEDIA_ROOT = BASE_DIR / "media"
 
     ALLOWED_HOSTS = ['*']

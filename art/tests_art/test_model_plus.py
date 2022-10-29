@@ -1,31 +1,19 @@
 """Тестируем модель и все что с ней связано, чтобы не создавать\
             базу по несколько раз."""
-            
+
+from http import HTTPStatus
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
 from art.models import Category, Author, Technique, Product, ArtComment
+from .model_setup import ModelSetupMixin
 
 
-class DetailViewTest(TestCase):
+class test_artdb(ModelSetupMixin, TestCase):
 
-    def setUp(self):
-        """Создаем тестовую модель."""
-        a = Author.objects.create(
-            last_name='just Author', first_name='just Author', slug='just1aut')
-        c = Category.objects.create(title='just Category', slug='just1cat')
-        t = Technique.objects.create(title='just Technique', slug='just1tec')
-        p = Product.objects.create(
-            title='just Product', slug='just1product', author=a, category=c,
-            technique=t)
-        p.images.create(picture="picname.jpg")
-        u = get_user_model().objects.create_user(
-            username='testuser',
-            email='test@email.com',
-            password='secret',
-        )
-        ArtComment.objects.create(text='just ArtComment', product=p, user=u)
+    # setUp(self): наследуем из ModelSetupMixin
 
     def test_art_model(self):
         """Тестируем модель."""
@@ -57,11 +45,24 @@ class DetailViewTest(TestCase):
         resp = self.client.get('/just1product/', follow=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'art/detail.html')
+#        resp = self.client.post('/just1product/')
+#        resp = self.client.post('/just1product/', {'text': 'just1comment'})
+#        self.assertEqual(resp.status_code, 200)
 
     def test_detail_rev(self):
         resp = self.client.get(
             reverse('art:detail', args=['just1product']), follow=True)
         self.assertEqual(resp.status_code, 200)
+
+    def test_index_abs_tmp(self):
+        resp = self.client.get('/?query=duct', follow=True)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertContains(resp, 'just Product')
+        self.assertTemplateUsed(resp, 'art/index.html')
+
+    def test_index_rev(self):
+        resp = self.client.get(reverse('art:index'), follow=True)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
 
     def test_cat_abs_tmp(self):
         resp = self.client.get('/cat/just1cat/', follow=True)
@@ -71,25 +72,29 @@ class DetailViewTest(TestCase):
     def test_cat_rev(self):
         resp = self.client.get(
             reverse('art:filter', args=['cat', 'just1cat']), follow=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
 
     def test_tec_abs_tmp(self):
         resp = self.client.get('/tec/just1tec/', follow=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(resp, 'art/index.html')
 
     def test_tec_rev(self):
         resp = self.client.get(
             reverse('art:filter', args=['tec', 'just1tec']), follow=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
 
     def test_aut_abs_tmp(self):
         resp = self.client.get('/aut/just1aut/', follow=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(resp, 'art/index.html')
 
     def test_aut_rev(self):
         resp = self.client.get(
             reverse('art:filter', args=['aut', 'just1aut']), follow=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
 
+    def test_sitemap_abs(self):
+        resp = self.client.get('/sitemap.xml', follow=True)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertContains(resp, 'just1product')

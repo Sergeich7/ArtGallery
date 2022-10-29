@@ -1,14 +1,45 @@
 """Собираем общий контекст для всех страниц."""
 
+"""
+Задаем раз в сутки порядок сортировки и новые тумбы для работ.
+Чтобы с кроном пока не морочиться.
+"""
+
+import random
+import datetime
+
+from django.core.cache import cache
 from django.db.models import Count, F, Value
 from django.db.models.functions import Concat
 
 from .forms import SearchForm
-from .models import Product, Category, Technique, Author
+from .models import Product, Category, Technique, Author, Gallery
 
 
 def categories4menu(request):
     """Добавляем контекст - меню, количество, категории итд."""
+    # сортируем выдачу работ по порядку заданному полем order
+    # order задаем рандомно на 24 часа, потом снова сортируем
+    if not cache.get('seed'):
+        # если в кэше нет seed
+        # (прошли сутки или перегружался сайт или еще что-то случилось)
+        # сохраняем seed в кэш
+        seed = datetime.date.today().strftime('%Y%m%d')
+        cache.set('seed', seed, 60*60*24)
+        # задаем новый порядок сортировки и новые тумбы если есть
+        # на следующие сутки
+        random.seed(int(seed))
+        prod = Product.objects.all().select_related('th_of_day')
+        for p in prod:
+            p.order = random.randint(1, 10000)
+            ths = Gallery.objects.filter(product=p.pk, thumb=True).order_by('?').first()
+            if not ths:
+                # если не нашлось хорошей тумбы, ищем среди всех
+                ths = Gallery.objects.filter(product=p.pk).order_by('?').first()
+            if p.th_of_day != ths:
+                p.th_of_day = ths
+        Product.objects.bulk_update(prod, fields=['order', 'th_of_day'])
+
     context = {}
 
     context['query'] = request.GET.get('query', '')
@@ -24,8 +55,8 @@ def categories4menu(request):
     context['all_items_tec'] = Technique.objects.all().\
         annotate(num_arts=Count('product')).order_by('title')
     context['all_items_aut'] = Author.objects.all().\
-        annotate(num_arts=Count('product')).annotate(
-            title=Concat(F('first_name'), Value(' '), F('last_name'))
-            ).order_by('title')
+        annotate(num_arts=Count('product')).\
+        annotate(title=Concat(F('first_name'), Value(' '), F('last_name'))).\
+        only('id', 'last_name', 'first_name', 'slug',).order_by('title')
 
     return context

@@ -16,22 +16,13 @@ urlpatterns = [
     path('instruction/', TemplateView.as_view(
                         template_name='art/instruction.html'), name='instruction'),
 
-    # фильтр по категориям и техникам (id или slug)
-    # /cat/1/ /cat/vazy/ /tec/2/ /tec/dekupazh/
-    re_path('(?P<filter>[a-z]+)/(?P<pk>[0-9]+)/\\Z', IndexView.as_view(), name='filter'),
+    # фильтр по категориям, техникам или авторам
     re_path('(?P<filter>[a-z]+)/(?P<slug>[-a-z0-9_]+)/\\Z', IndexView.as_view(), name='filter'),
-
-    # детали работы по pk
-    re_path('(?P<pk>[0-9]+)/\\Z', DetailView.as_view(), name='detail'),
-    re_path(
-        '(?P<pk>[0-9]+)/del/(?P<dc>[0-9]+)\\Z',
-        DetailView.as_view(),
-        name='delete-comment'),
 
     re_path(
         'sitemap.xml/{0,1}', sitemap, {'sitemaps': ArtSiteMaps}, name='sitemaps'),
 
-    # детали работы по slug
+    # детали работы
     re_path(
         '(?P<slug>[-a-zA-Z0-9_!sitemap.xml]+)/\\Z',
         DetailView.as_view(),

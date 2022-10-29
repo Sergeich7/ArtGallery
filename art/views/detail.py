@@ -26,40 +26,46 @@ class DetailView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.kwargs.get('pk'):
-            prod = get_object_or_404(Product, pk=self.kwargs.get('pk'))
-        else:
-            prod = get_object_or_404(Product, slug=self.kwargs.get('slug'))
+        prod = Product.objects.filter(slug=self.kwargs.get('slug')).\
+            select_related('author', 'category', 'technique', 'th_of_day').\
+            only(
+                'id',
+                'title',
+                'created',
+                'description',
+                'materials',
+                'size',
+                'author_id',
+                'category_id',
+                'technique_id',
+                'th_of_day',
+
+                'author__id',
+                'author__last_name',
+                'author__first_name',
+                'author__patronymic',
+
+                'category__id',
+                'category__title',
+                'technique__id',
+                'technique__title',
+            ).first()
         context['product'] = prod
-        context['thumb1st'] = prod.thumbnail.picture
-        context['thumbs_wo_1st'] = prod.images.exclude(id=prod.thumbnail.id)
+        context['thumbs_wo_1st'] = prod.images.exclude(id=prod.th_of_day.pk)
+        context['vids'] = prod.videos.all()
         context['all_comments'] = ArtComment.objects.filter(product=prod.pk)
         return context
-# може так быстрее чем через вычисляемое поле?
-#        if not th:
-#            th = prod.images.order_by('?').first()
-#        context['product'] = prod
-#        context['thumb1st'] = th.picture
-#        context['thumbs_wo_1st'] = prod.images.exclude(id=th.pk)
-#        context['all_comments'] = ArtComment.objects.filter(product=prod.pk)
-#        return context
 
     def get_success_url(self):
         """Возврат на ту-же страницу после добавления комментария."""
-        if self.kwargs.get('pk'):
-            args = (self.kwargs.get('pk'), )
-        else:
-            args = (self.kwargs.get('slug'),)
+        args = (self.kwargs.get('slug'),)
         return reverse('art:detail', args=args) + \
             '#comments'
 
     def form_valid(self, form):
         """Добавляем пользователя (комментатора) в форму."""
         form.instance.user = self.request.user
-        if self.kwargs.get('pk'):
-            form.instance.product = Product.objects.get(pk=self.kwargs.get('pk'))
-        else:
-            form.instance.product = Product.objects.get(slug=self.kwargs.get('slug'))
+        form.instance.product = Product.objects.get(slug=self.kwargs.get('slug'))
         return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):

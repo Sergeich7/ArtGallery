@@ -3,7 +3,7 @@
 {% if all_items %}
     {% for item in all_items %}
         {% if item.num_arts > 0 %}
-        <li><a href="{% url 'art:filter' items_type item.slug %}">{{ item.title|truncatechars:12 }} ({{ item.num_arts }})</a></li>
+        <li><a href="{{ item.get_absolute_url }}">{{ item.title|truncatechars:12 }} ({{ item.num_arts }})</a></li>
         {% endif %}
     {% endfor %}
 {% else %}

@@ -30,11 +30,19 @@ class ContactForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Список для выбора получателя
         to_choices =[
             (None, "Выберете получателя"),
             ("adm", "Администрация сайта"),
         ]
-        [to_choices.append((a.pk, str(a)),) for a in Author.objects.all()]
+        for a in Author.objects.all().only(
+                'id', 'last_name', 'first_name', 'patronymic', 'contacts_off'):
+            if not a.contacts_off:
+                to_choices.append((a.pk, str(a)),)
+
+
+
         self.fields['to'].choices = to_choices
         if kwargs.get('data'):
             captcha_placeholder = 'Неверно введен текст с картинки. Повторите. '
