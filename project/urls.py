@@ -4,12 +4,13 @@ from django.urls import include, path
 from django.contrib.staticfiles.views import serve
 from django.views.decorators.cache import never_cache
 
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 
 from django.conf.urls.static import static
 
 #from django.conf import settings
-from .settings import DEBUG, MEDIA_URL, MEDIA_ROOT
+from .settings import DEBUG, MEDIA_URL, MEDIA_ROOT, STATIC_URL
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 
 urlpatterns = [
@@ -24,6 +25,10 @@ urlpatterns = [
             template_name="robots.txt",
             content_type="text/plain"),
     ),
+#    path(
+#        "favicon.ico",
+#        RedirectView.as_view(url=staticfiles_storage.url("assets/images/favicon.ico")),
+#    ),
     path('', include('art.urls')),
 ]
 

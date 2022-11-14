@@ -15,7 +15,7 @@ class ModelSetupMixin():
             title='just Product', slug='just1product', author=a, category=c,
             technique=t)
         th = p.images.create(picture="picname.jpg")
-        p.th_of_day = th
+        p.thumb_of_day = th.picture
         p.save()
         u = get_user_model().objects.create_user(
             username='testuser',

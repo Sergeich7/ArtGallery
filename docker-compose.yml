@@ -1,0 +1,47 @@
+version: '2.12'
+
+services:
+    db:
+        container_name: artMySQL
+        env_file:
+            - .env
+        image: mysql:8.0
+        restart: always
+        volumes:
+            - ./mysql_volume:/var/lib/mysql
+
+    web:
+        container_name: artApp
+        env_file:
+            - .env
+        build: .
+        restart: always
+        depends_on:
+            - db
+        volumes:
+            - .:/app
+
+    nginx:
+        container_name: artNginx
+        image: nginx:alpine
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - web
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - .:/app
+
+    phpmyadmin:
+        container_name: artPhpMyAdmin
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        environment:
+            PMA_HOST: db
+        ports:
+            - "8080:80"
+        depends_on:
+            - db
+

@@ -1,9 +1,7 @@
 """Собираем общий контекст для всех страниц."""
 
-"""
-Задаем раз в сутки порядок сортировки и новые тумбы для работ.
-Чтобы с кроном пока не морочиться.
-"""
+# Задаем раз в сутки порядок сортировки и сбрасываем тумбы.
+# Чтобы с кроном пока не морочиться.
 
 import random
 import datetime
@@ -13,7 +11,7 @@ from django.db.models import Count, F, Value
 from django.db.models.functions import Concat
 
 from .forms import SearchForm
-from .models import Product, Category, Technique, Author, Gallery
+from .models import Product, Category, Technique, Author
 
 
 def categories4menu(request):
@@ -29,16 +27,11 @@ def categories4menu(request):
         # задаем новый порядок сортировки и новые тумбы если есть
         # на следующие сутки
         random.seed(int(seed))
-        prod = Product.objects.all().select_related('th_of_day')
+        prod = Product.objects.all().only('order', 'thumb_of_day')
         for p in prod:
             p.order = random.randint(1, 10000)
-            ths = Gallery.objects.filter(product=p.pk, thumb=True).order_by('?').first()
-            if not ths:
-                # если не нашлось хорошей тумбы, ищем среди всех
-                ths = Gallery.objects.filter(product=p.pk).order_by('?').first()
-            if p.th_of_day != ths:
-                p.th_of_day = ths
-        Product.objects.bulk_update(prod, fields=['order', 'th_of_day'])
+            p.thumb_of_day = None
+        Product.objects.bulk_update(prod, fields=['order', 'thumb_of_day'])
 
     context = {}
 

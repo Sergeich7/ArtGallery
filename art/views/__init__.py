@@ -1,7 +1,7 @@
 from .index import IndexView
-from .detail import DetailView
+from .detail import DetailProdView
 from .contact import ContactFormView
 
 __all__ = [
-    'IndexView', 'DetailView', 'ContactFormView',
+    'IndexView', 'DetailProdView', 'ContactFormView',
     ]

@@ -6,17 +6,20 @@ htmlcov/
 # материалы для разработки
 .restart-app
 Материалы/
-db.sqlite3
 ttt.py
+tttcopy.py
 
-# картинки и видео - содержание
+# картинки, видео, база данных
+mysql_volume/
 media/
 
 # пароли
 config.json
+.env
 
 # миграции
 art/migrations/
+users/migrations/
 
 
 # Byte-compiled / optimized / DLL files

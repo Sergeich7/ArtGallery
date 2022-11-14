@@ -1,5 +1,4 @@
 
-from multiprocessing import get_context
 from django.views.generic import ListView
 from django.db.models import Q
 
@@ -35,6 +34,7 @@ class IndexView(ListView):
             else:
                 # выбираем все продукты
                 q = Q()
-        prods = Product.objects.filter(q).select_related('th_of_day').\
-            order_by('order', '-created')
-        return prods
+
+        return Product.objects.filter(q).only(
+            'order', 'title', 'slug', 'created', 'description', 'thumb_of_day',
+            ).order_by('order', '-created')

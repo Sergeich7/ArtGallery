@@ -7,7 +7,7 @@ from captcha.fields import CaptchaField, CaptchaTextInput
 
 from project.settings import ADMIN
 
-from ..models import Author, Category
+from ..models import Author
 
 
 class ContactForm(forms.Form):
@@ -15,37 +15,42 @@ class ContactForm(forms.Form):
     to = forms.ChoiceField(
         required=True,
         label='',
-        widget=forms.Select(attrs={"class": "rounded-0 w-100 input-area name, mb-4", })
+        widget=forms.Select(
+            attrs={"class": "rounded-0 w-100 input-area name, mb-4", })
     )
 
     name = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Ваше имя',}))
-    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={"class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'e-mail',}))
-    message = forms.CharField(label='', widget=forms.Textarea(attrs={"rows": "4", "class": "rounded-0 w-100 input-area name, mb-4", 'placeholder': 'Текст сообщения',}))
+        widget=forms.TextInput(attrs={
+            "class": "rounded-0 w-100 input-area name, mb-4",
+            'placeholder': 'Ваше имя', }))
+    email = forms.EmailField(
+        label='',
+        widget=forms.EmailInput(attrs={
+            "class": "rounded-0 w-100 input-area name, mb-4",
+            'placeholder': 'e-mail', }))
+    message = forms.CharField(label='', widget=forms.Textarea(attrs={
+        "rows": "4", "class": "rounded-0 w-100 input-area name, mb-4",
+        'placeholder': 'Текст сообщения', }))
     captcha = CaptchaField(
         label='',
-        error_messages={'invalid': 'Неправильный текст с картинки'},
-        )
+        error_messages={'invalid': 'Неправильный текст с картинки'},)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Список для выбора получателя
-        to_choices =[
+        to_choices = [
             (None, "Выберете получателя"),
             ("adm", "Администрация сайта"),
         ]
-        for a in Author.objects.all().only(
-                'id', 'last_name', 'first_name', 'patronymic', 'contacts_off'):
-            if not a.contacts_off:
-                to_choices.append((a.pk, str(a)),)
-
-
+        for a in Author.objects.all().exclude(contacts_off=True).\
+                only('last_name', 'first_name', 'patronymic'):
+            to_choices.append((a.pk, str(a)),)
 
         self.fields['to'].choices = to_choices
         if kwargs.get('data'):
-            captcha_placeholder = 'Неверно введен текст с картинки. Повторите. '
+            captcha_placeholder = 'Неверно введен текст с картинки. Повторите.'
         else:
             captcha_placeholder = 'Введите текст с картинки'
         self.fields['captcha'].widget = CaptchaTextInput(attrs={
@@ -80,4 +85,3 @@ class ContactFormView(FormView):
             fail_silently=False,
         )
         return super().form_valid(form)
-

@@ -140,12 +140,14 @@ else:
 
     ALLOWED_HOSTS = ['*']
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+    DATABASES = config['DATABASES-DEV']
+
+#    if 'test' in sys.argv:
+#        # на PRODUCTION для тестов другая база
+#        DATABASES = config['DATABASES-DEV-TEST']
+#    else:
+#        # рабочая база данных на PRODUCTION
+#        DATABASES = config['DATABASES-DEV-WORK']
 
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
