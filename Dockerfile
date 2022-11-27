@@ -4,7 +4,7 @@ RUN apt-get update
 RUN apt-get -y install git default-libmysqlclient-dev
 RUN apt-get -y install git build-essential
 WORKDIR /app
-COPY requirements.txt start.sh /app
+COPY requirements.txt start.sh /app/
 RUN pip install -r  requirements.txt
 #COPY . /app
 RUN chmod +x start.sh
