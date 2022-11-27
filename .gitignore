@@ -12,6 +12,7 @@ tttcopy.py
 # картинки, видео, база данных
 data/
 media/
+static/
 
 # пароли
 .env
