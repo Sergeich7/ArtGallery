@@ -9,8 +9,6 @@ services:
         env_file: .env
         volumes:
             - ./data/mysql:/var/lib/mysql
-        networks:
-            - artnet
 
     web:
         build: .
@@ -21,8 +19,6 @@ services:
             - db
         volumes:
             - .:/app
-        networks:
-            - artnet
 
     nginx:
         image: nginx:alpine
@@ -39,8 +35,6 @@ services:
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot
         command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-        networks:
-            - artnet
 
     certbot:
         image: certbot/certbot
@@ -50,8 +44,6 @@ services:
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot
         entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-        networks:
-            - artnet
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
@@ -63,9 +55,4 @@ services:
             - "8080:80"
         depends_on:
             - db
-        networks:
-            - artnet
 
-networks:
-    artnet:
-        driver: bridge
