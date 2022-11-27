@@ -114,7 +114,7 @@ if state not in 'DEV':
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
     ALLOWED_HOSTS = [
-        'www.lh.artgallery-tatyana.ru', 'lh.artgallery-tatyana.ru', 'artgallery-tatyana.ru',
+        '95.163.243.134', 'www.lh.artgallery-tatyana.ru', 'lh.artgallery-tatyana.ru', 'artgallery-tatyana.ru',
         'www.artgallery-tatyana.ru',
         'xn----7sbabaopa6cyazevhb4nwbf.xn--p1ai',
         'www.xn----7sbabaopa6cyazevhb4nwbf.xn--p1ai'
