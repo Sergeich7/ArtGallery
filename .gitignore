@@ -10,9 +10,9 @@ ttt.py
 tttcopy.py
 
 # картинки, видео, база данных
-data/
+data/certbot
+data/mysql
 media/
-static/
 
 # пароли
 .env
