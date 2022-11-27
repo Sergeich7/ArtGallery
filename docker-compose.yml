@@ -1,6 +1,7 @@
 version: '1.25'
 
 services:
+
     db:
         image: mysql:8.0
         container_name: artMySQL
