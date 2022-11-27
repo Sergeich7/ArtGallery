@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$DEV" == "True" ]; then
+if [ "$STATE" == "DEV" ]; then
     python manage.py runserver 0.0.0.0:8000 --nostatic
     exit
 fi

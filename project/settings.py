@@ -2,27 +2,34 @@
 
 import os
 import sys
-import json
 from pathlib import Path
 
-
-def on_production() -> bool:
-    """Функция определяет где запущен экземпляр. РАЗРАБОТКА или ПРОДАКШЕН."""
-    return 'www' in str(Path(__file__).resolve())
-
-
+############################################
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Читаем пароли, личные данные и тд из файла конфигурации
-# На продакшен прячем конфиг выше корневого каталога сайта
-CONFIG_DIR = BASE_DIR.parent if on_production() else BASE_DIR
-with open(CONFIG_DIR / 'config.json', 'r', encoding="utf8") as cf:
-    config = json.load(cf)
+############################################
+# Переменные окружения
+if not os.environ.get('SECRET_KEY'):
+    # Запуск сервера без докера (разработка или на виртуале)
+    # Нет переменных окружения. Загружаем из файла.
+    if 'www' in str(Path(__file__).resolve()):
+        # На виртуале прячем .env выше корневого каталога сайта
+        ENV_DIR = BASE_DIR.parent
+    else:
+        ENV_DIR = BASE_DIR
+    from dotenv import load_dotenv
+    if os.path.exists(os.path.join(ENV_DIR, '.env')):
+        load_dotenv(os.path.join(ENV_DIR, '.env'))
+        # поправить DATABASE_HOST_DEV на 127.0.0.1 вместо db
+        os.environ["DATABASE_HOST_DEV"] = '127.0.0.1'
 
+
+############################################
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config['SECRET_KEY']
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
+############################################
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -52,8 +59,6 @@ SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-#APPEND_SLASH = False
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -63,7 +68,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'users.authentication.EmailBackend',
 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -100,30 +104,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-if on_production():
+state = os.environ.get('STATE')
+if state not in 'DEV':
     ############################################
     # PRODUCTION
-    DEBUG = False
+    DEBUG = True
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
     ALLOWED_HOSTS = [
-        'artgallery-tatyana.ru',
+        'www.lh.artgallery-tatyana.ru', 'lh.artgallery-tatyana.ru', 'artgallery-tatyana.ru',
         'www.artgallery-tatyana.ru',
         'xn----7sbabaopa6cyazevhb4nwbf.xn--p1ai',
         'www.xn----7sbabaopa6cyazevhb4nwbf.xn--p1ai'
     ]
-
-    if 'test' in sys.argv:
-        # на PRODUCTION для тестов другая база
-        DATABASES = config['DATABASES-TEST']
-    else:
-        # рабочая база данных на PRODUCTION
-        DATABASES = config['DATABASES-WORK']
-
-#    SECURE_SSL_REDIRECT = True
-#    CSRF_COOKIE_SECURE = True
 else:
     ############################################
     # РАЗРАБОТКА
@@ -140,15 +135,6 @@ else:
 
     ALLOWED_HOSTS = ['*']
 
-    DATABASES = config['DATABASES-DEV']
-
-#    if 'test' in sys.argv:
-#        # на PRODUCTION для тестов другая база
-#        DATABASES = config['DATABASES-DEV-TEST']
-#    else:
-#        # рабочая база данных на PRODUCTION
-#        DATABASES = config['DATABASES-DEV-WORK']
-
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 
@@ -156,6 +142,27 @@ AUTHENTICATION_BACKENDS = [
 #    'django.contrib.auth.backends.ModelBackend',
     'users.authentication.EmailBackend',
     ]
+
+############################################
+# База данных
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.environ.get('DATABASE_NAME_' + state),
+        "USER": os.environ.get('DATABASE_USER_' + state),
+        "PASSWORD": os.environ.get('DATABASE_PASSWORD_' + state),
+        "HOST": os.environ.get('DATABASE_HOST_' + state),
+        "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
+    }
+}
+
+if state in 'PROD' and 'test' in sys.argv:
+    # на PRODUCTION для тестов другая база
+    DATABASES[0].update({
+        "TEST": {
+            "NAME": os.environ.get('DATABASE_NAME_' + state + '_TEST')
+        },
+    })
 
 ############################################
 # Password validation
@@ -204,10 +211,10 @@ LOGOUT_URL = 'users:logout'
 
 ############################################
 # Почта
-EMAIL_HOST = config['EMAIL_HOST']
-EMAIL_PORT = config['EMAIL_PORT']
-EMAIL_HOST_USER = config['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = config['EMAIL_HOST_PASSWORD']
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
@@ -215,4 +222,8 @@ EMAIL_USE_SSL = False
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-MANAGERS = ADMIN = config['ADMIN'] + [['Host', EMAIL_HOST_USER]]
+MANAGERS = ADMIN = [
+    ["Виталий", "pl3@yandex.ru"],
+    ["Татьяна", "tsbelashova@yandex.ru"],
+    ['Host', EMAIL_HOST_USER]
+]

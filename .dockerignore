@@ -9,7 +9,6 @@ ttt.py
 tttcopy.py
 
 # картинки, видео, база данных
-mysql_volume/
 media/
 
 # пароли
@@ -51,14 +50,7 @@ env/
 build/
 develop-eggs/
 dist/
-downloads/
-eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
+downloads/mysql_volume
 .installed.cfg
 *.egg
 

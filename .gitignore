@@ -10,17 +10,15 @@ ttt.py
 tttcopy.py
 
 # картинки, видео, база данных
-mysql_volume/
+data/
 media/
 
 # пароли
-config.json
 .env
 
 # миграции
 art/migrations/
 users/migrations/
-
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
