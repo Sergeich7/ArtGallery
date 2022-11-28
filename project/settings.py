@@ -108,13 +108,15 @@ state = os.environ.get('STATE')
 if state not in 'DEV':
     ############################################
     # PRODUCTION
-    DEBUG = True
+    DEBUG = False
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
     ALLOWED_HOSTS = [
-        '95.163.243.134', 'www.lh.artgallery-tatyana.ru', 'lh.artgallery-tatyana.ru', 'artgallery-tatyana.ru',
+        '95.163.243.134',
+        'www.lh.artgallery-tatyana.ru', 'lh.artgallery-tatyana.ru',
+        'artgallery-tatyana.ru',
         'www.artgallery-tatyana.ru',
         'xn----7sbabaopa6cyazevhb4nwbf.xn--p1ai',
         'www.xn----7sbabaopa6cyazevhb4nwbf.xn--p1ai'
