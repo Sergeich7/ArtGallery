@@ -6,6 +6,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
 fi
 
 domains=(artgallery-tatyana.ru www.artgallery-tatyana.ru)
+
 rsa_key_size=4096
 data_path="./data/certbot"
 email="pl3@yandex.ru"   # Adding a valid address is strongly recommended
