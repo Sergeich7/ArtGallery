@@ -78,9 +78,9 @@ class ContactFormView(FormView):
             # отправляем письмо админам
             to_emails = [e for _, e in ADMIN]
         send_mail(
-            'artgallery-tatyana.ru - contact form',     # тема
+            f'artgallery-tatyana.ru contact form {name} {email}',     # тема
             message,                # тело
-            f'{name} <{email}>',    # отправитель
+            'artgallery-tatyana.ru <pl3@yandex.ru>', # отправитель
             to_emails,              # получатели
             fail_silently=False,
         )

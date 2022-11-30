@@ -214,18 +214,18 @@ LOGOUT_URL = 'users:logout'
 ############################################
 # Почта
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TLS'))
+EMAIL_USE_SSL = bool(os.environ.get('EMAIL_USE_SSL'))
 
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
 
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = "webmaster@artgallery-tatyana.ru"
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
 MANAGERS = ADMIN = [
     ["Виталий", "pl3@yandex.ru"],
     ["Татьяна", "tsbelashova@yandex.ru"],
-    ['Host', EMAIL_HOST_USER]
+    ['Host', SERVER_EMAIL]
 ]
