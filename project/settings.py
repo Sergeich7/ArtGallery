@@ -22,12 +22,14 @@ if not os.environ.get('SECRET_KEY'):
     if os.path.exists(os.path.join(ENV_DIR, '.env')):
         load_dotenv(os.path.join(ENV_DIR, '.env'))
         # поправить DATABASE_HOST_DEV на 127.0.0.1 вместо db
-        os.environ["DATABASE_HOST_DEV"] = '127.0.0.1'
+        # os.environ["DATABASE_HOST_DEV"] = '127.0.0.1'
 
 
 ############################################
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
+DEBUG = bool(os.environ.get('DEBUG'))
 
 ############################################
 # Application definition
@@ -108,7 +110,6 @@ state = os.environ.get('STATE')
 if state not in 'DEV':
     ############################################
     # PRODUCTION
-    DEBUG = False
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -124,8 +125,6 @@ if state not in 'DEV':
 else:
     ############################################
     # РАЗРАБОТКА
-    DEBUG = True
-
     # для 'debug_toolbar'
     # pip install django-debug-toolbar
     INSTALLED_APPS.append('debug_toolbar')
