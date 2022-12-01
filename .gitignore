@@ -13,6 +13,7 @@ tttcopy.py
 data/certbot
 data/mysql
 media/
+static/
 
 # пароли
 .env
