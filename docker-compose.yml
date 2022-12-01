@@ -24,12 +24,6 @@ services:
 #        networks:
 #            - artnet
 
-    redis:
-        container_name: artRedis
-        image: redis:6-alpine
-        networks:
-            - artnet
-
     web:
         build: .
         container_name: artApp
@@ -42,6 +36,42 @@ services:
             - .:/app
 #        ports:
 #            - "8000:8000"
+        networks:
+            - artnet
+
+    nginx:
+        image: nginx:1.23-alpine
+        container_name: artNginx
+        restart: unless-stopped
+        env_file: .env
+        ports:
+            - "80:80"
+            - "443:443"
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+        depends_on:
+            - web
+        volumes:
+            - ./data/nginx/nginx${STATE}.conf:/etc/nginx/nginx.conf
+            - ./data/nginx/conf.d:/etc/nginx/conf.d
+            - .:/app
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+        networks:
+            - artnet
+
+    certbot:
+        image: certbot/certbot
+        container_name: artCertbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+        volumes:
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+        networks:
+            - artnet
+
+    redis:
+        container_name: artRedis
+        image: redis:6-alpine
         networks:
             - artnet
 
@@ -79,43 +109,13 @@ services:
         networks:
             - artnet
 
-    nginx:
-        image: nginx
-        container_name: artNginx
-        restart: unless-stopped
-        env_file: .env
-        ports:
-            - "80:80"
-            - "443:443"
-        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-        depends_on:
-            - web
-        volumes:
-            - ./data/nginx/nginx${STATE}.conf:/etc/nginx/nginx.conf
-            - ./data/nginx/conf.d:/etc/nginx/conf.d
-            - .:/app
-            - ./data/certbot/conf:/etc/letsencrypt
-            - ./data/certbot/www:/var/www/certbot
-        networks:
-            - artnet
-
-    certbot:
-        image: certbot/certbot
-        container_name: artCertbot
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-        volumes:
-            - ./data/certbot/conf:/etc/letsencrypt
-            - ./data/certbot/www:/var/www/certbot
-        networks:
-            - artnet
-
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin
+        image: phpmyadmin
         container_name: artPhpMyAdmin
-        command: tail -F anything
         restart: "no"
-        environment:
-            PMA_HOST: mysql
+#        environment:
+#            PMA_HOST: mysql
+#            - PMA_ARBITRARY=1
         ports:
             - "8080:80"
         depends_on:
