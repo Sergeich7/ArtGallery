@@ -1,0 +1,48 @@
+/*-----------------------------------------------------------------------------------
+
+    Template Name: Template Name
+    Version: 1.0
+
+-----------------------------------------------------------------------------------
+    
+    CSS INDEX
+    ===================
+	
+    01. Template default CSS
+    02. Header CSS
+        2.1 Header Top
+        2.2 Header Bottom
+        2.3 Mobile Menu
+        2.4 Offcanvas Search
+    03. Hero CSS
+    04. Component CSS
+        4.1 Button CSS
+        4.2 Team CSS
+        4.3 Funfact CSS
+        4.4 Testimonial CSS
+        4.5 Brand Logo CSS
+        4.6 Breadcrumb CSS
+        4.7 Pagination CSS
+    05. Pages CSS
+        5.1 About CSS
+        5.2 Project CSS 
+        5.3 Blog CSS 
+        5.4 Contact CSS 
+        5.5 Faq CSS 
+        5.6 Error 404 CSS
+    06. Footer CSS
+        6.1 Footer Top CSS
+        6.2 Footer Bottom CSS
+
+-----------------------------------------------------------------------------------*/
+@import "./bootstrap/functions";
+@import "variabls";
+@import "custom-variables";
+@import "./bootstrap/bootstrap";
+
+@import "common";
+@import "header";
+@import "hero";
+@import "component";
+@import "pages";
+@import "footer";

@@ -1,0 +1,162 @@
+/* ======== 6.1 Footer Top CSS ========*/
+.footer-top {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    @media #{$tablet-device} { 
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+    @media #{$large-mobile} {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+}
+.single-footer-widget {
+    & .widget-title {
+        color: $white;
+        font-size: 24px;
+        font-weight: 600;
+        position: relative;
+        line-height: 1;
+        display: block;
+
+        &:after {
+            content: "";
+            background: $primary;
+            width: 40px;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            height: 2px;
+        }
+    }
+
+    & .desc-content {
+        color: $white;
+    }
+
+    & .widget-address {
+        & li {
+            color: $white;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            line-height: 1;
+
+            &:last-child {
+                margin-bottom: 0px;
+            }
+
+            & i {
+                font-size: 18px;
+                margin-right: 10px;
+                color: $primary;
+            }
+
+            & a {
+                color: $white;
+
+                &:hover {
+                    color: $primary;
+                }
+            }
+        }
+    }
+
+    & .widget-list {
+        & li {
+            margin-bottom: 10px;
+            & a {
+                color: $white;
+                display: block;
+                line-height: 1.9;
+
+                &:hover {
+                    color: $primary;
+                    padding-left: 5px;
+                }
+            }
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    & .widget-social {
+        display: flex;
+        flex-wrap: wrap;
+
+        & a {
+            padding: 10px;
+            margin-right: 10px;
+            color: $white;
+            border: 1px solid #8b8b8b;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 100%;
+            background: transparent;
+            font-size: 18px;
+
+            @media #{$large-mobile}{
+                margin-right: 8px;
+            }
+
+            &:hover {
+                background: $primary;
+                color: $black;
+                border-color: $primary;
+            }
+        }
+    }
+}
+.newsletter-form-wrap {
+    & .mc-form {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        & .email-box {
+            padding: 5px 35px 5px 10px;
+            border-radius: 0;
+            background: transparent;
+            border: 1px solid #8b8b8b;
+            border-right: 0;
+            color: $white;
+            min-height: 41px;
+
+            &:focus {
+                box-shadow: none;
+            }
+
+            &::placeholder {
+                color: $gray-300;
+                opacity: 1; 
+            }
+        }
+
+        & .newsletter-btn {
+            padding: 0 10px 0 0;
+            border: 1px solid #8b8b8b;
+            border-left: 0;
+            border-radius: 0;
+            background: transparent;
+            color: $white;
+            min-height: 41px;
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            &:hover {
+                color: $primary;
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}

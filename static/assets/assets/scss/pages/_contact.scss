@@ -1,0 +1,96 @@
+/* ======== 5.4 Contact CSS ========*/
+.single-contact-address {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &:hover {
+        .contact-address-icon {
+            background: $primary;
+            transition: all 0.4s ease-in-out 0s;
+            &:before {
+                opacity: 1;
+                visibility: visible;
+                transform: scale(1.1);
+            }
+        }
+    }
+    
+    & .title {
+        font-size: 20px;
+        line-height: 1;
+        margin-bottom: 20px;
+    }
+
+    & p {
+        line-height: 1.4;
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+.contact-address-icon {
+    background: $gray-800;
+    color: $white;
+    padding: 30px;
+    font-size: 36px;
+    display: flex;
+    border-radius: 100%;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    position: relative;
+    transition: all 0.4s ease-in-out 0s;
+    &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: 100%;
+        border: 2px solid $primary;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease-in-out 0s;
+    }
+}
+
+// Contact Form
+.contact-form{
+    color: $headings-color;
+    font-size: 20px;
+    .input-item{
+        padding: 10px 20px;
+    }
+    .input-item, .textarea-item{
+        width: 100%;
+        border: 0;
+        font-size: 14px;
+        background: $gray-200;
+        &:focus{
+            border: 0px;
+            outline: 0px;
+        }
+    }
+    .textarea-item{
+        min-height: 130px;
+        padding: 10px 20px;
+    }
+}
+p.form-messege {
+    font-size: 16px;
+    margin-bottom: 0;
+    display: inline-block;
+    padding-top: 30px;
+    line-height: 1;
+    display: none;
+    &.success{
+        display: block;
+    }
+    &.error{
+        display: block;
+    }
+}

@@ -1,0 +1,66 @@
+/* ======== 2.4 Offcanvas Search ========*/
+
+.offcanvas-search {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: auto;
+    height: 100vh;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-base;
+    transition-duration: 700ms;
+    z-index: 9999;
+    &.open{
+        opacity: 1;
+        visibility: visible;
+        & .offcanvas-search-inner {
+            transform: none;
+        }
+    }
+}
+.offcanvas-search-inner {
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    position: relative;
+    transform: translateX(calc(100% - 0px));
+    transition: $transition-base;
+    transition-duration: 700ms;
+    padding: 20px 20px 40px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-flow: row-reverse;
+    & .btn-close-bar{
+        font-size: 50px;
+        color: $headings-color;
+        opacity: 1;
+        & i{
+            cursor: pointer;
+            transform: rotate(0deg);
+            transition: $transition-base;
+            &:hover{
+                color: $primary;
+                transition: $transition-base;
+                transform: rotate(90deg);
+            }
+        }
+    }
+}
+.offcanvas-search-form {
+    width: 100%;
+    input {
+        width: 100%;
+        border: 0px;
+        border-bottom: 2px solid $headings-color;
+        font-size: 24px;
+        
+        &:focus {
+            outline: none;
+        }
+    }
+}

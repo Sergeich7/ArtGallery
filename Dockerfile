@@ -7,10 +7,9 @@ RUN apt-get -y install git libssl-dev
 RUN apt-get -y install git build-essential
 WORKDIR /app
 RUN pip install --upgrade pip
-COPY requirements.txt start.sh /app/
+COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
-CMD ["./start.sh"]
 
 

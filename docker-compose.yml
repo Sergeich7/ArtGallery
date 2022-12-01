@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
 
-    db:
+    mysql:
         image: mysql:8.0
         container_name: artMySQL
         restart: unless-stopped
@@ -12,13 +12,59 @@ services:
         networks:
             - artnet
 
+    rabbit:
+        image: rabbitmq:3.11-management
+        container_name: artRabbitMQ
+        restart: unless-stopped
+        env_file: .env
+        ports:
+#            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - artnet
+
     web:
         build: .
         container_name: artApp
         restart: unless-stopped
         env_file: .env
+        command: gunicorn --forwarded-allow-ips=* --bind 0.0.0.0:8000 -w 2 project.wsgi:application
         depends_on:
-            - db
+            - mysql
+            - rabbit
+        volumes:
+            - .:/app
+#        ports:
+#            - "8000:8000"
+        networks:
+            - artnet
+
+    celery:
+        build: .
+        container_name: artCelery
+        restart: unless-stopped
+        working_dir: /app
+        command: celery --app=project --broker=${CELERY_BROKER_URL} worker --loglevel=info --logfile=data/celery/celery.log
+        depends_on:
+            - rabbit
+            - web
+        volumes:
+            - .:/app
+        networks:
+            - artnet
+
+    flower:
+        build: . 
+        container_name: artFlower
+        restart: unless-stopped
+        working_dir: /app
+        command: celery --app=project --broker=${CELERY_BROKER_URL} flower --logfile=data/celery/flower.log
+        ports:
+            - 5555:5555
+        depends_on:
+            - rabbit
+            - web
+            - celery
         volumes:
             - .:/app
         networks:
@@ -32,6 +78,7 @@ services:
         ports:
             - "80:80"
             - "443:443"
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
         depends_on:
             - web
         volumes:
@@ -40,31 +87,30 @@ services:
             - .:/app
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot
-        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
         networks:
             - artnet
-
 
     certbot:
         image: certbot/certbot
         container_name: artCertbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
         volumes:
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
         networks:
             - artnet
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: artPhpMyAdmin
-        restart: unless-stopped
+        command: tail -F anything
+        restart: "no"
         environment:
-            PMA_HOST: db
+            PMA_HOST: mysql
         ports:
             - "8080:80"
         depends_on:
-            - db
+            - mysql
         networks:
             - artnet
 

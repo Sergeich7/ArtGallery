@@ -1,6 +1,5 @@
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
-from django.core.mail import send_mail
 from django import forms
 
 from captcha.fields import CaptchaField, CaptchaTextInput
@@ -8,6 +7,7 @@ from captcha.fields import CaptchaField, CaptchaTextInput
 from project.settings import ADMIN
 
 from ..models import Author
+from .tasks import send_mail_to_one
 
 
 class ContactForm(forms.Form):
@@ -66,10 +66,16 @@ class ContactFormView(FormView):
     success_url = reverse_lazy('art:thanks')
 
     def form_valid(self, form):
-        """Отправка письма владельцу сайта, если форма валидна."""
+        """Отправка письма владельцам сайта или авторам, если форма валидна."""
+
         name = self.request.POST.get('name', '')
         email = self.request.POST.get('email', '')
-        message = self.request.POST.get('message', '')
+
+        mail_title = f'artgallery-tatyana.ru contact form {name} {email}'
+        mail_body = self.request.POST.get('message', '')
+        mail_body_html = mail_body
+        mail_from = 'artgallery-tatyana.ru <pl3@yandex.ru>'
+
         to_id = self.request.POST.get('to', '')
         if type(to_id) == int:
             # отправляем письмо автору работа
@@ -77,11 +83,35 @@ class ContactFormView(FormView):
         else:
             # отправляем письмо админам
             to_emails = [e for _, e in ADMIN]
-        send_mail(
-            f'artgallery-tatyana.ru contact form {name} {email}',     # тема
-            message,                # тело
-            'artgallery-tatyana.ru <pl3@yandex.ru>', # отправитель
-            to_emails,              # получатели
-            fail_silently=False,
-        )
+        for mail_to in to_emails:
+            # Запускаем задачу отправку одного письма
+            # отложенную на 0 (countdown=0) сек
+            send_mail_to_one.apply_async(
+                (
+                    mail_from,
+                    mail_to,
+                    mail_title,
+                    mail_body,
+                    mail_body_html,
+                ),
+                countdown=0)
+
+#        name = self.request.POST.get('name', '')
+#        email = self.request.POST.get('email', '')
+#        message = self.request.POST.get('message', '')
+#        to_id = self.request.POST.get('to', '')
+#        if type(to_id) == int:
+#            # отправляем письмо автору работа
+#            to_emails = [Author.objects.get(pk=to_id).email, ]
+#        else:
+#            # отправляем письмо админам
+#            to_emails = [e for _, e in ADMIN]
+#        send_mail(
+#            f'artgallery-tatyana.ru contact form {name} {email}',     # тема
+#            message,                # тело
+#            'artgallery-tatyana.ru <pl3@yandex.ru>', # отправитель
+#            to_emails,              # получатели
+#            fail_silently=False,
+#        )
+
         return super().form_valid(form)

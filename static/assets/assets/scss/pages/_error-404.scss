@@ -1,0 +1,33 @@
+/* ======== 5.6 Error 404 CSS ========*/
+.error-area {
+    img {
+        width: 600px;
+        object-fit: cover;
+
+        @media #{$large-mobile, $small-mobile, $extra-small-mobile} {
+            width: 100%;
+        }
+    }
+    .title {
+        margin-top: 60px;
+        margin-bottom: 10px;
+        line-height: 1;
+        font-size: 36px;
+
+        @media #{$small-mobile, $extra-small-mobile} {
+            font-size: 26px;
+            margin-top: 40px;
+        }
+    }
+    .error-btn_wrap {
+        margin-top: 50px;
+
+        @media #{$large-mobile, $tablet-device} {
+            margin-top: 40px;
+        }
+
+        @media #{$small-mobile, $extra-small-mobile} {
+            margin-top: 20px;
+        }
+    }
+}

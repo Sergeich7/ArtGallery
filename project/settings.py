@@ -8,6 +8,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+###########################
+# CELERY
+
 ############################################
 # Переменные окружения
 if not os.environ.get('SECRET_KEY'):
@@ -21,18 +24,17 @@ if not os.environ.get('SECRET_KEY'):
     from dotenv import load_dotenv
     if os.path.exists(os.path.join(ENV_DIR, '.env')):
         load_dotenv(os.path.join(ENV_DIR, '.env'))
-        # поправить DATABASE_HOST_DEV на 127.0.0.1 вместо db
-        # os.environ["DATABASE_HOST_DEV"] = '127.0.0.1'
+        # поправить DATABASE_HOST на 127.0.0.1 вместо db
+        os.environ["DATABASE_HOST"] = '127.0.0.1'
 
 
 ############################################
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = bool(os.environ.get('DEBUG'))
 
 ############################################
-# Application definition
+# Application definitionPROJECT_PASSWORD
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -110,10 +112,6 @@ state = os.environ.get('STATE')
 if state not in 'DEV':
     ############################################
     # PRODUCTION
-
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
     ALLOWED_HOSTS = [
         '95.163.243.134',
         'www.lh.artgallery-tatyana.ru', 'lh.artgallery-tatyana.ru',
@@ -131,13 +129,21 @@ else:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1']
 
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-    MEDIA_ROOT = BASE_DIR / "media"
 
     ALLOWED_HOSTS = ['*']
 
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DEBUG = bool(os.environ.get('DEBUG'))
+
+if DEBUG:
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+#    MEDIA_ROOT = BASE_DIR / "media"
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 AUTHENTICATION_BACKENDS = [
 #    'django.contrib.auth.backends.ModelBackend',
@@ -149,10 +155,10 @@ AUTHENTICATION_BACKENDS = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get('DATABASE_NAME_' + state),
-        "USER": os.environ.get('DATABASE_USER_' + state),
-        "PASSWORD": os.environ.get('DATABASE_PASSWORD_' + state),
-        "HOST": os.environ.get('DATABASE_HOST_' + state),
+        "NAME": os.environ.get('DATABASE_NAME'),
+        "USER": os.environ.get('DATABASE_USER'),
+        "PASSWORD": os.environ.get('DATABASE_PASSWORD'),
+        "HOST": os.environ.get('DATABASE_HOST'),
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
 }
@@ -209,6 +215,15 @@ LOGOUT_REDIRECT_URL = 'art:index'
 
 LOGIN_URL = 'users:login'
 LOGOUT_URL = 'users:logout'
+
+###########################
+# CELERY
+
+#CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+#CELERY_BROKER_URL = 'amqp://artgallery:p7Ri7OhI3ai8HFCq@rabbit:5672'
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbit:5672'
+#CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@rabbit:5672'
+
 
 ############################################
 # Почта
