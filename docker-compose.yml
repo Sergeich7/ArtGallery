@@ -91,23 +91,23 @@ services:
         networks:
             - artnet
 
-    flower:
-        build: . 
-        container_name: artFlower
-        restart: unless-stopped
-        working_dir: /app
-        command: celery --app=project --broker=${CELERY_BROKER_URL} flower --logfile=data/celery/flower.log
-        ports:
-            - 5555:5555
-        depends_on:
-#            - rabbit
-            - redis
-            - web
-            - celery
-        volumes:
-            - .:/app
-        networks:
-            - artnet
+#    flower:
+#        build: . 
+#        container_name: artFlower
+#        restart: unless-stopped
+#        working_dir: /app
+#        command: celery --app=project --broker=${CELERY_BROKER_URL} flower --logfile=data/celery/flower.log
+#        ports:
+#            - 5555:5555
+#        depends_on:
+##            - rabbit
+#            - redis
+#            - web
+#            - celery
+#        volumes:
+#            - .:/app
+#        networks:
+#            - artnet
 
     phpmyadmin:
         image: phpmyadmin
