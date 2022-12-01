@@ -12,14 +12,21 @@ services:
         networks:
             - artnet
 
-    rabbit:
-        image: rabbitmq:3.11-management
-        container_name: artRabbitMQ
-        restart: unless-stopped
-        env_file: .env
-        ports:
-#            - "5672:5672"
-            - "15672:15672"
+#    rabbit:
+#        image: rabbitmq:3.11-management
+#
+#        container_name: artRabbitMQ
+#        restart: unless-stopped
+#        env_file: .env
+#        ports:
+##            - "5672:5672"
+#            - "15672:15672"
+#        networks:
+#            - artnet
+
+    redis:
+        container_name: artRedis
+        image: redis:6-alpine
         networks:
             - artnet
 
@@ -31,7 +38,6 @@ services:
         command: gunicorn --forwarded-allow-ips=* --bind 0.0.0.0:8000 -w 2 project.wsgi:application
         depends_on:
             - mysql
-            - rabbit
         volumes:
             - .:/app
 #        ports:
@@ -44,9 +50,11 @@ services:
         container_name: artCelery
         restart: unless-stopped
         working_dir: /app
-        command: celery --app=project --broker=${CELERY_BROKER_URL} worker --loglevel=info --logfile=data/celery/celery.log
+#        command: celery --app=project --broker=${CELERY_BROKER_URL} worker --loglevel=info --logfile=data/celery/celery.log
+        command: celery --app=project --broker=${CELERY_BROKER_URL} --result-backend=${CELERY_RESULT_BACKEND} worker --loglevel=info --logfile=data/celery/celery.log
         depends_on:
-            - rabbit
+#            - rabbit
+            - redis
             - web
         volumes:
             - .:/app
@@ -62,7 +70,8 @@ services:
         ports:
             - 5555:5555
         depends_on:
-            - rabbit
+#            - rabbit
+            - redis
             - web
             - celery
         volumes:
