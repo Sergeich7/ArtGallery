@@ -8,7 +8,6 @@ docker-compose build
 docker-compose create mysql web nginx certbot phpmyadmin
 docker-compose start mysql web nginx certbot
 
-
 if [[ $STATE == *"DEV"* ]]; then
     # запускаем асинхронность только для разработки
     # на production - слабый сервер
