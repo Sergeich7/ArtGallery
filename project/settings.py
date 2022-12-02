@@ -35,6 +35,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
 
+#CELERY_BROKER_URL='amqp://guest:guest@rabbit:5672'
+
 ############################################
 # Application definitionPROJECT_PASSWORD
 INSTALLED_APPS = [

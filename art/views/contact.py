@@ -1,6 +1,9 @@
+import psutil
+
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django import forms
+from django.core.mail import send_mail
 
 from captcha.fields import CaptchaField, CaptchaTextInput
 
@@ -83,18 +86,56 @@ class ContactFormView(FormView):
         else:
             # отправляем письмо админам
             to_emails = [e for _, e in ADMIN]
-        for mail_to in to_emails:
-            # Запускаем задачу отправку одного письма
-            # отложенную на 0 (countdown=0) сек
-            send_mail_to_one.apply_async(
-                (
-                    mail_from,
-                    mail_to,
-                    mail_title,
-                    mail_body,
-                    mail_body_html,
-                ),
-                countdown=0)
+
+        if 'celery' in (p.name() for p in psutil.process_iter()):
+            # если celery запущен 
+            # отправляем асинхронно по одной задаче в очередь
+            for mail_to in to_emails:
+                send_mail_to_one.delay(
+                        mail_from,
+                        mail_to,
+                        mail_title,
+                        mail_body,
+                        mail_body_html,
+                    )
+        else:
+            send_mail(
+                mail_title,     # тема
+                mail_body,      # тело
+                mail_from,      # отправитель
+                to_emails,      # получатели
+                fail_silently=False,
+                html_message=mail_body_html
+            )
+
+#            send_mail_to_one.delay(
+#                    mail_from,
+#                    mail_to,
+#                    mail_title,
+#                    mail_body,
+#                    mail_body_html,
+#                )
+
+#            send_mail_to_one.apply_async(
+#                (
+#                    mail_from,
+#                    mail_to,
+#                    mail_title,
+#                    mail_body,
+#                    mail_body_html,
+#                ),
+#                countdown=0)
+
+#Можно воспользоваться универсальным кроссплатформенным решением - psutil (pip install psutil).
+#
+#import psutil
+#for proc in psutil.process_iter():
+#    name = proc.name()
+#    print(name)
+#    if name == "program.exe":
+#        pass
+
+
 
 #        name = self.request.POST.get('name', '')
 #        email = self.request.POST.get('email', '')

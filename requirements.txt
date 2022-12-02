@@ -29,6 +29,7 @@ packaging==21.3
 Pillow==9.3.0
 prometheus-client==0.15.0
 prompt-toolkit==3.0.33
+psutil==5.9.4
 pycodestyle==2.10.0
 pydocstyle==6.1.1
 pyflakes==3.0.1
