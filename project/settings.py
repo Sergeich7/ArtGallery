@@ -133,14 +133,14 @@ else:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1']
 
-
     ALLOWED_HOSTS = ['*']
 
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DEBUG = bool(os.environ.get('DEBUG'))
+DEBUG = bool(os.environ.get('DEBUG', False))
+DEBUG = False
 
 if DEBUG:
     STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -166,14 +166,6 @@ DATABASES = {
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
 }
-
-if state in 'PROD' and 'test' in sys.argv:
-    # на PRODUCTION для тестов другая база
-    DATABASES[0].update({
-        "TEST": {
-            "NAME": os.environ.get('DATABASE_NAME_' + state + '_TEST')
-        },
-    })
 
 ############################################
 # Password validation
@@ -219,14 +211,6 @@ LOGOUT_REDIRECT_URL = 'art:index'
 
 LOGIN_URL = 'users:login'
 LOGOUT_URL = 'users:logout'
-
-###########################
-# CELERY
-
-#CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
-#CELERY_BROKER_URL = 'amqp://artgallery:p7Ri7OhI3ai8HFCq@rabbit:5672'
-CELERY_BROKER_URL = 'amqp://guest:guest@rabbit:5672'
-#CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@rabbit:5672'
 
 
 ############################################
