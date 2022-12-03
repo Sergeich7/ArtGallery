@@ -71,6 +71,8 @@ services:
     redis:
         container_name: artRedis
         image: redis:6-alpine
+        env_file: .env
+        restart: unless-stopped
         networks:
             - artnet
 
@@ -78,6 +80,7 @@ services:
         build: .
         container_name: artCelery
         restart: unless-stopped
+        env_file: .env
         working_dir: /app
         command: celery --app=project --broker=${CELERY_BROKER_URL} worker --loglevel=info --logfile=data/celery/celery.log
 # Redis
@@ -95,6 +98,7 @@ services:
         build: . 
         container_name: artFlower
         restart: unless-stopped
+        env_file: .env
         working_dir: /app
         command: celery --app=project --broker=${CELERY_BROKER_URL} flower --logfile=data/celery/flower.log
         ports:
@@ -110,9 +114,10 @@ services:
             - artnet
 
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin
+        image: phpmyadmin
         container_name: artPhpMyAdmin
         restart: "no"
+        env_file: .env
         ports:
             - "8080:80"
         depends_on:
