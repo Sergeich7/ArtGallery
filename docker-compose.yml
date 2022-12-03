@@ -57,68 +57,68 @@ services:
         networks:
             - artnet
 
-    rabbit:
-        image: rabbitmq:3.11-management
-        container_name: artRabbitMQ
-        restart: unless-stopped
-        env_file: .env
-        ports:
-#            - "5672:5672"
-            - "15672:15672"
-        networks:
-            - artnet
-
-    redis:
-        container_name: artRedis
-        image: redis:6-alpine
-        networks:
-            - artnet
-
-    celery:
-        build: .
-        container_name: artCelery
-        restart: unless-stopped
-        working_dir: /app
-        command: celery --app=project --broker=${CELERY_BROKER_URL} worker --loglevel=info --logfile=data/celery/celery.log
-# Redis
-#        command: celery --app=project --broker=${CELERY_BROKER_URL} --result-backend=${CELERY_RESULT_BACKEND} worker --loglevel=info --logfile=data/celery/celery.log
-        depends_on:
-            - rabbit
-            - redis
-            - web
-        volumes:
-            - .:/app
-        networks:
-            - artnet
-
-    flower:
-        build: . 
-        container_name: artFlower
-        restart: unless-stopped
-        working_dir: /app
-        command: celery --app=project --broker=${CELERY_BROKER_URL} flower --logfile=data/celery/flower.log
-        ports:
-            - 5555:5555
-        depends_on:
-            - rabbit
-            - redis
-            - web
-            - celery
-        volumes:
-            - .:/app
-        networks:
-            - artnet
-
-    phpmyadmin:
-        image: phpmyadmin
-        container_name: artPhpMyAdmin
-        restart: "no"
-        ports:
-            - "8080:80"
-        depends_on:
-            - mysql
-        networks:
-            - artnet
+#    rabbit:
+#        image: rabbitmq:3.11-management
+#        container_name: artRabbitMQ
+#        restart: unless-stopped
+#        env_file: .env
+#        ports:
+##            - "5672:5672"
+#            - "15672:15672"
+#        networks:
+#            - artnet
+#
+#    redis:
+#        container_name: artRedis
+#        image: redis:6-alpine
+#        networks:
+#            - artnet
+#
+#    celery:
+#        build: .
+#        container_name: artCelery
+#        restart: unless-stopped
+#        working_dir: /app
+#        command: celery --app=project --broker=${CELERY_BROKER_URL} worker --loglevel=info --logfile=data/celery/celery.log
+## Redis
+##        command: celery --app=project --broker=${CELERY_BROKER_URL} --result-backend=${CELERY_RESULT_BACKEND} worker --loglevel=info --logfile=data/celery/celery.log
+#        depends_on:
+#            - rabbit
+#            - redis
+#            - web
+#        volumes:
+#            - .:/app
+#        networks:
+#            - artnet
+#
+#    flower:
+#        build: . 
+#        container_name: artFlower
+#        restart: unless-stopped
+#        working_dir: /app
+#        command: celery --app=project --broker=${CELERY_BROKER_URL} flower --logfile=data/celery/flower.log
+#        ports:
+#            - 5555:5555
+#        depends_on:
+#            - rabbit
+#            - redis
+#            - web
+#            - celery
+#        volumes:
+#            - .:/app
+#        networks:
+#            - artnet
+#
+#    phpmyadmin:
+#        image: phpmyadmin
+#        container_name: artPhpMyAdmin
+#        restart: "no"
+#        ports:
+#            - "8080:80"
+#        depends_on:
+#            - mysql
+#        networks:
+#            - artnet
 
 networks:
     artnet:

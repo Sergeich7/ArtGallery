@@ -148,6 +148,7 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+print(STATIC_ROOT)
 
 AUTHENTICATION_BACKENDS = [
 #    'django.contrib.auth.backends.ModelBackend',
