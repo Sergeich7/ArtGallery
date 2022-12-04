@@ -61,7 +61,7 @@ services:
             - artnet
 
     phpmyadmin:
-        image: phpmyadmin
+        image: phpmyadmin/phpmyadmin
         container_name: artPhpMyAdmin
         restart: "no"
         environment:
