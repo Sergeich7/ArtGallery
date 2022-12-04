@@ -1,32 +1,19 @@
-version: '2.2'
+version: '3.3'
 
 services:
 
     mysql:
-        image: mysql:8.0
+        image: mysql:latest
         container_name: artMySQL
         restart: unless-stopped
         env_file: .env
-#        ports:
-#            - "3306:3306"
-#            - "33060:33060"
         volumes:
             - ./data/mysql:/var/lib/mysql
-        networks:
-            - artnet
-
-    web:
-        build: .
-        container_name: artApp
-        restart: unless-stopped
-        env_file: .env
         command: gunicorn --forwarded-allow-ips=* --bind 0.0.0.0:8000 -w 2 project.wsgi:application
         depends_on:
             - mysql
         volumes:
             - .:/app
-#        ports:
-#            - "8000:8000"
         networks:
             - artnet
 
@@ -65,7 +52,8 @@ services:
         container_name: artPhpMyAdmin
         restart: "no"
         environment:
-            - PMA_ARBITRARY=1
+            PMA_ARBITRARY: 1
+            PMA_HOST: mysql
         ports:
             - "8080:80"
         depends_on:
