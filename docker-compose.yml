@@ -9,11 +9,6 @@ services:
         env_file: .env
         volumes:
             - ./data/mysql:/var/lib/mysql
-        command: gunicorn --forwarded-allow-ips=* --bind 0.0.0.0:8000 -w 2 project.wsgi:application
-        depends_on:
-            - mysql
-        volumes:
-            - .:/app
         networks:
             - artnet
 
