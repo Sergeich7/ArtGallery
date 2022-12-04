@@ -7,6 +7,9 @@ services:
         container_name: artMySQL
         restart: unless-stopped
         env_file: .env
+        ports:
+            - "3306:3306"
+            - "33060:33060"
         volumes:
             - ./data/mysql:/var/lib/mysql
         networks:
@@ -117,7 +120,8 @@ services:
         image: phpmyadmin
         container_name: artPhpMyAdmin
         restart: "no"
-        env_file: .env
+        environment:
+            - PMA_ARBITRARY=1
         ports:
             - "8080:80"
         depends_on:
