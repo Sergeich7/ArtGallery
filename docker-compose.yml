@@ -17,6 +17,22 @@ services:
         networks:
             - artnet
 
+    web:
+        build: .
+        container_name: artApp
+        restart: unless-stopped
+        env_file: .env
+        command: gunicorn --forwarded-allow-ips=* --bind 0.0.0.0:8000 -w 2 project.wsgi:application
+        depends_on:
+            - mysql
+            - rabbit
+        volumes:
+            - .:/app
+#        ports:
+#            - "8000:8000"
+        networks:
+            - artnet
+
     nginx:
         image: nginx:1.23-alpine
         container_name: artNginx
