@@ -22,7 +22,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    thumb = serializers.CharField(source='thumbnail.picture')
+    thumb = serializers.CharField(source='thumbnail')
 
     class Meta:
         model = Product

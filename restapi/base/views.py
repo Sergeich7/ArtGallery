@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.generics import ListAPIView
 
-from .api_serializers import CategorySerializer, ProductSerializer
-from .api_serializers import TechniqueSerializer, AuthorSerializer
-from .api_serializers import IdListSerializer
+from .serializers import CategorySerializer, ProductSerializer
+from .serializers import TechniqueSerializer, AuthorSerializer
+from .serializers import IdListSerializer
 
 from art.models import Category, Product, Technique, Author
 
@@ -38,4 +38,3 @@ class IdListProductsView(ListAPIView):
                 qs = qs.filter(
                     **{value: self.kwargs.get(key.replace("fn", "pk"))})
         return qs
-
