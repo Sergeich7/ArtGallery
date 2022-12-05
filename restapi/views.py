@@ -12,6 +12,7 @@ from art.models import Category, Product, Technique, Author
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+
 class CategoriesViewSet(ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
