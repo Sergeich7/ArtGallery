@@ -1,12 +1,16 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from rest_framework.generics import ListAPIView
+
+from rest_framework.mixins import CreateModelMixin
+from django.contrib.auth import get_user_model
 
 from .serializers import CategorySerializer, ProductSerializer
 from .serializers import TechniqueSerializer, AuthorSerializer
-from .serializers import IdListSerializer
+from .serializers import IdListSerializer, SignUpSerializer
 
 from art.models import Category, Product, Technique, Author
 
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class CategoriesViewSet(ReadOnlyModelViewSet):
     queryset = Category.objects.all()
@@ -38,3 +42,9 @@ class IdListProductsView(ListAPIView):
                 qs = qs.filter(
                     **{value: self.kwargs.get(key.replace("fn", "pk"))})
         return qs
+
+
+class SignUpUserView(CreateModelMixin, GenericViewSet):
+    permission_classes = [AllowAny]
+    queryset = get_user_model().objects.all()
+    serializer_class = SignUpSerializer

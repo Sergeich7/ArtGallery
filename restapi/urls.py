@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import CategoriesViewSet, TechniqueViewSet
+from .views import CategoriesViewSet, TechniqueViewSet, SignUpUserView
 from .views import AuthorViewSet, ProductViewSet, IdListProductsView
 
 router = routers.SimpleRouter()
@@ -19,13 +19,14 @@ router.register(r'cats', CategoriesViewSet)
 router.register(r'techs', TechniqueViewSet)
 router.register(r'auths', AuthorViewSet)
 router.register(r'prods', ProductViewSet)
+router.register(r'users/create', SignUpUserView)
 
 # http://127.0.0.1:8000/api/filter/author/1/category/4/technique/5/
 
 urlpatterns = [
 
+    path('users/', include('rest_framework.urls')),
     path('', include(router.urls)),
-
     # фильтры. можно комбинировать до 3х. порядок не важен
     # filter/cat/2/ - все продукты 2ой категории
     # filter/cat/2/tech/4/ - все продукты 2ой категории и 4ой техники

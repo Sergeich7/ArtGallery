@@ -85,8 +85,13 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
@@ -135,15 +140,13 @@ else:
 
     ALLOWED_HOSTS = ['*']
 
-STATIC_URL = 'static/'
-MEDIA_URL = 'media/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEBUG = bool(os.environ.get('DEBUG', False))
-DEBUG = False
-
 if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / "static"]
+    STATICFILES_DIRS = [BASE_DIR / "static/"]
 #    MEDIA_ROOT = BASE_DIR / "media"
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -230,3 +233,4 @@ MANAGERS = ADMIN = [
     ["Татьяна", "tsbelashova@yandex.ru"],
     ['Host', SERVER_EMAIL]
 ]
+
