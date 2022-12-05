@@ -53,3 +53,23 @@ class ChangeUserPasswordSerializer(serializers.Serializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class EditUserSerializer(serializers.Serializer):
+    email = serializers.EmailField(
+        label='email', max_length=128, required=True)
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.email = self.validated_data['email']
+        user.save()
+        return user
+
+
+class DeleteUserSerializer(serializers.Serializer):
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.delete()
+        return user
+

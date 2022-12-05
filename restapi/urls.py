@@ -5,6 +5,7 @@ from .base import CategoriesViewSet, TechniqueViewSet
 from .base import AuthorViewSet, ProductViewSet, IdListProductsView
 
 from .users import SignUpUserView, ChangePasswordUserView
+from .users import EditUserView, DeleteUserView
 
 router = routers.SimpleRouter()
 
@@ -17,6 +18,8 @@ urlpatterns = [
 
     # Регистрация, аутентификация и изменение пользователя
     path('users/signup/', SignUpUserView.as_view()),
+    path('users/edit/', EditUserView.as_view()),
+    path('users/delete/', DeleteUserView.as_view()),
     path('users/changepassword/', ChangePasswordUserView.as_view()),
     path('users/', include('rest_framework.urls')),
 

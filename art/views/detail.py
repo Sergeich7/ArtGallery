@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views.generic import CreateView
 from django.urls import reverse
 from django import forms
@@ -38,6 +39,8 @@ class DetailProdView(CreateView):
                 'category__id', 'category__title',
                 'technique__id', 'technique__title',
             ).first()
+        if not prod:
+            raise Http404
         context['product'] = prod
         context['thumbs_wo_1st'] = Gallery.objects.filter(product=prod).\
             exclude(picture=prod.thumbnail)
