@@ -9,9 +9,11 @@ from django.views.generic.base import TemplateView, RedirectView
 from django.conf.urls.static import static
 
 from django.conf import settings
+
 #from .settings import DEBUG, MEDIA_URL, MEDIA_ROOT, STATIC_URL
 #from django.contrib.staticfiles.storage import staticfiles_storage
 
+urlpatterns = []
 
 if settings.DEBUG:
     import debug_toolbar
@@ -34,4 +36,4 @@ urlpatterns = urlpatterns + [
             content_type="text/plain"),
     ),
     path('', include('art.urls')),
-]
+    ]
