@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'captcha',
     'django_cleanup',
     'rest_framework',
+    'drf_spectacular',
     'corsheaders',
     'bootstrap4',
 
@@ -90,8 +91,17 @@ REST_FRAMEWORK = {
 #        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Artgallery Tatyana API',
+    'DESCRIPTION': 'REST API documentation',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
