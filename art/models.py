@@ -87,11 +87,14 @@ class Product(models.Model):
     size = models.CharField(max_length=20, blank=True, verbose_name='Размер')
 
     author = models.ForeignKey(
-        Author, on_delete=models.CASCADE, verbose_name='Автор')
+        Author, on_delete=models.CASCADE, related_name='author_products',
+        verbose_name='Автор')
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, verbose_name='Категория')
+        Category, on_delete=models.CASCADE, related_name='category_products',
+        verbose_name='Категория')
     technique = models.ForeignKey(
-        Technique, on_delete=models.CASCADE, verbose_name='Техника')
+        Technique, on_delete=models.CASCADE, related_name='technique_products',
+        verbose_name='Техника')
 
     thumb_of_day = models.ImageField(
         null=True, blank=True, verbose_name='Тумба дня')

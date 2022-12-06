@@ -44,11 +44,11 @@ def categories4menu(request):
     context['total_aut'] = Author.objects.count()
 
     context['all_items_cat'] = Category.objects.all().\
-        annotate(num_arts=Count('product')).order_by('title')
+        annotate(num_arts=Count('category_products')).order_by('title')
     context['all_items_tec'] = Technique.objects.all().\
-        annotate(num_arts=Count('product')).order_by('title')
+        annotate(num_arts=Count('technique_products')).order_by('title')
     context['all_items_aut'] = Author.objects.all().\
-        annotate(num_arts=Count('product')).\
+        annotate(num_arts=Count('author_products')).\
         annotate(title=Concat(F('first_name'), Value(' '), F('last_name'))).\
         only('id', 'last_name', 'first_name', 'slug',).order_by('title')
 
