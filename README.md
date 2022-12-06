@@ -1,7 +1,8 @@
 # ArtGallery
 https://artgallery-tatyana.ru/
 
-**При разработки использовал:** Python, Django framework, Django REST framework, MySQL, Redis, Celery, RabbitMQ, Docker, Docker compose. 
+## При разработки использовал:
+Python, Django framework, Django REST framework, MySQL, Redis, Celery, RabbitMQ, Docker, Docker compose. 
 
 https://artgallery-tatyana.ru/api/
 
