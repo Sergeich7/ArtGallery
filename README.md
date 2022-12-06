@@ -13,4 +13,4 @@ Python, Django framework, Django REST framework, MySQL, Redis, Celery, RabbitMQ,
 Celery, RabbitMQ, Redis
 
 ### Production
-Для публикации сайта использовал микросервисную архитектуру. Проект запущен на VPS (Nginx, Linux) c с использованием Docker и Docker compose
+Для публикации сайта использовал микросервисную архитектуру. Проект запущен на VPS (Nginx, Linux) с использованием Docker и Docker compose
