@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 
 from art.views import IndexView, DetailProdView, ContactFormView
+from art.views import session_to_json
+
 from .sitemaps import ArtSiteMaps
 
 app_name = 'art'
@@ -12,8 +14,18 @@ urlpatterns = [
 
     path(
         'thanks/',
-        TemplateView.as_view(template_name='art/thanks.html'),
+        TemplateView.as_view(template_name='art/email_success.html'),
         name='thanks'),
+
+    path('buy/<str:pk>', session_to_json, name='buy'),
+    path(
+        'payment_success/',
+        TemplateView.as_view(template_name='art/payment_success.html'),
+        name='payment_success'),
+    path(
+        'payment_cancel/',
+        TemplateView.as_view(template_name='art/payment_cancel.html'),
+        name='payment_cancel'),
 
     path(
         'instruction/',

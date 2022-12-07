@@ -2,23 +2,32 @@
 from django.views.generic import ListView
 from django.db.models import Q
 
-from art.models import Product
+from art.models import Product, Category, Technique, Author
 
 
 class IndexView(ListView):
     template_name = 'art/index.html'
     context_object_name = 'all_products'
     paginate_by = 9
+    page_title = ''
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = self.page_title
+        return context
 
     def get_queryset(self):
+        self.page_title = ''
         slug = self.kwargs.get('slug', None)
         if slug and slug not in 'all':
             # выбираем все продукты по фильтру
-            q = {
-                'cat': Q(category__slug=slug),
-                'tec': Q(technique__slug=slug),
-                'aut': Q(author__slug=slug),
+            # и таблицу для определения названия категории
+            mod, q = {
+                'cat': [Category, Q(category__slug=slug)],
+                'tec': [Technique, Q(technique__slug=slug)],
+                'aut': [Author, Q(author__slug=slug)],
             }.get(self.kwargs.get('filter', None), Q())
+            self.page_title = mod.objects.get(slug=slug).__str__
         else:
             query = self.request.GET.get('query', None)
             if query:

@@ -8,7 +8,7 @@ from .serializers import IdListSerializer
 from art.models import Category, Product, Technique, Author
 
 
-class CategoriesViewSet(ReadOnlyModelViewSet):
+class CategoryViewSet(ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 

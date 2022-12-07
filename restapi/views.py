@@ -8,13 +8,14 @@ class APIRootView(APIView):
 
     def get(self, request):
         data = {
+
             'Products (may added: /1/)':
                 reverse('product-list', request=request),
             'Categories (may added: /1/)':
-                reverse('categories-list', request=request),
-            'Technique (may added: /1/)':
+                reverse('category-list', request=request),
+            'Techniques (may added: /1/)':
                 reverse('technique-list', request=request),
-            'Author (may added: /1/)':
+            'Authors (may added: /1/)':
                 reverse('author-list', request=request),
 
             'List products ID (may added: /author=1/category=4/technique=5/)':
@@ -24,13 +25,13 @@ class APIRootView(APIView):
                 reverse('rest_framework:login', request=request) + '?next=/api',
             'User logout':
                 reverse('rest_framework:logout', request=request) + '?next=/api',
-            'Create user':
+            'User create':
                 reverse('users-signup', request=request),
-            'Update user':
+            'User update':
                 reverse('users-edit', request=request),
-            'Change user password':
+            'User change password':
                 reverse('users-changepassword', request=request),
-            'Delete user':
+            'User delete':
                 reverse('users-delete', request=request),
         }
         return Response(data)
