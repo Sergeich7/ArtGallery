@@ -11,6 +11,7 @@
 {% block page_title %}{{ product.category }} * {{ product.technique }}{% endblock %}
 
 {% block content %}
+<script src="https://js.stripe.com/v3/"></script>
     <!-- Blog Section Start -->
     <div class="section section-padding">
         <div class="container">
@@ -19,15 +20,43 @@
                 <div class="col-lg-9 m-auto">
                     <!-- Single Post Details Start -->
                     <div class="blog-details mb-10">
-<!---->
                         <!-- Blog Details Image Start -->
-                        <div class="image mb-6" data-aos="fade-up" data-aos-delay="300">
-                        {% thumbnail product.thumbnail "1172" as im %}
-                            <a href="{{ thumb1st.url }}">
-                            <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
-                            </a>
-                        {% endthumbnail %}
-                        </div>
+                            <div class="image mb-6" data-aos="fade-up" data-aos-delay="300" style="display: grid;">
+                                <div style="grid-area: 1 / 1 / 2 / 2;">
+                                    {% thumbnail product.thumbnail "1172" as im %}
+                                    <a href="{{ product.thumbnail.url }}">
+                                    <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
+                                    </a>
+                                    {% endthumbnail %}
+                                </div>
+                                <div style="grid-area: 1 / 1 / 2 / 2; margin-left: auto; margin-right: 0;"">
+                                    <div class="col-12 col-custom mt-8 mr-4" >
+                                        <button id="buy-button" type="submit" class="btn btn-primary btn-hover-secondary">Купить</button>
+                                        <script type="text/javascript">
+                                            async function doRequest() {
+                                                let res = await fetch('/buy/{{ product.pk }}');
+                                                if (res.ok) {
+                                                    return res.text();
+                                                } else {
+                                                    return `HTTP error: ${res.status}`;
+                                                }
+                                            }
+                                            var stripe = Stripe('{{ STRIPE_PK }}');
+                                            var buyButton = document.getElementById('buy-button');
+                                            buyButton.addEventListener('click', function() {
+                                                doRequest().then(data => {
+                                                    session = JSON.parse(data)
+                                                    console.log(session["id"])
+                                                    console.log(session)
+                                                    stripe.redirectToCheckout({ sessionId: session["id"] })
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         <!-- Blog Details Image End -->
 
 

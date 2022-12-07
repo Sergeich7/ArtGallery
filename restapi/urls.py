@@ -3,13 +3,20 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularRedocView
 
-from .base import CategoriesViewSet, TechniqueViewSet
+from .base import CategoryViewSet, TechniqueViewSet
 from .base import AuthorViewSet, ProductViewSet, ListIdProductsView
 
 from .users import SignUpUserView, ChangePasswordUserView
 from .users import EditUserView, DeleteUserView
 
 from .views import APIRootView
+
+from rest_framework import routers
+router = routers.SimpleRouter()
+router.register(r'cats', CategoryViewSet)
+router.register(r'techs', TechniqueViewSet)
+router.register(r'auths', AuthorViewSet)
+router.register(r'prods', ProductViewSet)
 
 urlpatterns = [
     path('', APIRootView.as_view(), name='index'),
@@ -38,18 +45,7 @@ urlpatterns = [
     # http://127.0.0.1:8000/api/techs/1/
     # http://127.0.0.1:8000/api/auths/1/
     # http://127.0.0.1:8000/api/prods/1/
-
-    path('cats/', CategoriesViewSet.as_view({'get': 'list', }), name='categories-list'),
-    path('cats/<int:pk>/', CategoriesViewSet.as_view({'get': 'retrieve', }), name='categories-detail'),
-
-    path('techs/', TechniqueViewSet.as_view({'get': 'list', }), name='technique-list'),
-    path('techs/<int:pk>/', TechniqueViewSet.as_view({'get': 'retrieve', }), name='technique-detail'),
-
-    path('auths/', AuthorViewSet.as_view({'get': 'list', }), name='author-list'),
-    path('auths/<int:pk>/', AuthorViewSet.as_view({'get': 'retrieve', }), name='author-detail'),
-
-    path('prods/', ProductViewSet.as_view({'get': 'list', }), name='product-list'),
-    path('prods/<int:pk>/', ProductViewSet.as_view({'get': 'retrieve', }), name='product-detail'),
+    path('', include(router.urls)),
 
     # API документация
     path('schema/', SpectacularAPIView.as_view(), name='schema'),

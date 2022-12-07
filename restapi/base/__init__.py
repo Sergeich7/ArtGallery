@@ -1,4 +1,4 @@
-from .views import CategoriesViewSet, TechniqueViewSet, AuthorViewSet
+from .views import CategoryViewSet, TechniqueViewSet, AuthorViewSet
 from .views import ProductViewSet, ListIdProductsView
 #from .views import IdListProductsView
 
