@@ -36,7 +36,7 @@ def create_stripe_session(request, pk_list):
             'price_data': {
                 'currency': 'rub',
                 'product_data': {
-                    'name': f"{prod.title}",
+                    'name': prod.title,
                     'description': prod.description,
                 },
                 'unit_amount': 10000,

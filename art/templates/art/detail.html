@@ -46,9 +46,11 @@
                                             buyButton.addEventListener('click', function() {
                                                 doRequest().then(data => {
                                                     session = JSON.parse(data)
-                                                    console.log(session["id"])
-                                                    console.log(session)
-                                                    stripe.redirectToCheckout({ sessionId: session["id"] })
+                                                    //console.log(session["id"])
+                                                    //console.log(session)
+                                                    if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
+                                                        stripe.redirectToCheckout({ sessionId: session["id"] })
+                                                    }
                                                 });
                                             });
                                         </script>

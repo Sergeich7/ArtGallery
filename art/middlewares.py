@@ -30,7 +30,7 @@ def categories4menu(request):
         prod = Product.objects.all().only('order', 'thumb_of_day')
         for p in prod:
             p.order = random.randint(1, 10000)
-            p.thumb_of_day = None
+            p.thumb_of_day = p.thumbnail
         Product.objects.bulk_update(prod, fields=['order', 'thumb_of_day'])
 
     context = {}
