@@ -2,12 +2,16 @@
 * https://artgallery-tatyana.ru/
 
 ### При разработки использовал
-Python, Django framework, Django REST framework, MySQL, Redis, Celery, RabbitMQ, Docker, Docker compose, Nginx, Linux. 
+Python, Django framework, Django REST framework, MySQL, Stripe, Redis, Celery, RabbitMQ, Docker, Docker compose, Nginx, Linux. 
+
+### Online payments
+Stripe
 
 ### RESTful API
 * https://artgallery-tatyana.ru/api/
 * https://artgallery-tatyana.ru/api/schema/swagger-ui/
 * https://artgallery-tatyana.ru/api/schema/redoc/
+* https://artgallery-tatyana.ru/api/schema/
 
 ### Почта с сайта рассылается асинхронно
 Celery, RabbitMQ, Redis
