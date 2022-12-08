@@ -1,6 +1,7 @@
 """Тестируем модель и все что с ней связано, чтобы не создавать\
             базу по несколько раз."""
 
+import json
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
@@ -28,7 +29,6 @@ class test_artdb(ModelSetupMixin, TestCase):
         tst_obj = Technique.objects.get(slug='just1tec')
         expected_object_field = f'{tst_obj.title}'
         self.assertEqual(expected_object_field, 'just Technique')
-
         tst_prod = Product.objects.get(slug='just1product')
         expected_object_field = f'{tst_prod.title}'
         self.assertEqual(expected_object_field, 'just Product')
@@ -45,14 +45,20 @@ class test_artdb(ModelSetupMixin, TestCase):
         resp = self.client.get('/just1product/', follow=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'art/detail.html')
-#        resp = self.client.post('/just1product/')
-#        resp = self.client.post('/just1product/', {'text': 'just1comment'})
-#        self.assertEqual(resp.status_code, 200)
+
+    def test_detail_wrong_product(self):
+        resp = self.client.get('/wrong1product/', follow=True)
+        self.assertEqual(resp.status_code, 404)
 
     def test_detail_rev(self):
         resp = self.client.get(
             reverse('art:detail', args=['just1product']), follow=True)
         self.assertEqual(resp.status_code, 200)
+
+    def test_detail_buy_stripe(self):
+        resp = self.client.get(f'/buy/{self.prod1.id}', follow=True)
+#        print(json.loads(resp.content).get('results')[0])
+#        self.assertEqual(resp.status_code, 200)
 
     def test_index_abs_tmp(self):
         resp = self.client.get('/?query=duct', follow=True)

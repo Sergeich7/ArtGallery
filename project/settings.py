@@ -91,8 +91,8 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-#        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -104,7 +104,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'REST API documentation',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -179,7 +178,10 @@ DATABASES = {
         "USER": os.environ.get('DATABASE_USER'),
         "PASSWORD": os.environ.get('DATABASE_PASSWORD'),
         "HOST": os.environ.get('DATABASE_HOST'),
-        "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+#            "init_command": "SET storage_engine='MYISAM'",
+            },
     }
 }
 

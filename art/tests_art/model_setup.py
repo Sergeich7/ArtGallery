@@ -12,7 +12,7 @@ class ModelSetupMixin():
         c = Category.objects.create(title='just Category', slug='just1cat')
         t = Technique.objects.create(title='just Technique', slug='just1tec')
         p = Product.objects.create(
-            title='just Product', slug='just1product', author=a, category=c,
+            title='just Product', description='just Description', slug='just1product', author=a, category=c,
             technique=t)
         th = p.images.create(picture="picname.jpg")
         p.thumb_of_day = th.picture
@@ -22,5 +22,6 @@ class ModelSetupMixin():
             email='test@email.com',
             password='secret',
         )
+        self.prod1 = p
         ArtComment.objects.create(text='just ArtComment', product=p, user=u)
 

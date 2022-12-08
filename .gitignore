@@ -1,7 +1,7 @@
 
 # покрытие тестами
 .coverage
-htmlcov/
+#htmlcov/
 
 # материалы для разработки
 .restart-app
@@ -19,8 +19,6 @@ static/
 .env
 
 # миграции
-art/migrations/
-users/migrations/
 
 
 # Byte-compiled / optimized / DLL files

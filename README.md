@@ -2,7 +2,7 @@
 * https://artgallery-tatyana.ru/
 
 ### При разработки использовал
-Python, Django framework, Django REST framework, MySQL, Stripe, Redis, Celery, RabbitMQ, Docker, Docker compose, Nginx, Linux. 
+Python, Django framework, Django REST framework, MySQL, Stripe, Redis, Celery, RabbitMQ, Git, Docker, Docker compose, Nginx, Linux. 
 
 ### Online payments
 Stripe
