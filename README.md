@@ -16,5 +16,9 @@ Stripe
 ### Почта с сайта рассылается асинхронно
 Celery, RabbitMQ, Redis
 
+### Покрытие тестами
+Стараюсь держать не менее 90%
+* https://artgallery-tatyana.ru/static/htmlcov/index.html
+
 ### Production
 Для публикации сайта использовал микросервисную архитектуру. Проект запущен на VPS (Nginx, Linux) с использованием Docker и Docker compose
