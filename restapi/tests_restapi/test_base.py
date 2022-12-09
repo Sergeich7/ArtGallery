@@ -7,14 +7,14 @@ from rest_framework.test import APITestCase
 from art.models import Category, Author, Technique, Product
 
 
-class APITests(APITestCase):
+class TestsBase(APITestCase):
 
-    def test_rest_api_root(self):
+    def test_api_root(self):
         resp = self.client.get(f'/api/', format='json', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertNotEqual(len(json.loads(resp.content)), 0)
 
-    def test_rest_abs_tmp(self):
+    def test_list(self):
         a = Author.objects.create(
             last_name='just Author', first_name='just Author', slug='just2aut')
         c = Category.objects.create(title='just Category', slug='just2cat')

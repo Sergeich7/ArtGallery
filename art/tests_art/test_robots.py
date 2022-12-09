@@ -3,9 +3,9 @@ from http import HTTPStatus
 from django.test import TestCase
 
 
-class ThanksViewTest(TestCase):
+class RobotsTest(TestCase):
 
-    def test_robots_abs_tmp(self):
+    def test_absoluteurl_tmplate(self):
         resp = self.client.get('/robots.txt', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(resp, 'robots.txt')

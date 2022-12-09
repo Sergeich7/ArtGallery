@@ -12,11 +12,11 @@ from art.models import Category, Author, Technique, Product, ArtComment
 from .model_setup import ModelSetupMixin
 
 
-class test_artdb(ModelSetupMixin, TestCase):
+class ArtModelTest(ModelSetupMixin, TestCase):
 
     # setUp(self): наследуем из ModelSetupMixin
 
-    def test_art_model(self):
+    def test_model(self):
         """Тестируем модель."""
         tst_obj = Category.objects.get(slug='just1cat')
         expected_object_field = f'{tst_obj.title}'
@@ -41,66 +41,83 @@ class test_artdb(ModelSetupMixin, TestCase):
         expected_object_field = f'{tst_obj.email}'
         self.assertEqual(expected_object_field, 'test@email.com')
 
-    def test_detail_abs_tmp(self):
+    #
+    # detail
+    #
+
+    def test_detail_absoluteurl_tmplate(self):
         resp = self.client.get('/just1product/', follow=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'art/detail.html')
 
-    def test_detail_wrong_product(self):
+    def test_detail_get_wrong_product(self):
         resp = self.client.get('/wrong1product/', follow=True)
         self.assertEqual(resp.status_code, 404)
 
-    def test_detail_rev(self):
+    def test_detail_reverseurl(self):
         resp = self.client.get(
             reverse('art:detail', args=['just1product']), follow=True)
         self.assertEqual(resp.status_code, 200)
 
     def test_detail_buy_stripe(self):
+        """Сессия stripe для покупки продукта."""
         resp = self.client.get(f'/buy/{self.prod1.id}', follow=True)
-#        print(json.loads(resp.content).get('results')[0])
-#        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertContains(resp, 'cs_test_')
 
-    def test_index_abs_tmp(self):
+    #
+    # index
+    #
+
+    def test_index_absoluteurl_tmplate(self):
         resp = self.client.get('/?query=duct', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertContains(resp, 'just Product')
         self.assertTemplateUsed(resp, 'art/index.html')
 
-    def test_index_rev(self):
+    def test_index_reverseurl(self):
         resp = self.client.get(reverse('art:index'), follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
-    def test_cat_abs_tmp(self):
+    #
+    # params
+    #
+
+    def test_cat_absoluteurl_tmplate(self):
         resp = self.client.get('/cat/just1cat/', follow=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'art/index.html')
 
-    def test_cat_rev(self):
+    def test_cat_reverseurl(self):
         resp = self.client.get(
             reverse('art:filter', args=['cat', 'just1cat']), follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
-    def test_tec_abs_tmp(self):
+    def test_tec_absoluteurl_tmplate(self):
         resp = self.client.get('/tec/just1tec/', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(resp, 'art/index.html')
 
-    def test_tec_rev(self):
+    def test_tec_reverseurl(self):
         resp = self.client.get(
             reverse('art:filter', args=['tec', 'just1tec']), follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
-    def test_aut_abs_tmp(self):
+    def test_aut_absoluteurl_tmplate(self):
         resp = self.client.get('/aut/just1aut/', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(resp, 'art/index.html')
 
-    def test_aut_rev(self):
+    def test_aut_reverseurl(self):
         resp = self.client.get(
             reverse('art:filter', args=['aut', 'just1aut']), follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
-    def test_sitemap_abs(self):
+    #
+    # sitemap
+    #
+
+    def test_sitemap_absoluteurl(self):
         resp = self.client.get('/sitemap.xml', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertContains(resp, 'just1product')

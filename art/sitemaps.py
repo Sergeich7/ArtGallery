@@ -21,7 +21,7 @@ class ProductSitemap(Sitemap):
     priority = 0.9
 
     def items(self):
-        return Product.objects.all().order_by('order')
+        return Product.objects.all()
 
 
 class CategorySitemap(Sitemap):

@@ -6,9 +6,9 @@ from http import HTTPStatus
 from rest_framework.test import APITestCase
 
 
-class TestUsers(APITestCase):
+class TestsUsers(APITestCase):
 
-    def test_users(self):
+    def test_create_login(self):
         resp = self.client.post("/api/users/signup/", {
                 'username': '111',
                 'email': '111@www.eee',
@@ -17,8 +17,26 @@ class TestUsers(APITestCase):
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertEqual(json.loads(resp.content), {'user': 'created'})
 
-        resp = self.client.login(username='111', password='1xcvx222d')
+        resp = self.client.login(username='111', password='1xcvx222d', follow=True)
         self.assertTrue(resp)
+
+#        resp = self.client.post("/api/users/login/", {'username': '111', 'password': '1xcvx222d'})
+#        print(resp.content)
+
+#        resp = self.client.post("/api/users/delete/", format='json')
+#        print(resp)
+#        self.assertEqual(resp.status_code, HTTPStatus.OK)
+
+#        resp = self.client.post(
+#            "/api/users/edit/", {'email': '222@www.eee', },
+#            format='json', follow=True)
+#
+#        self.assertEqual(resp.status_code, HTTPStatus.OK)
+#        print(json.loads(resp.content))
+
+
+
+#        self.client.logout
 
 #    def test_login(self):
 #        resp = self.client.post("/api/users/login/", {
