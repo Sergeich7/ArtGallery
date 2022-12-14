@@ -33,9 +33,9 @@ class VideoInline(admin.TabularInline):
 @admin.register(a_models.Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [GalleryInline, VideoInline]
-    list_display = ('title', 'thumb_day', 'author', 'category', 'technique',)
+    list_display = ('title', 'price', 'thumb_day', 'author', 'category', 'technique',)
     list_display_links = ('title', 'thumb_day', )
-#    list_editable = ('created',)
+    list_editable = ('price',)
     search_fields = ('title', 'description',)
     ordering = ('title',)
     prepopulated_fields = {'slug': ('title',)}
@@ -47,27 +47,6 @@ class ProductAdmin(admin.ModelAdmin):
         ('size', 'slug',),
         ('description', 'thumb_day',),
     )
-#    fieldsets = (
-#        (None, {
-#            "fields": (("title", "tagline"),)
-#        }),
-#        (None, {
-#            "fields": ("description", "poster")
-#        }),
-#        (None, {
-#            "fields": (("year", "world_premiere", "country"),)
-#        }),
-#        ("Actors", {
-#            "classes": ("collapse",),
-#            "fields": (("actors", "directors", "genres", "category"),)
-#        }),
-#        (None, {
-#            "fields": (("budget", "fees_in_usa", "fess_in_world"),)
-#        }),
-#        ("Options", {
-#            "fields": (("url", "draft"),)
-#        }),
-#    )
 
     def thumb_day(self, object):
         """Показываем миниатюру дня работы, если уже выбрана"""

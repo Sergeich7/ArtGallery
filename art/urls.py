@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 
-from art.views import IndexView, DetailProdView, ContactFormView
+from art.views import IndexView, DetailProdView, ContactFormView, FavoritesCMD
 from art.views import session_to_json
 
 from .sitemaps import ArtSiteMaps
@@ -10,6 +10,10 @@ from .sitemaps import ArtSiteMaps
 app_name = 'art'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
+    path('favorites/', IndexView.as_view(), name='favorites'),
+    # add/pk/ remove/pk/ clear/0/ 
+    path('favorites/<slug:cmd>/<int:pk>/', FavoritesCMD.as_view(), name='favorites-cmd'),
+
     path('contacts/', ContactFormView.as_view(), name='contacts'),
 
     path(

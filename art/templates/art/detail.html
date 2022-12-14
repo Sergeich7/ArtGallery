@@ -11,7 +11,6 @@
 {% block page_title %}{{ product.category }} * {{ product.technique }}{% endblock %}
 
 {% block content %}
-<script src="https://js.stripe.com/v3/"></script>
     <!-- Blog Section Start -->
     <div class="section section-padding">
         <div class="container">
@@ -21,42 +20,13 @@
                     <!-- Single Post Details Start -->
                     <div class="blog-details mb-10">
                         <!-- Blog Details Image Start -->
-                            <div class="image mb-6" data-aos="fade-up" data-aos-delay="300" style="display: grid;">
-                                <div style="grid-area: 1 / 1 / 2 / 2;">
-                                    {% thumbnail product.thumbnail "1172" as im %}
-                                    <a href="{{ product.thumbnail.url }}">
-                                    <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
-                                    </a>
-                                    {% endthumbnail %}
-                                </div>
-                                <div style="grid-area: 1 / 1 / 2 / 2; margin-left: auto; margin-right: 0;"">
-                                    <div class="col-12 col-custom mt-8 mr-4" >
-                                        <button id="buy-button" type="submit" class="btn btn-primary btn-hover-secondary">Купить</button>
-                                        <script type="text/javascript">
-                                            async function doRequest() {
-                                                let res = await fetch('/buy/{{ product.pk }}');
-                                                if (res.ok) {
-                                                    return res.text();
-                                                } else {
-                                                    return `HTTP error: ${res.status}`;
-                                                }
-                                            }
-                                            var stripe = Stripe('{{ STRIPE_PK }}');
-                                            var buyButton = document.getElementById('buy-button');
-                                            buyButton.addEventListener('click', function() {
-                                                doRequest().then(data => {
-                                                    session = JSON.parse(data)
-                                                    //console.log(session["id"])
-                                                    //console.log(session)
-                                                    if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
-                                                        stripe.redirectToCheckout({ sessionId: session["id"] })
-                                                    }
-                                                });
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="image mb-6" data-aos="fade-up" data-aos-delay="300" style="display: grid;">
+                            {% thumbnail product.thumbnail "1172" as im %}
+                            <a href="{{ product.thumbnail.url }}">
+                            <img class="fit-image" src="{{ im.url }}" alt="{{ product.title }}">
+                            </a>
+                            {% endthumbnail %}
+                        </div>
 
 
                         <!-- Blog Details Image End -->
@@ -109,7 +79,51 @@
                                 <span class="meta-item data">{{ product.materials }}</span>
                             </div>
                             {% endif %}
-                            
+
+                            {% if product.price %}                                
+                            <div class="meta-list mt-1 mb-0">
+                                <span class="meta-item author mr-1 text-uppercase"><strong>Цена</strong></span>
+                                <span class="meta-item data">{{ product.price }} руб.</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="col-12 mb-4 text-center mt-7 mb-10 pb-2" data-aos="fade-up" data-aos-delay="400">
+                                <div class="project-tab mb-n1">
+                                    {% if product.id|slugify in cart.cart %}
+                                    <a href="{% url 'art:favorites-cmd' 'remove' product.pk %}" class="mr-4 btn btn-primary btn-hover-secondary">Удалить из избранного</a>
+                                    {% else %}
+                                    <a href="{% url 'art:favorites-cmd' 'add' product.pk %}" class="mr-4 btn btn-outline-matterhorn btn-hover-primary">Добавить в избранное</a>
+                                    {% endif %}
+
+                                    {% if product.price %}                                
+        
+                                    <button id="buy-button" type="submit" class="btn btn-primary btn-hover-secondary">Купить</button>
+                                    <script type="text/javascript">
+                                        async function doRequest() {
+                                            let res = await fetch('/buy/{{ product.pk }}');
+                                            if (res.ok) {
+                                                return res.text();
+                                            } else {
+                                                return `HTTP error: ${res.status}`;
+                                            }
+                                        }
+                                        var stripe = Stripe('{{ STRIPE_PK }}');
+                                        var buyButton = document.getElementById('buy-button');
+                                        buyButton.addEventListener('click', function() {
+                                            doRequest().then(data => {
+                                                session = JSON.parse(data)
+                                                //console.log(session["id"])
+                                                //console.log(session)
+                                                if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
+                                                    stripe.redirectToCheckout({ sessionId: session["id"] })
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    {% endif %}
+                                </div>
+                            </div>
+                                
                             {% if vids or thumbs_wo_1st %}
                             <div class="row mt-6">
                             {% if vids %}

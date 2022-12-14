@@ -10,8 +10,11 @@ from django.core.cache import cache
 from django.db.models import Count, F, Value
 from django.db.models.functions import Concat
 
+from project.settings import STRIPE_PK
+
 from .forms import SearchForm
 from .models import Product, Category, Technique, Author
+from .views import Cart
 
 
 def categories4menu(request):
@@ -51,5 +54,8 @@ def categories4menu(request):
         annotate(num_arts=Count('author_products')).\
         annotate(title=Concat(F('first_name'), Value(' '), F('last_name'))).\
         only('id', 'last_name', 'first_name', 'slug',).order_by('title')
+
+    context['cart'] = Cart(request)
+    context['STRIPE_PK'] = STRIPE_PK
 
     return context

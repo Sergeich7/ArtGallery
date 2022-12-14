@@ -82,6 +82,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=100, db_index=True, unique=True)
     created = models.DateField(null=True, verbose_name='Дата создания')
     description = models.TextField(verbose_name='Описание')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     materials = models.CharField(
         max_length=200, verbose_name='Материалы')
     size = models.CharField(max_length=20, blank=True, verbose_name='Размер')

@@ -41,12 +41,14 @@
 
     <link rel="stylesheet" href="{% static 'assets/css/vendor.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}">
+
+    <script src="https://js.stripe.com/v3/"></script>
+    
 {% tracker %}
 </head>
 
 
 <body>
-
     <!-- Header Section Start -->
     <div class="header section">
 
@@ -116,17 +118,52 @@
                                     </ul>
                                 </li>
                                 <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
-                                {% if user.is_authenticated %}
-                                <li class="has-children">
-                                    <a href="#">{{user.username|truncatechars:7}}</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
-                                        <li><a href="{% url 'logout' %}">Выход</a></li>
-                                    </ul>
-                                </li>
+                                {% if cart|length > 0 %}
+                                    <li class="has-children">
+                                        <a href="{% url 'art:favorites' %}">Избранное ({{ cart|length }})</a>
+                                        <ul class="sub-menu">
+                                            {% if cart.get_total_price > 0 %}
+                                                <li><a id="buy-main-menu" type="submit">Купить ({{ cart.get_total_price }} p.)</a></li>
+                                                <script type="text/javascript">
+                                                    async function doRequest() {
+                                                        let res = await fetch('/buy/0');
+                                                        if (res.ok) {
+                                                            return res.text();
+                                                        } else {
+                                                            return `HTTP error: ${res.status}`;
+                                                        }
+                                                    }
+                                                    var stripe = Stripe('{{ STRIPE_PK }}');
+                                                    var buyButton = document.getElementById('buy-main-menu');
+                                                    buyButton.addEventListener('click', function() {
+                                                        doRequest().then(data => {
+                                                            session = JSON.parse(data)
+                                                            //console.log(session["id"])
+                                                            //console.log(session)
+                                                            if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
+                                                                stripe.redirectToCheckout({ sessionId: session["id"] })
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+            
+                                                {% endif %}
+                                            <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
+                                        </ul>
+                                    </li>
                                 {% else %}
-                                <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
-                                <li><a href="{% url 'users:login' %}">Войти</a></li>
+                                    {% if user.is_authenticated %}
+                                    <li class="has-children">
+                                        <a href="#">{{user.username|truncatechars:7}}</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="{% url 'users:password-change' %}">Изменить пароль</a></li>
+                                            <li><a href="{% url 'logout' %}">Выход</a></li>
+                                        </ul>
+                                    </li>
+                                    {% else %}
+                                    <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
+                                    <li><a href="{% url 'users:login' %}">Войти</a></li>
+                                    {% endif %}
                                 {% endif %}
                             </ul>
                         </div>
@@ -177,7 +214,7 @@
                                 <a href="/">Главная</a>
                             </li>
                             <li class="has-children">
-                                <a href="#">Категории <i class="fa fa-angle-down aria-hidden="true""></i></a>
+                                <a href="#">Категории <i class="fa fa-angle-down aria-hidden="true"></i></a>
                                 <ul class="dropdown">
                                     {% menu_items_cat_tec 'cat' %}
                                 </ul>
@@ -195,7 +232,19 @@
                                 </ul>
                             </li>
                             <li><a href="{% url 'art:contacts' %}">Контакты</a></li>
-                            {% if user.is_authenticated %}
+                            {% if cart|length > 0 %}
+                            <li class="has-children" aria-expanded="true">
+                                <a href="#">Избранное <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul class="dropdown">
+                                    <li><a href="{% url 'art:favorites' %}">Избранное ({{ cart|length }})</a></li>
+                                    {% if cart.get_total_price > 0 %}
+                                        <li><a href="#">Купить ({{ cart.get_total_price }} p.)</a></li>
+                                    {% endif %}
+                        <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
                             <li class="has-children">
                                 <a href="#">{{user.username}}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <ul class="dropdown">
@@ -282,9 +331,6 @@
         <div class="footer-top">
             <div class="container">
                 <div class="row mb-n10">
-                    <!--
-                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10">
-                    -->
                     <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
                             <div class="single-footer-widget">
                             <h2 class="widget-title">Категории</h2>
@@ -318,9 +364,23 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-lg-3 col-xl-3 mb-10"">
+                    {% if cart|length > 0 %}
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
                         <div class="single-footer-widget">
-                            <h2 class="widget-title">Личный кабинет</h2>
+                            <h2 class="widget-title">Избранное</h2>
+                            <ul class="widget-list pt-6">
+                                <li><a href="{% url 'art:favorites' %}">Избранное ({{ cart|length }})</a></li>
+                                {% if cart.get_total_price > 0 %}
+                                    <li><a href="#">Купить ({{ cart.get_total_price }} p.)</a></li>
+                                {% endif %}
+                                <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="col-12 col-sm-6 col-lg-3 col-xl-2 mb-10"">
+                        <div class="single-footer-widget">
+                            <h2 class="widget-title">Кабинет</h2>
                             <p class="desc-content mb-0"><strong>{{user.username}}</strong></p>
                             {% if user.is_authenticated %}
                                 <ul class="widget-list pt-1">
