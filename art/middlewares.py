@@ -10,7 +10,7 @@ from django.core.cache import cache
 from django.db.models import Count, F, Value
 from django.db.models.functions import Concat
 
-from project.settings import STRIPE_PK
+from django.conf import settings
 
 from .forms import SearchForm
 from .models import Product, Category, Technique, Author
@@ -56,6 +56,6 @@ def categories4menu(request):
         only('id', 'last_name', 'first_name', 'slug',).order_by('title')
 
     context['cart'] = Cart(request)
-    context['STRIPE_PK'] = STRIPE_PK
+    context['STRIPE_PK'] = settings.STRIPE_PK
 
     return context

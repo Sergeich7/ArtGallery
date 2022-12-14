@@ -7,7 +7,6 @@ from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView, RedirectView
 
 from django.conf.urls.static import static
-
 from django.conf import settings
 
 #from .settings import DEBUG, MEDIA_URL, MEDIA_ROOT, STATIC_URL

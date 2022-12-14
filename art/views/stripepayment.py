@@ -3,8 +3,7 @@ import stripe
 from django.urls import reverse
 from django.views import View
 from django.http import JsonResponse
-
-from project.settings import STRIPE_SK
+from django.conf import settings
 
 from art.models import Product
 from .favorites import Cart
@@ -44,7 +43,7 @@ class StripeBuyView(View):
                 success_url=request.build_absolute_uri(reverse('art:payment_success')),
                 cancel_url=request.build_absolute_uri(reverse('art:payment_cancel')),
             )
-            stripe.api_key = STRIPE_SK
+            stripe.api_key = settings.STRIPE_SK
             return JsonResponse(stripe.checkout.Session.create(**sp))
 
         return JsonResponse({'error': 'No sales items'})

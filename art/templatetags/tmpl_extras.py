@@ -4,8 +4,7 @@ import random
 
 from django.utils.safestring import mark_safe
 from django import template
-
-from project.settings import DEBUG
+from django.conf import settings
 
 
 register = template.Library()
@@ -36,7 +35,7 @@ def random_int(a: int, b=None) -> int:
 @register.simple_tag
 def tracker() -> str:
     """Выводим трэкер если на продакшен."""
-    return ('' if DEBUG else mark_safe("""
+    return ('' if settings.DEBUG else mark_safe("""
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript" >

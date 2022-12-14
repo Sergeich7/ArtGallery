@@ -4,10 +4,9 @@ from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django import forms
 from django.core.mail import send_mail
+from django.conf import settings
 
 from captcha.fields import CaptchaField, CaptchaTextInput
-
-from project.settings import ADMIN
 
 from ..models import Author
 from .tasks import send_mail_to_one
@@ -85,7 +84,7 @@ class ContactFormView(FormView):
             to_emails = [Author.objects.get(pk=to_id).email, ]
         else:
             # отправляем письмо админам
-            to_emails = [e for _, e in ADMIN]
+            to_emails = [e for _, e in settings.ADMIN]
 
         if 'celery' in (p.name() for p in psutil.process_iter()):
             # если celery запущен 
