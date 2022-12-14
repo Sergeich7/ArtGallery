@@ -43,7 +43,30 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}">
 
     <script src="https://js.stripe.com/v3/"></script>
-    
+    <script type="text/javascript">
+        async function doReq(pk) {
+            let res = await fetch('/buy/' + pk);
+            if (res.ok) {
+                return res.text();
+            } else {
+                return `HTTP error: ${res.status}`;
+            }
+        }
+        var stripe = Stripe('{{ STRIPE_PK }}');
+        function toStripe(pk) {
+            if(pk == undefined){
+                pk = 0
+            }
+            doReq(pk).then(data => {
+                session = JSON.parse(data)
+                //console.log(session["id"])
+                //console.log(session)
+                if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
+                    stripe.redirectToCheckout({ sessionId: session["id"] })
+                }
+            });
+        }
+    </script>
 {% tracker %}
 </head>
 
@@ -123,30 +146,7 @@
                                         <a href="{% url 'art:favorites' %}">Избранное ({{ cart|length }})</a>
                                         <ul class="sub-menu">
                                             {% if cart.get_total_price > 0 %}
-                                                <li><a id="buy-main-menu" type="submit">Купить ({{ cart.get_total_price }} p.)</a></li>
-                                                <script type="text/javascript">
-                                                    async function doRequest() {
-                                                        let res = await fetch('/buy/0');
-                                                        if (res.ok) {
-                                                            return res.text();
-                                                        } else {
-                                                            return `HTTP error: ${res.status}`;
-                                                        }
-                                                    }
-                                                    var stripe = Stripe('{{ STRIPE_PK }}');
-                                                    var buyButton = document.getElementById('buy-main-menu');
-                                                    buyButton.addEventListener('click', function() {
-                                                        doRequest().then(data => {
-                                                            session = JSON.parse(data)
-                                                            //console.log(session["id"])
-                                                            //console.log(session)
-                                                            if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
-                                                                stripe.redirectToCheckout({ sessionId: session["id"] })
-                                                            }
-                                                        });
-                                                    });
-                                                </script>
-            
+                                                <li><a type="submit" onClick="toStripe()">Купить ({{ cart.get_total_price }} p.)</a></li>            
                                                 {% endif %}
                                             <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
                                         </ul>
@@ -238,9 +238,9 @@
                                 <ul class="dropdown">
                                     <li><a href="{% url 'art:favorites' %}">Избранное ({{ cart|length }})</a></li>
                                     {% if cart.get_total_price > 0 %}
-                                        <li><a href="#">Купить ({{ cart.get_total_price }} p.)</a></li>
+                                    <li><a type="submit" onClick="toStripe()">Купить ({{ cart.get_total_price }} p.)</a></li>            
                                     {% endif %}
-                        <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
+                                    <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
                                 </ul>
                             </li>
                         {% endif %}
@@ -292,8 +292,6 @@
                 <!-- Offcanvas Search Form Start -->
                 <form method="GET" class="offcanvas-search-form" action="/">
                     {{ searchform }}
-<!--                    <input type="text" placeholder="Search Products...">
-    -->
                 </form>
                 <!-- Offcanvas Search Form End -->
 
@@ -371,7 +369,7 @@
                             <ul class="widget-list pt-6">
                                 <li><a href="{% url 'art:favorites' %}">Избранное ({{ cart|length }})</a></li>
                                 {% if cart.get_total_price > 0 %}
-                                    <li><a href="#">Купить ({{ cart.get_total_price }} p.)</a></li>
+                                <li><a type="submit" onClick="toStripe()">Купить ({{ cart.get_total_price }} p.)</a></li>            
                                 {% endif %}
                                 <li><a href="{% url 'art:favorites-cmd' 'clear' 0 %}">Очистить</a></li>
                             </ul>

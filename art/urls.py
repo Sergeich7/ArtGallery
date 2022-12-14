@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 
 from art.views import IndexView, DetailProdView, ContactFormView, FavoritesCMD
-from art.views import session_to_json
+from art.views import StripeBuyView
 
 from .sitemaps import ArtSiteMaps
 
@@ -21,7 +21,8 @@ urlpatterns = [
         TemplateView.as_view(template_name='art/email_success.html'),
         name='thanks'),
 
-    path('buy/<str:pk>', session_to_json, name='buy'),
+    path('buy/<str:pk>', StripeBuyView.as_view(), name='buy'),
+    
     path(
         'payment_success/',
         TemplateView.as_view(template_name='art/payment_success.html'),

@@ -96,30 +96,7 @@
                                     {% endif %}
 
                                     {% if product.price %}                                
-        
-                                    <button id="buy-button" type="submit" class="btn btn-primary btn-hover-secondary">Купить</button>
-                                    <script type="text/javascript">
-                                        async function doRequest() {
-                                            let res = await fetch('/buy/{{ product.pk }}');
-                                            if (res.ok) {
-                                                return res.text();
-                                            } else {
-                                                return `HTTP error: ${res.status}`;
-                                            }
-                                        }
-                                        var stripe = Stripe('{{ STRIPE_PK }}');
-                                        var buyButton = document.getElementById('buy-button');
-                                        buyButton.addEventListener('click', function() {
-                                            doRequest().then(data => {
-                                                session = JSON.parse(data)
-                                                //console.log(session["id"])
-                                                //console.log(session)
-                                                if (confirm("Внимание!!!\nОплата работает в тестовом режиме.\nНе вводите данные реальных карт.")){
-                                                    stripe.redirectToCheckout({ sessionId: session["id"] })
-                                                }
-                                            });
-                                        });
-                                    </script>
+                                        <button onClick="toStripe({{ product.pk }})" type="submit" class="btn btn-primary btn-hover-secondary">Купить</button>
                                     {% endif %}
                                 </div>
                             </div>

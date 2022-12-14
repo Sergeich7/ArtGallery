@@ -1,10 +1,10 @@
 from .index import IndexView
 from .favorites import FavoritesCMD, Cart
 from .detail import DetailProdView
-from .stripepayment import session_to_json
+from .stripepayment import StripeBuyView
 from .contact import ContactFormView
 
 __all__ = [
-    'IndexView', 'DetailProdView', 'session_to_json', 'ContactFormView',
-    'FavoritesCMD', 'Cart',
+    'IndexView', 'DetailProdView', 'ContactFormView',
+    'FavoritesCMD', 'Cart', 'StripeBuyView',
     ]
