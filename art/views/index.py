@@ -3,7 +3,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 
 from art.models import Product, Category, Technique, Author
-
+from .favorites import Cart
 
 class IndexView(ListView):
     template_name = 'art/index.html'
@@ -40,6 +40,11 @@ class IndexView(ListView):
                     Q(category__title__icontains=query) |\
                     Q(author__last_name__icontains=query) |\
                     Q(technique__title__icontains=query)
+            elif self.request.path == '/favorites/':
+                self.page_title = 'Избранное'
+                cart = Cart(self.request)
+                product_ids = cart.cart.keys()
+                q = Q(pk__in=product_ids)
             else:
                 # выбираем все продукты
                 q = Q()

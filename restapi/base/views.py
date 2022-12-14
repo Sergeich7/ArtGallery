@@ -28,18 +28,6 @@ class ProductViewSet(ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
 
 
-#class IdListProductsView(ListAPIView):
-#    serializer_class = IdListSerializer
-#
-#    def get_queryset(self):
-#        qs = Product.objects.all()
-#        for key, value in self.kwargs.items():
-#            if 'fn' in key:
-#                qs = qs.filter(
-#                    **{value: self.kwargs.get(key.replace("fn", "pk"))})
-#        return qs
-
-
 class ListIdProductsView(ListAPIView):
     serializer_class = IdListSerializer
 

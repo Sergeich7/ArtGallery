@@ -10,7 +10,8 @@
     <!-- Single project Start -->
 
 {% block content %}
-    <!-- Blog Section Start -->
+
+<!-- Blog Section Start -->
     <div class="section section-padding">
         <div class="container">
             <div class="row mb-n8 row-cols-sm-2 row-cols-lg-3 row-cols-1 mesonry-list">
@@ -27,10 +28,23 @@
                                 {% endthumbnail %}
                             </a>
                         </div>
-                        <div class="blog-content">
-                            <h3 class="title"><a href="{{ product.get_absolute_url }}">{{ product.title|truncatechars:20 }}</a></h3>
-                            <p>{{ product.description|truncatechars:140 }}</p>
-                            <a class="link" href="{{ product.get_absolute_url }}">Читать далее</a>
+                        <div class="blog-content" style="display: grid;">
+                            <div style="grid-area: 1 / 1 / 2 / 2;">
+                                <h3 class="title"><a href="{{ product.get_absolute_url }}">{{ product.title|truncatechars:20 }}</a></h3>
+                                <p>{{ product.description|truncatechars:140 }}
+                                    {% if request.path == '/favorites/' and product.price %}
+                                    <br><strong>Цена:</strong> {{ product.price }} руб.
+                                {% endif %}
+                                </p>
+                                <p><a class="link" href="{{ product.get_absolute_url }}">Читать далее</a></p>
+                            </div>
+                            <div style="grid-area: 1 / 1 / 2 / 2; margin-left: auto; margin-top: auto; margin-right: 0; margin-bottom: 0;">
+                                {% if product.id|slugify in cart.cart %}
+                                    <a href="{% url 'art:favorites-cmd' 'remove' product.pk %}" class="btn btn-primary btn-hover-secondary btn-sm" title="Удалить из избранного"><i class="fa fa-minus"></i></a>
+                                    {% else %}
+                                    <a href="{% url 'art:favorites-cmd' 'add' product.pk %}" class="btn btn-outline-matterhorn btn-hover-primary btn-sm" title="Добавить в избранное"><i class="fa fa-plus"></i></a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     <!-- Single Blog End -->
