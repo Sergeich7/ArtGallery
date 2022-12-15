@@ -4,6 +4,7 @@ import os
 import sys
 from pathlib import Path
 
+# Тестовый режим
 if 'test' in sys.argv:
     CAPTCHA_TEST_MODE = True 
 
