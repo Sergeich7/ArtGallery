@@ -1,7 +1,6 @@
 """Тестируем модель и все что с ней связано, чтобы не создавать\
             базу по несколько раз."""
 
-import json
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
@@ -10,6 +9,7 @@ from django.urls import reverse
 
 from art.models import Category, Author, Technique, Product, ArtComment
 from .model_setup import ModelSetupMixin
+from art.views.favorites import Cart
 
 
 class ArtModelTest(ModelSetupMixin, TestCase):
@@ -60,7 +60,7 @@ class ArtModelTest(ModelSetupMixin, TestCase):
         self.assertEqual(resp.status_code, 200)
 
     def test_detail_buy_stripe(self):
-        """Сессия stripe для покупки продукта."""
+       # Сессия stripe для покупки продукта.
         resp = self.client.get(f'/buy/{self.prod1.id}', follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
         self.assertContains(resp, 'cs_test_')
@@ -78,6 +78,30 @@ class ArtModelTest(ModelSetupMixin, TestCase):
     def test_index_reverseurl(self):
         resp = self.client.get(reverse('art:index'), follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
+
+    #
+    # favorites
+    #
+
+    def test_favorites(self):
+        self.client.get(f'/favorites/add/{self.prod1.id}/', follow=True)
+        cart = Cart(self.client)
+        self.assertEqual(cart.get_total_price(), 1000)
+
+        resp = self.client.get("/favorites/", follow=True)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertContains(resp, 'just Product')
+
+        resp = self.client.get(reverse('art:favorites'), follow=True)
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+
+        self.client.get(f'/favorites/remove/{self.prod1.id}/', follow=True)
+        cart = Cart(self.client)
+        self.assertEqual(len(cart), 0)
+
+        self.client.get('/favorites/clear/0/', follow=True)
+        cart = Cart(self.client)
+        self.assertEqual(len(cart), 0)
 
     #
     # params

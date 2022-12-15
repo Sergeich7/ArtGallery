@@ -15,3 +15,15 @@ class ContactTest(TestCase):
         resp = self.client.get(reverse('art:contacts'), follow=True)
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
+    def test_send_mail_wtih_valid_data(self):
+        resp = self.client.post(
+            '/contacts/',
+            {
+                'to': 'adm',
+                'name': 'test',
+                'email': 'test@test.ru',
+                'message': 'test',
+                'captcha_0': 'dummy-value',
+                'captcha_1': 'PASSED',
+            }, follow=True)
+        self.assertRedirects(resp, reverse('art:thanks'))

@@ -20,7 +20,7 @@ class TestsBase(APITestCase):
         c = Category.objects.create(title='just Category', slug='just2cat')
         t = Technique.objects.create(title='just Technique', slug='just2tec')
         p = Product.objects.create(
-            title='just Product', slug='just2product', author=a, category=c,
+            title='just Product', price=1000, slug='just2product', author=a, category=c,
             technique=t)
 
         resp = self.client.get(

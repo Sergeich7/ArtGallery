@@ -1,6 +1,7 @@
 
 # покрытие тестами
 .coverage
+htmlcov/
 
 # материалы для разработки
 .restart-app
