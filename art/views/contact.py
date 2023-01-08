@@ -98,12 +98,12 @@ class ContactFormView(FormView):
                         mail_body_html,
                     )
         else:
-            send_mail(
-                mail_title,     # тема
-                mail_body,      # тело
-                mail_from,      # отправитель
-                to_emails,      # получатели
-                fail_silently=False,
-                html_message=mail_body_html
-            )
+#            send_mail(
+#                mail_title,     # тема
+#                mail_body,      # тело
+#                mail_from,      # отправитель
+#                to_emails,      # получатели
+#                fail_silently=False,
+#                html_message=mail_body_html
+#            )
         return super().form_valid(form)
