@@ -98,6 +98,7 @@ class ContactFormView(FormView):
                         mail_body_html,
                     )
         else:
+            pass
 #            send_mail(
 #                mail_title,     # тема
 #                mail_body,      # тело
